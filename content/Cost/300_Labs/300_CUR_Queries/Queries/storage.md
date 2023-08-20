@@ -69,7 +69,7 @@ SELECT
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'OneZoneIAStorage') THEN 'Storage ZIA'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'OneZoneIASizeOverhead') THEN 'Storage ZIA-Overhead'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierInstantRetrievalStorage') THEN 'Storage GIR'
-    WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierInstantRetrievalSizeOverhead') THEN 'Storage GIR-Overhead'
+    WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierIRSizeOverhead') THEN 'Storage GIR-Overhead'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierStorage') THEN 'Storage Glacier'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierStagingStorage') THEN 'Storage Glacier-Staging'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND (line_item_operation = 'GlacierObjectOverhead' or line_item_operation = 'GlacierS3ObjectOverhead')) THEN 'Storage Glacier-Overhead'
@@ -143,9 +143,6 @@ This query provides an overview of cost and usage for Amazon EC2 EBS. Output inc
 #### Pricing
 Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing/).
 
-#### Sample Output
-![Images/ebssnapshot-spend.png](/Cost/300_CUR_Queries/Images/Storage/ebswrid.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebswrid.sql)
 
@@ -208,9 +205,6 @@ This query provides daily unblended cost and usage information about Amazon EBS 
 #### Pricing
 Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing/).
 
-#### Sample Output
-![Images/ebssnapshot-spend.png](/Cost/300_CUR_Queries/Images/Storage/ebssnapshot-spend.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebssnapshot-spend.sql)
 
@@ -254,9 +248,6 @@ This query helps correlate cross-region data transfer cost and usage with EBS Sn
 #### Pricing
 EBS Snapshot Copy is charged according to data transferred across regions. Please refer to the [data transfer section of the Amazon EC2 pricing page](https://aws.amazon.com/ec2/pricing/on-demand/#Data_Transfer).
 
-#### Sample Output
-![Images/ebssnapshotscopy.png](/Cost/300_CUR_Queries/Images/Storage/ebssnapshotscopy.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebssnapshotscopy.sql)
 
@@ -291,9 +282,6 @@ This query provides daily unblended cost and usage information about Amazon EBS 
 
 #### Pricing
 Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing/).  Please refer to the [Amazon EBS Volume Charges](https://aws.amazon.com/premiumsupport/knowledge-center/ebs-volume-charges/) page for more info on the calculations used on your bill. 
-
-#### Sample Output
-![Images/ebssnapshot-spend.png](/Cost/300_CUR_Queries/Images/Storage/ebsusagespend.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebsusagespend.sql)
@@ -352,9 +340,6 @@ This query provides monthly ratio of unblended cost and usage information betwee
 #### Pricing
 Please refer to the [Amazon EBS pricing page](https://aws.amazon.com/ebs/pricing/).  Please refer to the [Amazon EBS Volume Charges](https://aws.amazon.com/premiumsupport/knowledge-center/ebs-volume-charges/) page for more info on the calculations used on your bill. 
 
-#### Sample Output
-![Images/ebssnapshotratio.png](/Cost/300_CUR_Queries/Images/Storage/ebssnapshotratio.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebssnapshotratio.sql)
 
@@ -404,9 +389,6 @@ This query will provide daily unblended cost and usage information per linked ac
 
 #### Pricing
 Please refer to the [Amazon EFS pricing page](https://aws.amazon.com/efs/pricing/).
-
-#### Sample Output
-![Images/efswrid.png](/Cost/300_CUR_Queries/Images/Storage/efswrid.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/efswrid.sql)
@@ -460,9 +442,6 @@ This query will provide daily unblended cost and usage information per linked ac
 #### Pricing
 Please refer to the [Amazon FSx pricing page](https://aws.amazon.com/fsx/pricing/).
 
-#### Sample Output
-![Images/fsxwrid.png](/Cost/300_CUR_Queries/Images/Storage/fsxwrid.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/fsxwrid.sql)
 
@@ -512,9 +491,6 @@ This query will provide daily unblended cost and usage information per linked ac
 #### Pricing
 Please refer to the [AWS Backup pricing page](https://aws.amazon.com/backup/pricing/).
 
-#### Sample Output
-![Images/backup_spend.png](/Cost/300_CUR_Queries/Images/Storage/backup_spend.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/backup_spend.sql)
 
@@ -563,9 +539,6 @@ This query will display cost and usage of Elastic Block Storage Volumes that are
 
 #### Pricing
 Please refer to the [Elastic Block Storage pricing page](https://aws.amazon.com/ebs/pricing/).
-
-#### Sample Output
-![Images/ebs_gp2_to_gp3.png](/Cost/300_CUR_Queries/Images/Storage/ebs_gp2_to_gp3.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Storage/ebs_gp2_to_gp3.sql)

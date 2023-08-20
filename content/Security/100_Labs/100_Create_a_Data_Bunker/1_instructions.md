@@ -16,9 +16,19 @@ Best practice is to have a separate logging account for your data bunker. This a
 4. Consider applying best practices as a baseline such as [lock away your AWS account root user access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#lock-away-credentials) and [using multi-factor authentication](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html)
 5. Navigate to **Settings** and take a note of your Organization ID
 
-### 2. Create the bucket for CloudTrail logs
+### 2. Create a key to encrypt CloudTrail logs
 
 1. Switch roles into the logging account for your organization 
+1. Navigate to AWS Key Management Service (KMS)
+1. Press **Create a key**
+1. Select **Symmetric** and press **Next**
+1. Enter an **Alias** for your key, for example *CloudTrailKey*
+
+
+
+### 2. Create the bucket for CloudTrail logs
+
+1. While still in the logging account for your organization
 1. Navigate to S3
 1. Press **Create Bucket**
 1. Enter a **Bucket name** for your bucket, type a unique DNS-compliant name for your new bucket. Follow these naming guidelines:
@@ -82,10 +92,11 @@ Best practice is to have a separate logging account for your data bunker. This a
 }
 ```
 
-11. (Optional) Next we will add a life cycle policy to clean up old logs. Navigate to **Management**
+1. (Optional) Next we will add a life cycle policy to clean up old logs. Navigate to **Management**
 1. (Optional) Add a life cycle rule named *Delete old logs*, press **Next**
 1. (Optional) Add a transition rule for both the current and previous versions to move to Glacier after 32 days. Press **Next**
 1. (Optional) Select the current and previous versions and set them to delete after *365* days
+1. Take note of the name of the Amazon S3 bucket you created 
 
 ### 3. Ensure cross account access is read-only
 
@@ -96,7 +107,8 @@ These instructions outline how to modify the cross account access created in ste
 1. Navigate to **IAM** and select **Roles**
 2. Select the organizations account access role for your organization: Note: the default is *OrganizationAccountAccessRole*
 3. Press **Attach Policy** and attach the AWS managed *ReadOnlyAccess* Policy
-4. Navigate back to the *OrganizationAccountAccessRole* and press the **X** to remove the *AdministratorAccess* policy
+4. Press **Attach Policy** and attach the AWSS3READONLYACCESS as well
+5. Navigate back to the *OrganizationAccountAccessRole* and press the **X** to remove the *AdministratorAccess* policy
 
 ### 4. Turn on CloudTrail from the management account
 

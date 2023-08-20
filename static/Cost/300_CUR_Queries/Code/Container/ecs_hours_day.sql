@@ -1,4 +1,4 @@
--- modified: 2021-04-25
+-- modified: 2022-12-13
 
 SELECT -- automation_select_stmt
   bill_payer_account_id,
@@ -39,7 +39,7 @@ WHERE -- automation_where_stmt
   AND line_item_product_code IN ('AmazonECS')
   AND line_item_operation != 'ECSTask-EC2'
   AND product_product_family != 'Data Transfer'
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanNegation','SavingsPlanRecurringFee','SavingsPlanUpfrontFee')
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,

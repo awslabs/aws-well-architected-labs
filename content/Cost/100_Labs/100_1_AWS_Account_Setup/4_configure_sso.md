@@ -8,9 +8,7 @@ pre: "<b>4. </b>"
 
 
 
-You will create an AWS Organization, and join two or more accounts to the management account. An organization will allow you to centrally manage multiple AWS accounts efficiently and consistently. It is recommended to have a management account that is  used for security and administration, with access provided for limited billing tasks. A dedicated member account will be created for the Cost Optimization team or function, and another (or multiple) member account/s created to contain workload resources.
-
-You will need organizations:CreateOrganization access, and 2 or more AWS accounts. When you join a member account to a management account, it will contain all billing information for that member account. Member accounts will no longer have any billing information, including historical billing information.  Ensure you backup or export any reports or data before joining accounts to a management account.
+After completing Account Structure instructions, please follow steps below to configure SSO.
 
 ### Configure SSO
 You will create an AWS Organization with the management account.

@@ -19,7 +19,7 @@ SELECT -- automation_select_stmt
   SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
   SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
 FROM -- automation_from_stmt
-  ${table_Name} -- automation_tablename
+  ${table_name} -- automation_tablename
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon MQ'

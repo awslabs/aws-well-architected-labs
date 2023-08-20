@@ -59,7 +59,7 @@ Now that you have enabled VPC Flow Logs, which will help you understand how your
    6. **VpcFlowLogsAthenaDatabaseName:** Only provide existing database name if it has a table with all the required fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) otherwise leave it empty so that this template will create new DB.
    7. **VpcFlowLogsAthenaTableName:** Only provide existing table name if it has all the required fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) otherwise leave it empty so that this template will create new table.
    8. **VpcFlowLogsBucketName:** Name of the Amazon S3 bucket where vpc flow logs are stored. e.g. _my-vpc-flow-logs-bucket_
-   9. **VpcFlowLogsFilePrefix:** The log file prefix in Amazon S3 bucket that comes right after s3 bucket name e.g. _vpc-flow-logs_
+   9. **VpcFlowLogsFilePrefix:** The log file prefix in Amazon S3 bucket that comes right after s3 bucket name e.g. _vpc-flow-logs/_
    10. **VpcFlowLogsS3BucketLocation:** Please provide complete path **without log file name**, as shown below
 
    e.g.

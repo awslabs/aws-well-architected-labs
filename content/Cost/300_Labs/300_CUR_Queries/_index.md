@@ -9,13 +9,14 @@ hidden: false
 
 ## Last Updated
 
-June 2022
+November 2022
 
 ## Feedback
 If you wish to provide feedback on this lab, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
 
 ## Introduction
 {{< rawhtml >}}
+ <meta name="author" content="Chris Strzelczyk"Bill Pfeiffer>
 <video width="500" height="308" controls poster="/Cost/300_CUR_Queries/Images/cost-300-cql-intro.png">
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/CURQueryLibraryIntroduction.mp4" type="video/mp4">
   Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
@@ -31,6 +32,7 @@ CUR queries are provided as is. We recommend validating your data by comparing i
 
 ## Query Help
 {{< rawhtml >}}
+<meta name="author" content="Bill Pfeiffer">
 <video width="500" height="308" controls poster="/Cost/300_CUR_Queries/Images/cost-300-cql-helper-intro.png">
   <source src="https://d3h9zoi3eqyz7s.cloudfront.net/Cost/Videos/HelperIntroductionVideoFinal.mp4" type="video/mp4">
   Your browser doesn't support video, or if you're on GitHub head to https://wellarchitectedlabs.com to watch the video.
@@ -52,11 +54,15 @@ The CUR Query Library Help section is intended to provide tips and information a
 
 [Container]({{< ref "Queries/container.md" >}} "Container")
 
+[Cost Efficiency]({{< ref "Queries/cost_efficiency.md" >}} "Cost Efficiency")
+
 [Cost Optimization]({{< ref "Queries/cost_optimization.md" >}} "Cost Optimization")
 
 [Customer Engagement]({{< ref "Queries/customer_engagement.md" >}} "Customer Engagement")
 
 [Database]({{< ref "Queries/database.md" >}} "Database")
+
+[Developer Tools]({{< ref "Queries/developer_tools.md" >}} "Developer Tools") 
 
 [End User Computing]({{< ref "Queries/end_user_computing.md" >}} "End User Computing")
 

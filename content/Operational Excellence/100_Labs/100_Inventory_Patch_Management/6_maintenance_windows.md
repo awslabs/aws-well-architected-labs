@@ -127,7 +127,7 @@ After you create a Maintenance Window, you [assign targets](https://docs.aws.ama
    1. Add a second key/value pair using `InstanceRole` as the key and `WebServer` as the value.
 1. Choose **Register target** at the bottom of the page to return to the maintenance window details page.
 
-If you want to assign more targets to this window, choose the **Targets** tab, and then choose **Register target**to register new targets. With this option, you can choose a different means of targeting. For example, if you previously targeted instances by instance ID, you can register new targets and target instances by specifying Amazon EC2 tags.
+If you want to assign more targets to this window, choose the **Targets** tab, and then choose **Register target** to register new targets. With this option, you can choose a different means of targeting. For example, if you previously targeted instances by instance ID, you can register new targets and target instances by specifying Amazon EC2 tags.
 
 ### 6.4 Assigning Tasks to Your Patch Maintenance Window
 

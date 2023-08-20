@@ -17,7 +17,7 @@ pre: "<b>6. </b>"
   - **Measures**: % of over provisioning
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Provides a $ amount, allows headroom for demand spikes & time to scale
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 ---
 

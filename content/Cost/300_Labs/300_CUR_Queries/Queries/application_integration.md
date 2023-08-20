@@ -35,9 +35,6 @@ Please refer to the [Amazon MQ pricing page](https://aws.amazon.com/amazon-mq/pr
 This query will **not** run against CUR data that does not have any Amazon MQ usage.  
 {{% /notice%}}
 
-#### Sample Output
-![Images/mq-w-rid-output.png](/Cost/300_CUR_Queries/Images/Application_Integration/mqwrid.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/mqwrid.sql)
 
@@ -58,7 +55,7 @@ SELECT
   SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
   SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
 FROM 
-  ${table_Name} 
+  ${table_name} 
 WHERE 
   ${date_filter} 
   AND product_product_name = 'Amazon MQ'
@@ -91,9 +88,6 @@ This query will provide daily unblended and usage information per linked account
 
 #### Pricing
 Please refer to the [Amazon SES pricing page](https://aws.amazon.com/ses/pricing/).
-
-#### Sample Output
-![Images/ses-output.png](/Cost/300_CUR_Queries/Images/Application_Integration/ses.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/ses.sql)
@@ -148,9 +142,6 @@ This query will provide daily unblended cost and usage information per linked ac
 #### Pricing
 Please refer to the [Amazon SNS pricing page](https://aws.amazon.com/sns/pricing/).
 
-#### Sample Output
-![Images/sns-output.png](/Cost/300_CUR_Queries/Images/Application_Integration/sns.png)
-
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sns.sql)
 
@@ -190,9 +181,6 @@ This query will provide the top 20 daily unblended costs as well as usage inform
 
 #### Pricing
 Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing/).  Please refer to the [Reducing Amazon SQS costs page](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/reducing-costs.html) and [Enabling client-side buffering and request batching](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-client-side-buffering-request-batching.html) for Cost Optimization suggestions.
-
-#### Sample Output
-![Images/sqs.png](/Cost/300_CUR_Queries/Images/Application_Integration/sqs.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sqs.sql)
@@ -234,9 +222,6 @@ This query will provide daily unblended cost and usage information for Amazon SQ
 
 #### Pricing
 Please refer to the [Amazon SQS pricing page](https://aws.amazon.com/sqs/pricing/).  Please refer to the [Reducing Amazon SQS costs page](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/reducing-costs.html) and [Enabling client-side buffering and request batching](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-client-side-buffering-request-batching.html) for Cost Optimization suggestions.
-
-#### Sample Output
-![Images/sqs-by-product-family.png](/Cost/300_CUR_Queries/Images/Application_Integration/sqs-by-product-family.png)
 
 #### Download SQL File
 [Link to Code](/Cost/300_CUR_Queries/Code/Application_Integration/sqs-by-product-family.sql)

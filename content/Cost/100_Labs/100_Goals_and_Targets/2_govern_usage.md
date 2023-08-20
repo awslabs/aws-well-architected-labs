@@ -17,7 +17,7 @@ pre: "<b>2. </b>"
   - **Measures**: % of accounts with budgets set
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Ensure relevant staff are made aware of potential deviations from expected costs and usage
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 ---

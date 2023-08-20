@@ -5,99 +5,78 @@ from datetime import date
 import json
 import os
 from botocore.exceptions import ClientError
-from botocore.client import Config
 
+bucket = os.environ["BUCKET_NAME"]
+prefix = os.environ["PREFIX"]
+role_name = os.environ['ROLENAME']
+crawler = os.environ["CRAWLER_NAME"]
 
 def lambda_handler(event, context):
-    bucket = os.environ[
-        "BUCKET_NAME"
-    ]  # Using enviroment varibles below the lambda will use your S3 bucket
-    DestinationPrefix = os.environ["PREFIX"]
     try:
+        if 'Records' not in event: 
+            raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
         for record in event['Records']:
-           
             body = json.loads(record["body"])
             account_id = body["account_id"]
             payer_id = body["payer_id"]
             print(account_id)
             list_region = lits_regions()
-            with open(
-                    "/tmp/data.json", "w"
-                ) as f:  # Saving in the temporay folder in the lambda
-                session = assume_session(account_id)
-                for region in list_region:
-                    client = session.client("ecs",region_name = region)
-                    
-                    paginator = client.get_paginator(
-                        "list_clusters"
-                    )  # Paginator for a large list of accounts
-                    response_iterator = paginator.paginate()
+            local_file = "/tmp/data.json"
+            f = open(local_file, "w")
+            session = assume_session(account_id)
+            for region in list_region:
+                client = session.client("ecs", region_name = region)
+                paginator = client.get_paginator("list_clusters")
+                response_iterator = paginator.paginate()
 
-                    try:
-                        for response in response_iterator:  # extracts the needed info
-                            for cluster in response["clusterArns"]:
-                                listservices = client.list_services(
-                                    cluster=cluster.split("/")[1], maxResults=100
+                try:
+                    for response in response_iterator:
+                        for cluster in response["clusterArns"]:
+                            listservices = client.list_services(
+                                cluster=cluster.split("/")[1],
+                                maxResults=100
+                            )
+                            for i in listservices["serviceArns"]:
+                                # print (i)
+                                services = client.describe_services(
+                                    cluster=cluster.split("/")[1],
+                                    services=[i.split("/")[2],],
+                                    include=["TAGS"],
                                 )
-                                for i in listservices["serviceArns"]:
-                                    # print (i)
-                                
-                                    services = client.describe_services(
-                                        cluster=cluster.split("/")[1],
-                                        services=[
-                                            i.split("/")[2],
-                                        ],
-                                        include=[
-                                            "TAGS",
-                                        ],
-                                    )
-                                    for service in services["services"]:
-                                        data = {
-                                            "cluster": cluster.split("/")[1],
-                                            "services": service.get("serviceName"),
-                                            "servicesARN": i, #.split("/")[2]
-                                            "tags": service.get("tags"),
-                                            "account_id":account_id
-
-                                        }
-                                        print(data)
-
-                                        jsondata = json.dumps(
-                                            data
-                                        )  # converts datetime to be able to placed in json
-
-                                        f.write(jsondata)
-                                        f.write("\n")
-                    except Exception as e:
-                        print(e)
-                        pass
-                
+                                for service in services["services"]:
+                                    data = {
+                                        "cluster": cluster.split("/")[1],
+                                        "services": service.get("serviceName"),
+                                        "servicesARN": i, #.split("/")[2]
+                                        "tags": service.get("tags"),
+                                        "account_id":account_id
+                                    }
+                                    jsondata = json.dumps(data)
+                                    print(jsondata)
+                                    f.write(jsondata + "\n")
+                except Exception as e:
+                    print(region, account_id, type(e), e)
             print("respose gathered")
+            f.close()
 
-            fileSize = os.path.getsize("/tmp/data.json")
-            if fileSize == 0:  
-                print(f"No data in file for {DestinationPrefix}")
-            else:
-                today = date.today()
-                year = today.year
-                month = today.month
-                
-                client = boto3.client("s3")
-                client.upload_file(
-                    "/tmp/data.json",
-                    bucket,
-                    f"{DestinationPrefix}-data/payer_id={payer_id}/year={year}/month={month}/{DestinationPrefix}-{account_id}.json",
-                )  # uploading the file with the data to s3
-                print(f"Data in s3 - {DestinationPrefix}-data/year={year}/month={month}")
-                start_crawler()
+            if os.path.getsize(local_file) == 0:
+                print(f"No data in file for {prefix}")
+                continue
+            today = date.today()
+            year = today.year
+            month = today.month
+            day = today.day
+            key = f"{prefix}/{prefix}-data/payer_id={payer_id}/year={year}/month={month}/{account_id}-{year}-{month}-{day}.json"
+            client = boto3.client("s3")
+            client.upload_file(local_file, bucket, key)
+            print(f"Data in s3 - {key}")
+            start_crawler()
     except Exception as e:
-        print(e)
-        logging.warning(f"{e}" )
+        logging.warning(e)
         
 
 
 def assume_session(account_id):
-    role_name = os.environ['ROLENAME']
     role_arn = f"arn:aws:iam::{account_id}:role/{role_name}" #OrganizationAccountAccessRole
     sts_client = boto3.client('sts')
     
@@ -128,7 +107,7 @@ def lits_regions():
 def start_crawler():
     glue_client = boto3.client("glue")
     try:
-        glue_client.start_crawler(Name=os.environ["CRAWLER_NAME"])
+        glue_client.start_crawler(Name=crawler)
         print("Crawler Started")
     except Exception as e:
         # Send some context about this error to Lambda Logs

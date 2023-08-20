@@ -24,7 +24,11 @@ Prior to deleting resources, check with the application owner that your analysis
 - Compute
   * [Elastic Load Balancing - Idle ELB](#elastic-load-balancing---idle-elb)
   * [Elastic Compute Cloud - Unallocated Elastic IPs](#ec2-unallocated-elastic-ips)
+  * [Elastic Compute Cloud - Instance Cost by Pricing Model](#ec2-instance-cost-by-pricing-model)
   * [Graviton Usage](#graviton-usage)
+  * [Lambda Graviton Cost Savings](#lambda-graviton-savings)
+- Database
+  * [Amazon Aurora I/O-Optimized Savings](#amazon-aurora-io-optimized-savings)
 - End User Computing 
   * [Amazon WorkSpaces - Auto Stop](#amazon-workspaces---auto-stop)  
 - Networking & Content Delivery   
@@ -112,9 +116,6 @@ This query will return cost for unallocated Elastic IPs. Elastic IPs incur hourl
 #### Pricing
 Please refer to the [EC2 Elastic IP pricing page](https://aws.amazon.com/ec2/pricing/on-demand/#Elastic_IP_Addresses).
 
-#### Sample Output
-![Images/ec2-unallocated-elastic-ips.png](/Cost/300_CUR_Queries/Images/Cost_Optimization/ec2-unallocated-elastic-ips.png)
-
 #### Download SQL File
 Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/ec2-unallocated-elastic-ips.sql)
 
@@ -181,7 +182,7 @@ FROM
   ${table_name}
 WHERE 
   ${date_filter}
-  AND REGEXP_LIKE(line_item_usage_type, '.[a-z]([1-9]|[1-9][0-9]).?.?[g]\.')
+  AND REGEXP_LIKE(line_item_usage_type, '.?[a-z]([1-9]|[1-9][0-9]).?.?[g][a-zA-Z]?\.')
   AND line_item_usage_type NOT LIKE '%EBSOptimized%' 
   AND (line_item_line_item_type = 'Usage'
     OR line_item_line_item_type = 'SavingsPlanCoveredUsage'
@@ -203,6 +204,270 @@ ORDER BY
 {{< email_button category_text="Cost Optimization" service_text="Graviton Usage" query_text="Graviton Usage" button_text="Help & Feedback" >}}
 
 [Back to Table of Contents](#table-of-contents)
+
+### Lambda Graviton Savings
+
+#### Cost Optimization Technique
+This query will output all Lambda queries and their processor architecture.  Lambda functions which are running on X86 may be 
+cost optimized by moving to ARM64 architecture.  On average functions using the Arm/Graviton2 architecture, duration charges are 20 percent lower than the current pricing for x86.  Thus the query calculates a 20% savings on each X86 Lambda.
+
+
+#### Copy Query
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/lambda-graviton-savings.sql) 
+
+```tsql
+WITH x86_v_arm_spend AS (
+SELECT
+   line_item_resource_id      AS line_item_resource_id,
+   bill_payer_account_id      AS bill_payer_account_id,
+   line_item_usage_account_id AS line_item_usage_account_id,
+   line_item_line_item_type AS line_item_line_item_type,
+   CASE SUBSTR(line_item_usage_type, length(line_item_usage_type)-2)
+      WHEN 'ARM' THEN 'arm64'
+      ELSE 'x86_64'
+   END AS "processor",
+   CASE SUBSTR(line_item_usage_type, length(line_item_usage_type)-2)
+      WHEN 'ARM' THEN 0
+      ELSE line_item_unblended_cost * .2
+   END AS "potential_arm_savings",
+   SUM(line_item_unblended_cost) AS sum_line_item_unblended_cost
+FROM 
+${table_name}
+WHERE 
+   line_item_product_code  = 'AWSLambda'
+   AND line_item_operation = 'Invoke'
+   AND ( 
+      line_item_usage_type    LIKE '%Request%'
+      OR line_item_usage_type LIKE '%Lambda-GB-Second%'
+   )
+   AND line_item_usage_start_date > CURRENT_DATE - INTERVAL '1' MONTH
+   AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+GROUP BY 1,2,3,5,6,4
+)
+SELECT 
+line_item_resource_id,
+bill_payer_account_id,
+line_item_usage_account_id,
+line_item_line_item_type,
+processor,
+sum(sum_line_item_unblended_cost)           AS sum_line_item_unblended_cost,
+sum(potential_arm_savings) AS "potential_arm_savings"
+FROM 
+x86_v_arm_spend
+GROUP BY 2,3,1,5,4
+```
+
+#### Helpful Links
+* [Lambda Functions Powered By AWS Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/)
+
+
+{{< email_button category_text="Cost Optimization" service_text="Lambda Graviton2 Savings" query_text="Lambda Graviton2 Savings" button_text="Help & Feedback" >}}
+
+[Back to Table of Contents](#table-of-contents)
+
+### EC2 Instance Cost by Pricing Model
+The latest generation of instances are more performant and cheaper to operate.  Identifying which accounts are using [pervious generation](https://aws.amazon.com/ec2/previous-generation/) instances and determining if those instances are running on-demand or covered by a commitment based pricing model (On-Demand, Reserved Instance or Savings Plan) is challenging.   This query may be used to group instance usage by account in a given time period and filter by pricing model.  It will help customers find old generation instances running on-demand which may be candidates for an upgrade.
+
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/ec2-instance-cost-by-pricing-term.sql) 
+
+```tsql
+SELECT
+  line_item_usage_account_id, 
+  CASE 
+    WHEN reservation_reservation_a_r_n <> '' THEN split_part(reservation_reservation_a_r_n,':',5)
+    WHEN savings_plan_savings_plan_a_r_n <> '' THEN split_part(savings_plan_savings_plan_a_r_n,':',5)
+    ELSE 'NA'
+  END AS ri_sp_owner_id,
+	(CASE 
+		WHEN (line_item_usage_type LIKE '%SpotUsage%') THEN 'Spot' 
+		WHEN 
+			(((product_usagetype LIKE '%BoxUsage%') 
+			OR (product_usagetype LIKE '%DedicatedUsage:%')) 
+			AND ("line_item_line_item_type" LIKE 'SavingsPlanCoveredUsage')) 
+			OR (line_item_line_item_type = 'SavingsPlanNegation') 
+		THEN 'SavingsPlan' 
+		WHEN 
+			(("product_usagetype" LIKE '%BoxUsage%') 
+			AND ("line_item_line_item_type" LIKE 'DiscountedUsage')) 
+		THEN 'ReservedInstance' 
+		WHEN 
+			((("product_usagetype" LIKE '%BoxUsage%') 
+			OR ("product_usagetype" LIKE '%DedicatedUsage:%')) 
+			AND ("line_item_line_item_type" LIKE 'Usage')) 
+		THEN 'OnDemand' 
+		ELSE 'Other' END) pricing_model, 
+	CASE 
+		WHEN 
+			line_item_usage_type like '%BoxUsage' 
+			OR line_item_usage_type LIKE '%DedicatedUsage' 
+		THEN product_instance_type 
+		ELSE SPLIT_PART (line_item_usage_type, ':', 2) END instance_type, 
+	ROUND(SUM (line_item_unblended_cost),2) sum_line_item_unblended_cost, 
+	ROUND (
+		SUM((
+			CASE 
+				WHEN line_item_usage_type LIKE '%SpotUsage%' 
+				THEN line_item_unblended_cost  
+				WHEN 
+					((product_usagetype LIKE '%BoxUsage%') 
+					OR (product_usagetype LIKE '%DedicatedUsage:%')) 
+					AND (line_item_line_item_type LIKE 'Usage') 
+				THEN line_item_unblended_cost 
+				WHEN 
+					((line_item_line_item_type LIKE 'SavingsPlanCoveredUsage')) 
+				THEN TRY_CAST(savings_plan_savings_plan_effective_cost AS double) 
+				WHEN ((line_item_line_item_type LIKE 'DiscountedUsage')) 
+				THEN reservation_effective_cost
+				WHEN (line_item_line_item_type = 'SavingsPlanNegation') 
+				THEN 0
+				ELSE line_item_unblended_cost END)), 2) amortized_cost  
+FROM 
+	${table_name}    
+WHERE
+	${date_filter}
+	AND line_item_operation LIKE '%RunInstance%' AND line_item_product_code = 'AmazonEC2' 
+	AND (product_instance_type <> '' OR (line_item_usage_type  LIKE '%SpotUsage%' AND line_item_line_item_type = 'Usage'))  
+GROUP BY 
+1, -- account id
+3, -- pricing model
+4, -- instance type
+2  -- ri_sp_owner_id
+ORDER BY
+pricing_model,
+sum_line_item_unblended_cost DESC
+;
+```
+{{% /expand%}}
+
+#### Helpful Links
+* [AWS Previous Generation Instances](https://aws.amazon.com/ec2/previous-generation/)
+
+{{< email_button category_text="Cost Optimization" service_text="EC2 Instance Cost By Pricing Term" query_text="EC2 Instance Cost By Pricing Term" button_text="Help & Feedback" >}}
+
+### Amazon Aurora I/O-Optimized Savings
+Amazon Aurora I/O-Optimized provides improved price performance and predictable pricing for customers with I/O-intensive applications. Aurora I/O-Optimized offers improved performance, increasing throughput and reducing latency for customers’ most demanding workloads. With Aurora I/O-Optimized, there are zero charges for read and write I/O operations.  You only pay for your database instances and storage usage, making it easy to predict your database spend up front. Aurora I/O-Optimized offers up to 40% cost savings for I/O-intensive applications where I/O charges exceed 25% of the total Aurora database spend. 
+
+For this query there are multiple nested queries to discover storage and I/O cost for the account.  This means you will have to replace the table_name and date_filter variables multiple times.  In addition, you can filter for specific accounts where noted in the query.  For tutorials on how to replace variables in queries, please see our [CUR Query Library help](https://wellarchitectedlabs.com/cost/300_labs/300_cur_queries/query_help/) section. 
+
+This query provides potential savings at the account level.  For savings on particular clusters, it's best for customers to attribute unique tags per cluster, and filter by cost allocation tags within the query.  
+
+#### Copy Query
+{{%expand "Click here - to expand the query" %}}
+Copy the query below or click to [Download SQL File](/Cost/300_CUR_Queries/Code/Cost_Optimization/aurora_io_optimized.sql) 
+
+```tsql
+with rds_aurora_io_optimized_data as (
+-- io_usage
+SELECT
+    (compute_usage.compute_amortized_cost + storage_usage.storage_usage_unblended_cost + SUM(line_item_unblended_cost)) - (1.3 * compute_usage.compute_amortized_cost + 2.25 * storage_usage.storage_usage_unblended_cost) as savings,
+    io_usage.line_item_usage_account_id as accounts,
+    SUM(line_item_unblended_cost) as io_usage_unblended_cost,
+    compute_usage.compute_amortized_cost as compute_usage_amortized_cost,
+    storage_usage.storage_usage_unblended_cost as storage_usage_unblended_cost,
+    io_usage.month,
+    io_usage.year
+FROM 
+    ${table_name}
+    io_usage,
+
+    -- storage_usage
+    (SELECT 
+        line_item_usage_account_id,
+        SUM(line_item_unblended_cost) as storage_usage_unblended_cost, 
+        month, 
+        year
+    FROM 
+         ${table_name}
+    WHERE 
+        line_item_usage_type LIKE '%Aurora:StorageUsage'
+        AND line_item_usage_amount != 0.0
+        ${date_filter} -- use partitions to optimize query
+    GROUP BY 
+        line_item_usage_account_id,
+        month, 
+        year
+    ) storage_usage,
+
+    -- compute_usage
+    (SELECT 
+        line_item_usage_account_id,
+        SUM(line_item_usage_amount) AS compute_usage_usage_amount, 
+        SUM(line_item_blended_cost) as compute_usage_blended_cost, 
+        "sum"((CASE 
+        WHEN ("line_item_line_item_type" = 'DiscountedUsage') THEN "reservation_effective_cost" 
+        WHEN ("line_item_line_item_type" = 'RIFee') THEN ("reservation_unused_amortized_upfront_fee_for_billing_period" + "reservation_unused_recurring_fee") 
+        WHEN (("line_item_line_item_type" = 'Fee') AND ("reservation_reservation_a_r_n" <> '')) THEN 0 ELSE "line_item_unblended_cost" 
+        END)) "compute_amortized_cost", 
+        month, 
+        year
+    FROM 
+        ${table_name}
+    WHERE 
+        (line_item_resource_id LIKE '%cluster:cluster-%' OR line_item_resource_id LIKE '%db:%')
+        AND product_database_engine IN ('Aurora MySQL','Aurora PostgreSQL')
+        AND line_item_usage_amount != 0.0
+        ${date_filter}  -- use partitions to optimize query
+    GROUP BY 
+        line_item_usage_account_id,
+        month, 
+        year
+    ) compute_usage
+
+-- io_usage continued
+WHERE 
+    line_item_usage_type LIKE '%Aurora:StorageIOUsage'
+    AND storage_usage.line_item_usage_account_id = compute_usage.line_item_usage_account_id
+    AND storage_usage.line_item_usage_account_id = io_usage.line_item_usage_account_id
+    AND storage_usage.month = compute_usage.month
+    AND storage_usage.year = compute_usage.year
+    AND storage_usage.month = io_usage.month
+    AND storage_usage.year = io_usage.year
+    AND line_item_line_item_type IN ('DiscountedUsage', 'Usage')
+    ${date_filter} -- use partitions to optimize query
+GROUP BY 
+    io_usage.line_item_usage_account_id,
+    storage_usage.storage_usage_unblended_cost,
+    compute_usage.compute_amortized_cost,
+    storage_usage.storage_usage_unblended_cost,
+    io_usage.month,
+    io_usage.year
+ORDER BY 
+    savings DESC
+)
+
+SELECT 
+    SUM(savings) as potential_savings, 
+    accounts,
+    io_usage_unblended_cost,
+    compute_usage_amortized_cost,
+    storage_usage_unblended_cost,
+    month,
+    year
+FROM 
+    rds_aurora_io_optimized_data
+WHERE
+    savings > 0  -- display only positive savings
+    -- add additional account filtering here
+GROUP BY 
+    accounts,
+    io_usage_unblended_cost,
+    compute_usage_amortized_cost,
+    storage_usage_unblended_cost,
+    month,
+    year
+ORDER BY
+    potential_savings DESC
+;
+```
+{{% /expand%}}
+
+#### Helpful Links
+* [AWS announces Amazon Aurora I/O-Optimized](https://aws.amazon.com/about-aws/whats-new/2023/05/amazon-aurora-i-o-optimized/)
+* [Best Practices for Tagging AWS Resources](https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/tagging-best-practices.html)
+
+{{< email_button category_text="Cost Optimization" service_text="Amazon Amazon Aurora I/O Optimized Savings" query_text="Amazon Amazon Aurora I/O Optimized Savings" button_text="Help & Feedback" >}}
 
 ### Amazon WorkSpaces - Auto Stop
 
@@ -278,7 +543,6 @@ ORDER BY
   product_operating_system,
   pricing_unit;
 ```
-
 {{% /expand%}}
 
 #### Helpful Links

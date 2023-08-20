@@ -1,0 +1,438 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Main CF template that builds shared resources and other stacks
+Parameters:
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket that is created to hold tgw data
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: transit-gateway
+  DatabaseName:
+    Type:  String
+    Description: Name of the Athena database to hold lambada information
+    Default: optimization_data
+    MinLength: 1
+  CURTable:
+    Type: String
+    Description: The name of your Cost and Usage Report table in Athena
+    Default: cid_cur.cur
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  GlueRoleArn:
+    Type: String
+    Description: ARN of the IAM role deployed to use for glue.
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
+Outputs:
+  SQSUrl:
+    Description: TaskQueue URL the account collector lambda
+    Value: !Ref TaskQueue
+
+
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+      Policies:
+        - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
+        - PolicyName: "LambdaTWGPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: 
+                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: !Sub "arn:aws:glue:${AWS::Region}:${AWS::AccountId}:crawler/${Crawler}"
+              - Effect: "Allow"
+                Action:
+                  - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
+                  - "sqs:GetQueueAttributes"
+                Resource: !Sub arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:TransitGatewayModule-TaskQueue
+              - Effect: "Allow"
+                Action:
+                  - "cloudwatch:*"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DescribeLogStreams"
+                Resource: "arn:aws:logs:*:*:*"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:DescribeRegions"
+                Resource: "*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures: [arm64]
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: LambdaFunction of python3.9.
+      Runtime: python3.9
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          from datetime import datetime
+          from botocore.client import Config
+          from botocore.exceptions import ClientError
+          from datetime import date, timedelta
+          import os 
+          import logging
+
+          bucket = os.environ['BUCKET_NAME']
+
+          last_day_of_prev_month = date.today().replace(day=1) - timedelta(days=1)
+          start_day_of_prev_month = date.today().replace(day=1) - timedelta(days=last_day_of_prev_month.day)
+         
+          s3_client = boto3.client('s3')
+          today = date.today()
+          year = today.year
+          month = today.month
+
+          def lambda_handler(event, context):
+              try:
+                  if 'Records' not in event: 
+                      raise Exception("Please do not trigger this Lambda manually. Find an Accounts-Collector-Function-OptimizationDataCollectionStack Lambda  and Trigger from there.")
+                  for record in event['Records']:
+                      body = json.loads(record["body"])
+                      account_id = body["account_id"]
+                      account_name = body["account_name"]
+                      payer_id = body["payer_id"]
+                      print(account_id)
+                      regions = get_supported_regions()
+                      for region_name in regions: 
+                          print(region_name)
+                          try:
+                              cw_client = assume_role('cloudwatch', account_id, region_name['RegionName'])
+                              ec2_client = assume_role('ec2', account_id, region_name['RegionName'])
+                              tgw_attachment_results = []
+                              final_result = []
+                              list_tgw_attachments = ec2_client.describe_transit_gateway_attachments()
+                              for item in list_tgw_attachments['TransitGatewayAttachments']:
+                                  tgw_attachment_results.append(item)
+                              
+                              cw_result = []
+                              for item in tgw_attachment_results:
+                                  response_in = metrics(cw_client, 'BytesIn', item)
+                                  
+                                  with open("/tmp/data.json", "w") as f:
+                                      
+                                      for cwitem in response_in['MetricDataResults']:
+                                          cw_results = {
+                                                  'TGW': item['TransitGatewayId'],
+                                                  'NetworkingAccount': item['TransitGatewayOwnerId'],
+                                                  'CustomerAccount': item['ResourceOwnerId'],
+                                                  'TGW-Attachment': item['TransitGatewayAttachmentId'],
+                                                  'BytesIn': cwitem['Values'],
+                                                  'Region': region_name['RegionName']
+                                              }
+                                  
+                                      response_out = metrics(cw_client, 'BytesOut', item)
+                                          
+                                      for cwitemout in response_out['MetricDataResults']:
+                                          cw_results['BytesOut']= cwitemout['Values']
+                                          print (cw_results)
+                                          jsondata = json.dumps(cw_results) 
+                                          f.write(jsondata)
+                                          f.write('\n')
+                                                              
+                                  s3 = boto3.client("s3", config=Config(s3={"addressing_style": "path"}))
+                                  s3.upload_file(
+                                      "/tmp/data.json",
+                                      bucket,
+                                      f"{os.environ['PREFIX']}/{os.environ['PREFIX']}-data/payer_id={payer_id}/year={year}/month={month}/tgw-{item['TransitGatewayAttachmentId']}-{region_name['RegionName']}.json")
+
+                          except Exception as e:
+                              # Send some context about this error to Lambda Logs
+                              logging.warning("%s" % e)
+                              continue
+                          
+                  start_crawler()
+                  print("Done")
+              except Exception as e:
+                  logging.warning(e)
+
+          def metrics(cw_client, byte, item):
+              cw_data = cw_client.get_metric_data(
+                      MetricDataQueries=[
+                              {
+                                  'Id': 'tgwMetric',
+                                  'MetricStat': {
+                                      'Metric': {
+                                          'Namespace': 'AWS/TransitGateway',
+                                          'MetricName': f'{byte}',
+                                          'Dimensions': [
+                                              {
+                                                  'Name': 'TransitGatewayAttachment',
+                                                  'Value': item['TransitGatewayAttachmentId']
+                                              },
+                                              {
+                                                  'Name': 'TransitGateway',
+                                                  'Value': item['TransitGatewayId']
+                                              },
+                                          ]
+                                      },
+                                      'Period': 2592000,
+                                      'Stat': 'Sum',
+                                  },
+                                  'ReturnData': True},
+                          ],
+                          StartTime=start_day_of_prev_month.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                          EndTime=last_day_of_prev_month.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                          ScanBy='TimestampDescending'
+                      )
+
+              return cw_data
+
+          def assume_role(service, account_id, region_name):
+              role_name = os.environ['ROLENAME']
+              role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
+              sts_client = boto3.client('sts')
+              
+              try:
+                  assumedRoleObject = sts_client.assume_role(
+                      RoleArn=role_arn,
+                      RoleSessionName="cross_acct_lambda"
+                      )
+                  
+                  credentials = assumedRoleObject['Credentials']
+                  client = boto3.client(
+                      service, 
+                      region_name=region_name,
+                      aws_access_key_id=credentials['AccessKeyId'],
+                      aws_secret_access_key=credentials['SecretAccessKey'],
+                      aws_session_token=credentials['SessionToken']
+                  )
+                  return client
+              
+              except ClientError as e:
+                  logging.warning(f"Unexpected error Account {account_id}: {e}")
+                  return None
+
+          def start_crawler():
+              glue_client = boto3.client("glue")
+              Crawler_Name = os.environ["CRAWLER_NAME"]
+              try:
+                  glue_client.start_crawler(Name=Crawler_Name)
+                  print(f"{Crawler_Name} has been started")
+              except Exception as e:
+                  # Send some context about this error to Lambda Logs
+                  logging.warning("%s" % e)
+
+          def get_supported_regions():
+              response = []              
+              ec2_c = boto3.client('ec2')
+              response = ec2_c.describe_regions()
+              return response['Regions'] if response['Regions'] else []
+
+      Handler: 'index.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref DestinationBucket
+          ROLENAME: !Ref MultiAccountRoleName
+          CRAWLER_NAME: !Ref Crawler
+          PREFIX: !Ref CFDataName
+
+  Crawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: !Sub
+          - '${CFDataName}-Crawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleArn
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/${CFDataName}/${CFDataName}-data/"
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt TaskQueue.Arn
+  TaskQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'TransitGatewayModule-TaskQueue'
+  EventSourceMapping:
+    DependsOn:
+      - EventPermission
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt TaskQueue.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
+
+  AthenaQueryCUR:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a chargeback view of the transit gateway
+      Name: transit_gateway_chargeback_cur
+      QueryString: !Sub
+        CREATE OR REPLACE VIEW "transit_gateway_chargeback" AS
+        WITH
+          cur_all AS (
+          SELECT *
+          FROM
+          ${DatabaseName}.transit_gateway_data
+        )
+        , customer_tgw_data AS (
+          SELECT
+            bill_billing_period_start_date
+          , bill_payer_account_id
+          , bill_billing_entity
+          , line_item_usage_start_date
+          , line_item_usage_account_id
+          , line_item_line_item_type
+          , line_item_product_code
+          , line_item_usage_type
+          , line_item_operation
+          , line_item_line_item_description
+          , product_product_name
+          , product_operation
+          , product_product_family
+          , product_servicecode
+          , product_servicename
+          , product_location
+          , year
+          , month
+          , sum(CAST(line_item_usage_amount AS decimal(16,8))) as usage_amount
+          , CAST((sum(line_item_usage_amount) / sum(sum(line_item_usage_amount)) OVER (PARTITION BY product_location)) AS decimal(5,2)) as percentage
+          FROM
+            ${CURTable}
+          WHERE line_item_usage_account_id <> '${AWS::AccountId}'
+          AND product_location LIKE '%US%'
+          AND product_group = 'AWSTransitGateway'
+          AND pricing_unit = 'GigaBytes'
+          GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+        )
+        , network_all AS (
+          SELECT
+            bill_payer_account_id
+          , bill_billing_period_start_date
+          , CAST(sum(CASE WHEN (line_item_line_item_type = 'EdpDiscount') THEN line_item_unblended_cost ELSE 0 END) AS decimal(5,2)) as EDP_Discounts
+          , CAST(sum(CASE WHEN (product_group = 'AWSTransitGateway') THEN line_item_unblended_cost ELSE 0 END) AS decimal(5,2)) as Total_Cost
+          FROM
+            ${CURTable}
+          WHERE
+          line_item_line_item_type <> 'Tax'
+          AND line_item_usage_account_id = '${AWS::AccountId}'
+          AND line_item_product_code = 'AmazonVPC'
+          AND (line_item_operation = 'CreateVpnConnection'
+          OR line_item_operation = 'TransitGatewayVPC' 
+          OR line_item_operation = 'TransitGatewayVPN'
+          OR line_item_operation = 'TransitGatewayPeering')
+          GROUP BY 1, 2
+        )
+        SELECT
+          customer_tgw_data.bill_billing_period_start_date
+        , customer_tgw_data.bill_payer_account_id
+        , bill_billing_entity
+        , line_item_usage_start_date
+        , line_item_usage_account_id
+        , line_item_line_item_type
+        , line_item_product_code
+        , line_item_usage_type
+        , line_item_operation
+        , line_item_line_item_description
+        , product_product_name
+        , product_operation
+        , product_product_family
+        , product_servicecode
+        , product_servicename
+        , Percentage as chargeback_proportion
+        , Total_Cost as total_Networking_cost
+        , (Total_Cost * Percentage) as chargeback_cost
+        , Year
+        , Month
+        FROM
+          customer_tgw_data
+        LEFT JOIN network_all ON
+          customer_tgw_data.bill_billing_period_start_date = network_all.bill_billing_period_start_date
+          AND network_all.bill_payer_account_id = customer_tgw_data.bill_payer_account_id
+        ORDER BY Percentage DESC
+
+  AthenaQueryCW:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Provides a chargeback view of joined data from cloudwath and transigateway 
+      Name: transit_gateway_chargeback_cw
+      QueryString: !Sub
+        CREATE OR REPLACE VIEW "transit_gateway_chargeback_to_customer_final_results" AS 
+        WITH
+          summary AS (
+            SELECT
+              *
+            , (sum(bytesin[1]) + sum(bytesout[1]) OVER (PARTITION BY "bill_payer_account_id")) as total_data_transfer
+            , (sum(bytesin[1]) + sum(bytesout[1])) as usage_account_dx_total
+            FROM
+              ${DatabaseName}.transit_gateway_data a
+            LEFT JOIN ${DatabaseName}.transit_gateway_chargeback b ON a.customeraccount = b.line_item_usage_account_id AND a.year = b.year AND a.month = b.month
+            GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+            ORDER BY bytesIn DESC
+          )
+          SELECT
+            *
+          , (usage_account_dx_total / total_data_transfer) as chargeback_percentage
+          , ("total_Networking_cost" * (usage_account_dx_total / total_data_transfer)) as chargeback_cost_final
+          FROM
+            summary
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

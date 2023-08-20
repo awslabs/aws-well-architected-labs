@@ -8,32 +8,35 @@ pre: "<b>1. </b>"
 
 ### Permissions
 
-We will need to install 2 IAM roles to ensure DataCollection account can collect information accross all accounts in the AWS Organization. 
-1. One Role [WA-Lambda-Assume-Role-Management-Account](https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml) for read only access from Data Collection account to the Management account. These must be deployed into any Management account you wish to collect data from. 
-2. A second [read only role](/Cost/300_Optimization_Data_Collection/Code/optimisation_read_only_role.yaml) must be installed in each Linked accout of Organization via a StackSet.
+To ensure Data Collection account can collect information across all accounts in the AWS Organization you must deploy  **2 IAM roles for each Management account** you wish to collect data from. (if you want to collect data from multiple payers, follow steps for each one)
+
+The rest of this page is broken into two sets of instructions: 
+1. **Role for Management Account**  - A Read Only Role WA-Lambda-Assume-Role-Management-Account must be deployed into any Management account you wish to collect data from. This allows access from your Data Collection Account to the Management account. 
+2. **Read Only roles for Data Collector modules** - A second read only role WA-Optimization-Data-Multi-Account-Role must be deployed in each Linked account of the Organization via a StackSets.
 
 ### 1/2 Role for Management Account 
 
-Some of the data needed for the modules is in the **Management account** we will now create a read only role to assume into that account to get the data. 
+Some of the data needed for the modules is in the **Management account** we will now create a read only role for the Data Collector Account to assume. 
 
-1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml)
+1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/Management.yaml&stackName=OptimizationManagementDataRoleStack)
 
 2. Call the Stack **OptimizationManagementDataRoleStack**
 
-3. In the Parameters section set **CostAccountID** as the ID of Cost Optimization Data Collection Accoint ( where you plan to deploy the OptimizationDataCollectionStack)  
+3. In the Parameters section set **CostAccountID** as the ID of Data Collection Account ( where you plan to deploy the OptimizationDataCollectionStack)  
 
-4. Scroll to the bottom and click **Next**
+4. **NOTE** If you choose to modify the Role Prefix field, keep this consistent across all the Stacks and StackSets you create as part of this lab.
 
-5. Tick the acknowledge boxes and click **Create stack**.
+5. Scroll to the bottom and click **Next**
 
-6. You can see the role that was collected by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
+6. Tick the acknowledge boxes and click **Create stack**.
+
+7. You can see the role that was collected by clicking on **Resources** and clicking on the hyperlink under **Physical ID**.
 ![Images/Managment_CF_deployed.png](/Cost/300_Optimization_Data_Collection/Images/Managment_CF_deployed.png)
-
 
 
 ### 2/2 Read Only roles for Data Collector modules
 
-Modules that we will deploy later **OptimizationDataCollectionStack** allow to collect data from all of the accounts in an AWS Organization. We will use a CloudFormation StackSet to deploy a single read only role to all accounts. 
+We will use a CloudFormation StackSet to deploy a single read only role to all accounts. It will allow the modules that we will deploy later with the  **OptimizationDataCollectionStack** to collect data from all of the accounts in an AWS Organization. 
 
 1. Login to your Management account and search for **Cloud Formation**
 ![Images/cloudformation.png](/Cost/300_Organization_Data_CUR_Connection/Images/cloudformation.png)
@@ -43,7 +46,7 @@ Modules that we will deploy later **OptimizationDataCollectionStack** allow to c
 
 3. Once Successful or if you have it enabled already click **Create StackSet**.  
 
-4. Keep all ticked boxes as default and past he follwing URL in **Amazon S3 URL**. Click **Next**.
+4. Keep all ticked boxes as default and past he following URL in **Amazon S3 URL**. Click **Next**.
 
 https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml
 
@@ -58,19 +61,22 @@ https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optim
 
 ![Images/SS_param.png](/Cost/300_Optimization_Data_Collection/Images/SS_param.png)
 
-7. Leave all as default and Click **Next**.
+7. **NOTE** If you choose to modify the Role Prefix field, keep this consistent across all the Stacks and StackSets you create as part of this lab.
+
+8. Leave all as default and Click **Next**.
 
 ![Images/ods_stackset_config.png](/Cost/300_Optimization_Data_Collection/Images/ods_stackset_config.png)
 
-8. Select the **region** you are currently deploying to.
+9. Select the **region** you are currently deploying to.
 
 ![Images/ods_stackset_region.png](/Cost/300_Optimization_Data_Collection/Images/ods_stackset_region.png)
 
-9. Tick the boxes and click **Create stack**.
+10. Tick the boxes and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
-10. This role will now be deployed to all linked accounts. 
+11. This role will now be deployed to all linked accounts. 
 
+If you face an issue with `AWSCloudFormationStackSetAdministrationRole` please make sure you activated 'Tusted Access' (2nd step) or follow [AWS Documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html) for activating this via additional CloudFormation.
 
 ### (Optional) Read Only roles in Management Account
 
@@ -78,13 +84,13 @@ If you wish to also access data in your management account, deploy the same Clou
 
 {{%expand "To do this follow these instructions" %}}
 
-1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml)
+1.  Log into your **Management account** then click [Launch CloudFormation Template](https://console.aws.amazon.com/cloudformation/home#/stacks/new?&templateURL=https://aws-well-architected-labs.s3-us-west-2.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/optimisation_read_only_role.yaml&stackName=OptimizationDataRoleStack)
 
-2. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
+2. Call the Stack **OptimizationDataRoleStack**. In the Parameters section use the Cost Optimization Account ID that you deployed the OptimizationDataCollectionStack into for **CostAccountID**. Under available modules section select modules which you you selected in **OptimizationDataCollectionStack** deployment step. . **NOTE** If you choose to modify the Role Prefix field, keep this consistent across all the Stacks and StackSets you create as part of this lab. This CloudFormation StackSet will provision required roles for modules in linked accounts. Detailed description of each module can be found [here](../3_data_collection_modules)
 
-4. Scroll to the bottom and click **Next**
+3. Scroll to the bottom and click **Next**
 
-5. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
+4. Tick the box **'I acknowledge that AWS CloudFormation might create IAM resources with custom names.'** and click **Create stack**.
 ![Images/Tick_Box.png](/Cost/300_Optimization_Data_Collection/Images/Tick_Box.png)
 
 

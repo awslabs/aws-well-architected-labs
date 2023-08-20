@@ -10,18 +10,83 @@ pre: "<b>4. </b>"
 Now you have pulled together optimization data there different ways in which you can analyze and visualize it and use to make infrastructure optimization decisions 
 
 ### Visualization of Trusted Advisor data with Amazon QuickSight
-You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) To deploy [TAO Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) please follow either [automated](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/3_auto_deployment/) or [manual](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/4_manual-deployment-prepare/) deployment steps and specify organizational data collection bucket created in this lab as a source
+You can visualize Trusted Advisor Data with [TAO Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/) To deploy TAO Dashboard please follow [TAO Dashboard deployment steps](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/dashboards/1_prerequistes/) and specify organizational data collection bucket created in this lab as a source
 
 ### Visualization of Compute Optimizer data with Amazon QuickSight
-You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard.](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/). 
+You can visualize Compute Optimizer Data with [Compute Optimizer Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/). [Compute Optimizer Dashboard](https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/compute-optimizer-dashboards/) also deliver Athena Tables and Views.
 
-### AWS Organisation Data and The Cost Intelligence Dashboard
+### AWS Organization Data and The Cost Intelligence Dashboard
 
-This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organisation data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
+This video shows you how to use the Optimization Data Collection Lab to pull in AWS Organization data such as Account names and Tags into the Cost And Usage report so it can be used in the CID.
 
 {{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/IaqtlkkdTs8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/EGSIpanIuH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
+
+You can also use the below query to update your **account_map** table in athena to read from this data
+
+{{%expand "New Account Map Query" %}}
+
+      CREATE OR REPLACE VIEW "account_map" AS 
+      SELECT DISTINCT
+        id account_id
+      , split_part(arn, ':',5) parent_account_id
+      , name account_name
+      , email account_email_id
+      FROM
+        "optimization_data"."organization_data" 
+
+{{% /expand%}}
+
+
+### Join with Cost and Usage Report
+
+Example query on how you can connect your CUR to this Organizations data as a one off. In this query you will see the service costs split by account names. 
+{{%expand "Steps" %}}
+
+1.	In the **Athena** service page run the below query to join the Organizations data with the CUR table. Make the below changes as needed:
+
+- Change managementcur if your named your database differently
+- month = **Chosen Month**
+- year = **Chosen Year**
+
+		SELECT line_item_usage_account_id,
+			line_item_product_code,
+			 name,
+			sum(line_item_unblended_cost) AS line_item_unblended_cost_cost
+		FROM "managementcur"."cur" cur
+		JOIN  "managementcur"."organisation_data"
+		ON "cur".line_item_usage_account_id = organisation_data.id
+		WHERE month = '10'
+				AND year = '2020'
+		GROUP BY  line_item_usage_account_id,  name, line_item_product_code
+		limit 10;
+
+![Images/Join.png](/Cost/300_Organization_Data_CUR_Connection/Images/Join.png)
+
+2. The important part of this query is the join. The **line_item_usage_account_id** from your Cost & Usage Report should match a **account_number** from the Organizations data. You can now see the account name in your data.
+
+![Images/Athena_Example.png](/Cost/300_Organization_Data_CUR_Connection/Images/Athena_Example.png)
+
+### Create a View with Cost and Usage Report
+
+If you would like to always have your Organizations data connected to your CUR then we can create a view. 
+
+1.	In the Athena service page run the below query to join the Organizations data with the CUR table as a view. 
+
+		CREATE OR REPLACE VIEW org_cur AS
+		SELECT *
+		FROM ("managementcur"."cur" cur
+		INNER JOIN "managementcur"."organisation_data"
+			ON ("cur"."line_item_usage_account_id" = "organisation_data"."id")) 
+			
+
+
+2. Going forward you will now be able to run your queries from this view and have the data connected to your Organizations data. To see a preview where your org data is, which is at the end of the returned data, run the below query.
+
+		SELECT * FROM "managementcur"."org_cur" limit 10;
+{{% /expand%}}
+
 
 ### Snapshots and AMIs
 When a AMI gets created it takes a Snapshot of the volume. This is then needed to be kept in the account whilst the AMI is used. Once the AMI is released the Snapshot can no longer be used but it still incurs costs. Using this query we can identify Snapshots that have the 'AMI Available', those where the 'AMI Removed' and those that fall outside of this scope and are 'NOT AMI'. Data must be collected and the crawler finished running before this query can be run. 
@@ -72,7 +137,7 @@ When a AMI gets created it takes a Snapshot of the volume. This is then needed t
 
 There is an option to add pricing data to this query. This assumes you have already run the accounts collector lambda. 
 
-{{%expand "Optimization Data Snapshots and AMIs with pricing data" %}}
+{{%expand "Optimization Data Snapshots and AMIs with OD pricing data" %}}
 
 **Lambda**
 1. Go to AWS Lambda 
@@ -83,12 +148,28 @@ There is an option to add pricing data to this query. This assumes you have alre
 **Athena**
 1. Go to AWS Athena
 2. Go to *Saved queries* at the top of the screen
-3. Run the *ec2_pricing* Query to create a pricing table
-4. In *Saved queries* Run the *region_names* Query to create a normalized region name table 
-5. In *Saved queries* run *snapshot-ami-query* to create a view 
+3. Run the *pricing_ec2_create_table* Query to create a pricing table
+4. In *Saved queries* Run the *pricing_region_names* Query to create a normalized region name table 
+5. In *Saved queries* run *inventory_snapshot_connected_to_ami_with_pricing* to create a view 
 6. Run the below to see your data
         
         SELECT * FROM "optimization_data"."snapshot_ami_quicksight_view" limit 10;
+
+{{% /expand%}}
+
+
+{{%expand "Optimization Data Snapshots and AMIs with CUR data" %}}
+
+You must have access to your Cost & Usage data in the same account and region so you can join through athena
+
+**Athena**
+1. Go to AWS Athena
+2. Go to *Saved queries* at the top of the screen
+3. In *Saved queries* run *inventory_snapshot_connected_to_ami_with_cur* to create a view 
+4. Change the value ${table_name} to your Cost and Usage report database and name and your ${date_filter} to look at a certain month/year
+5. You will see the price of all Snapshots and how much they cost based on their connection with AMIS
+
+Please note that if you delete the snapshot and it is part of a lineage you may only make a small saving
 
 {{% /expand%}}
 
@@ -180,7 +261,7 @@ In these labs we have a couple of amazing cost dashboards that can be found [her
 There is a saved query called **aws_budgets** created in the CloudFormation. This is used when connecting to dashboard.
 
 {{< rawhtml >}}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2SFO4SF0WN8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/2SFO4SF0WN8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 {{< /rawhtml >}}
 
 
@@ -398,4 +479,37 @@ The Cloud Watch data collection is automated for all the regions. However, if yo
 Now your views are created and you can run your report
 {{% /expand%}}
 
+
+### RDS Graviton Eligibility
+Graviton2 instances provide up to 35% performance improvement and up to 52% price/performance improvement for open source databases depending on database engine, version, and workload. You can easily determine what databases in your account can take advantage of Graviton using the RDS Graviton Eligibility query. This query will output all existing RDS databases, if they are eligible for graviton, if it requires any version upgrades in order to to migrate, the target graviton instance, as well as estimated savings. 
+
+This section requires you to have the **RDS Module** deployed. 
+
+{{%expand "Optimize RDS with Graviton" %}}
+
+1. Navigate to Lambda and test the **Accounts-Collector-Function-OptimizationDataCollectionStack** and **pricing-Lambda-Function-OptimizationDataCollectionStack** lambdas 
+2. Navigate to Athena 
+3. Go to Saved queries at the top of the screen
+4. Run the region_names Query to create a normalized region name table
+5. Run the rds_pricing_table Query to create a pricing look up table for RDS
+6. Run the graviton_mapping Query to create a mapping of existing Intel based instances to the proper Graviton based instance
+7. Run the rds_metrics-rds-graviton Query to provide the output of your RDS instances and their graviton eligibility and savings. You can download the results to further filter and analyze the results 
+
+{{%expand "Analyzing Your Results" %}}
+1. Use the **graviton_eligible** column to sort through 
+  * Already Graviton - this instance is already a graviton instance and is already receiving the price performance benefits
+  * Eligible - this instance meets both DB Engine and Version Number requirements, and can be immediately moved to Graviton with no modifications necessary
+  * Requires Updates - this instance meets the DB Engine requirement, but will [require a version upgrade prior to being migrated to Graviton](https://aws.amazon.com/blogs/database/key-considerations-in-moving-to-graviton2-for-amazon-rds-and-amazon-aurora-databases/)
+  * Ineligible - this database engine is not eligible to be moved to graviton
+2. **graviton_instancetype** will tell you what the equivilant graviton instance type is
+3. Calculate your savings by moving to graviton: 
+  * existing_unit_price	- your hourly price based on the configuration of your database
+  * existing_monthly_price - price to run your database for 24 hours per day for 30 days
+  * graviton_unit_price	- hourly price for the graviton equivilant of your existing database configuration
+  * graviton_montlhy_price - price to run your database for 24 hours per day for 30 days after being moved to Graviton	
+  * monthly_savings	- savings seen by moving a database to to Graviton if it ran 24 hours per day for 30 days
+  * estimated_annual_savings - savings seen by moving a database to to Graviton if it ran 24 hours per day for 365 days
+  * percentage_savings - percent difference in unit cost between the existing instance and its Graviton equivilant
+
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
+

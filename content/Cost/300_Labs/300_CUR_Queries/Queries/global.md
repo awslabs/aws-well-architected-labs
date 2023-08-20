@@ -46,9 +46,6 @@ Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 
 Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=LinkedAccount&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=true&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
-#### Sample Output:
-![Images/spendaccount.png](/Cost/300_CUR_Queries/Images/Global/spendaccount.png)
-
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Global/spendaccount.sql)
 
@@ -126,9 +123,6 @@ These links are provided as an example to compare CUR report output to Cost Expl
 Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Region&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=false&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
 Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Region&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=true&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
-
-#### Sample Output:                                                                                                                              
-![Images/spendregion.png](/Cost/300_CUR_Queries/Images/Global/spendregion.png)                                                                      
 
 #### Download SQL File:                                                                                                
 [Link to file](/Cost/300_CUR_Queries/Code/Global/spendregion.sql)                                                                                                                       
@@ -211,9 +205,6 @@ Unblended Cost [Link](https://console.aws.amazon.com/cost-management/home?#/cust
 
 Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=Service&forecastTimeRangeOption=None&hasBlended=false&excludeRefund=false&excludeCredit=false&excludeRIUpfrontFees=false&excludeRIRecurringCharges=false&excludeOtherSubscriptionCosts=false&excludeSupportCharges=false&excludeTax=false&excludeTaggedResources=false&chartStyle=Stack&timeRangeOption=Last12Months&granularity=Monthly&isTemplate=true&filter=%5B%7B%22dimension%22:%22UsageType%22,%22values%22:%5B%7B%22value%22:%22Route53-Domains%22,%22unit%22:%22Quantity%22%7D%5D,%22include%22:false,%22children%22:null%7D,%7B%22dimension%22:%22RecordType%22,%22values%22:%5B%22Other%22,%22Recurring%22,%22DiscountedUsage%22,%22SavingsPlanCoveredUsage%22,%22SavingsPlanNegation%22,%22SavingsPlanRecurringFee%22,%22SavingsPlanUpfrontFee%22,%22Support%22,%22Upfront%22,%22Usage%22%5D,%22include%22:true,%22children%22:null%7D%5D&reportType=CostUsage&hasAmortized=true&excludeDiscounts=true&usageAs=usageQuantity&excludeCategorizedResources=false&excludeForecast=false)
 
-#### Sample Output:                                                                                                                                     
-![Images/spendservice.png](/Cost/300_CUR_Queries/Images/Global/spendservice.png)          
-
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/spendservice.sql)                                                                                    
 
@@ -284,9 +275,6 @@ This query will provide a monthly cost summary by AWS Service Charge which is an
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
 
-#### Sample Output:                                                                                                                                     
-![Images/billservice.png](/Cost/300_CUR_Queries/Images/Global/billservice.png)          
-
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/billservice.sql)                                                                                    
 
@@ -333,9 +321,6 @@ This query will provide a monthly individual account chargeback for the premium 
 
 #### Pricing
 Please refer to the [AWS pricing page](https://aws.amazon.com/pricing/).
-
-#### Sample Output:                                                                                                                                     
-![Images/premiumsupport.png](/Cost/300_CUR_Queries/Images/Global/premiumsupport.png)          
 
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/premiumsupport.sql)                                                                                    
@@ -402,9 +387,6 @@ In order to obtain more granular data, try adding the column 'line_item_line_ite
 
 #### Pricing
 N/A
-
-#### Sample Output:                                                                                                                                     
-![Images/unblended_cost_by_charge_type.png](/Cost/300_CUR_Queries/Images/Global/unblended_cost_by_charge_type.png)          
 
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/unblended_cost_by_charge_type.sql)                                                                                    
@@ -473,9 +455,6 @@ This query will provide monthly unblended cost for all [Serverless products](htt
 * [Amazon DynamoDB pricing page](https://aws.amazon.com/dynamodb/pricing/)
 * [Amazon RDS Proxy pricing page](https://aws.amazon.com/rds/proxy/pricing)
 * [Amazon Aurora pricing page](https://aws.amazon.com/rds/aurora/pricing/)
-
-#### Sample Output:                                                                                                                                     
-![Images/serverless.png](/Cost/300_CUR_Queries/Images/Global/serverless.png)          
 
 #### Download SQL File:                                                                                                                                       
 [Link to file](/Cost/300_CUR_Queries/Code/Global/serverless.sql)                                                                                    
@@ -604,9 +583,6 @@ Choosing advanced options Cost Explorer documentation - [Link](https://docs.aws.
 These links are provided as an example to compare CUR report output to Cost Explorer output.
 
 Amortized Cost [Link](https://console.aws.amazon.com/cost-management/home?#/custom?groupBy=RecordType&hasBlended=false&hasAmortized=true&excludeDiscounts=true&excludeTaggedResources=false&excludeCategorizedResources=false&excludeForecast=false&timeRangeOption=Last6Months&granularity=Monthly&reportName=&reportType=CostUsage&isTemplate=true&filter=%5B%5D&chartStyle=Stack&forecastTimeRangeOption=None&usageAs=usageQuantity)
-
-#### Sample Output:
-![Images/spendaccount.png](/Cost/300_CUR_Queries/Images/Global/amortized_cost_by_charge_type.png)
 
 #### Download SQL File:
 [Link to file](/Cost/300_CUR_Queries/Code/Global/amortized_cost_by_charge_type.sql)

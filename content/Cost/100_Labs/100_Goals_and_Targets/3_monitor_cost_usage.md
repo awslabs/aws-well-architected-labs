@@ -17,7 +17,7 @@ pre: "<b>3. </b>"
   - **Measures**: % of workloads with dashboards
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Ensures the organization is focusing on the correct metric (efficiency), and not the bill.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 ---
 
@@ -29,7 +29,7 @@ pre: "<b>3. </b>"
   - **Measures**: Reduction in bill
  - **Good/Bad**: Bad
  - **Why? When does it work well or not?**: Does not drive improvement or capability building, can stifle innovation and positive growth. Does not factor in outcomes - ignores efficiency. Can have false positives - goal can be achieved by doing nothing if next months usage decreases, or impossible to achieve if next months usage is significantly higher
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 ---
 
@@ -41,7 +41,7 @@ pre: "<b>3. </b>"
   - **Measures**: % of tag-able bill untagged
  - **Good/Bad**: Good
  - **Why? When does it work well or not?**: Helps add meaning to cost and usage, allows for adjustment between effort/reward with the % of bill approach, instead of using resource count.
- - **Contact/Contributor**: natbesh@amazon.com
+ - **Contact/Contributor**: costoptimization@amazon.com
 
 
 

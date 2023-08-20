@@ -1,0 +1,451 @@
+---
+  AWSTemplateFormatVersion: '2010-09-09'
+  Description: This AWS Cloudformation Template is to launch a demonstration environment to showcase the implementation of AWS health aware operational change process.
+  Parameters:
+    NotificationEmailAddress:
+      Description: This is the email address to receive notifications when the operational change pipeline has been interrupted.
+      AllowedPattern: '[^@]+@[^@]+\.[^@]+'
+      Type: String
+  Resources:
+    EC2Instance:
+      Type: AWS::EC2::Instance
+      Properties:
+        ImageId: ami-02f3f602d23f1659d
+        InstanceType: t2.micro
+        Tags: 
+          - Key: "Name"
+            Value: "well-architected-lab-windows-ec2"
+          - Key: "SSMFleetEnv"
+            Value: "test"
+    SSMChangeTemplateApprovalRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: SSMChangeTemplateApprovalRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+    HASSMInstanceProfileRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: SSMInstanceProfileHealthAwareRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: ec2.amazonaws.com
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+    HASSMAutomationRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: SSMAutomationHealthAwareRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: ssm.amazonaws.com
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSHealthFullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+        Policies: 
+          - PolicyName: allow-ssm-to-publish-sns-notification
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 'sns:Publish'
+                  Resource: !Ref 'SNSNotificationTopic'
+          - PolicyName: ssm-automation-iam-passrole-policy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 'iam:PassRole'
+                  Resource: !Sub arn:aws:iam::${AWS::AccountId}:role/SSMAutomationHealthAwareRole
+    SNSNotificationTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: "ssms-change-process-interruption-notification-sns-topic"
+    SNSEmailSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        TopicArn: !Ref SNSNotificationTopic
+        Endpoint: 
+          Ref: NotificationEmailAddress
+        Protocol: email
+    SMSAutomationHealthAwareRunbook:
+      Type: AWS::SSM::Document
+      Properties: 
+        Content:
+          description: |+
+            ---
+            # Purpose of this SSM Automation Runbook
+            ## 1. Built-in AWS health aware logic
+            ## 2. Avoid operation pipeline to be impacted by active AWS service events
+            ## 
+
+            ## Runbook Workflow
+            >*1. Automation Runbook initiated*
+
+            >*2. Poll AWS Health API* 
+
+            >*3. If there's active AWS Service events, then cancel the workflow, and send SNS notification to admin*
+
+            >*4. If there's no active service events, proceed the operation, e.g. Windows EC2 upgrades*
+            ##
+            [Github: aws-health-aware-ssm-change-management](https://github.com/JerryChenZeyun/aws-health-aware-ssm-change-management)
+
+          schemaVersion: '0.3'
+          assumeRole: {"Fn::GetAtt" : [HASSMAutomationRole, "Arn"] }
+          mainSteps:
+            - name: check_aws_health_status
+              action: 'aws:executeScript'
+              inputs:
+                Runtime: python3.8
+                Handler: script_handler
+                InputPayload:
+                  accountId: '{{global:ACCOUNT_ID}}'
+                Script: |-
+                  import json
+                  import boto3
+                  from botocore.config import Config
+
+                  def script_handler(events, context):
+                    ## Get the current region
+                    my_session = boto3.session.Session()
+                    my_region = my_session.region_name
+                    print("The current region is:", my_region)
+                    
+                    ## Initiate boto3 client
+                    config = Config(
+                      retries = dict(
+                        max_attempts = 10 # org view apis have a lower tps than the single
+                                          # account apis so we need to use larger
+                                          # backoff/retry values than than the boto defaults
+                        )
+                    )
+                    client = boto3.client('health', 'us-east-1', config=config)
+                    print("boto3 client initiation succeeded.")
+                      
+                    ## Fetch health event status
+                    response = client.describe_events(
+                      filter={
+                        'regions': [my_region],
+                        'eventTypeCategories': [
+                          'issue'
+                        ],
+                        'eventStatusCodes': [
+                          'open'
+                          ##,'upcoming'
+                          ##'closed'
+                        ]
+                      }    
+                    )
+                    print("health events have been fetched: ", type(response))
+                    print("Event status is: ", response["events"])
+
+                    ## determine if there's any active ('open') events, so that the operation pipeline will be delayed or suspended.
+                    if(len(response["events"]) != 0):
+                      serviceEventStatus = "Active-Service-Event-Exists"
+                      ## Extract service event data into a list
+                      service_list = ''
+                      for event in response["events"]:
+                        service_list = service_list + event['service'] +', '
+                      print("service_list is: ", service_list)
+                      print("service_list type is: ", type(service_list))
+                      
+                      serviceEventData = "There's active AWS service event(s) impacting the region, hence the AWS Systems Manager operation change process has been suspended.\n" + "Impacted Service(s): " + service_list + "Please look into the runbook execution logs."
+                      print(serviceEventData)
+                      
+
+                      ## SNS notify the admin re the service issue before suspending the operational activities.
+                      # Get the account ID
+                      sts = boto3.client('sts')
+                      AWS_ACCOUNT_ID = sts.get_caller_identity()["Account"]
+
+                      # Get the region info   
+                      my_session = boto3.session.Session()
+                      my_region = my_session.region_name
+
+                      # Generate the sns Topic ARN based on the Topic Name
+                      client = boto3.client('sns')
+                      snsTopicArn = "arn:aws:sns:" + my_region + ":" + AWS_ACCOUNT_ID + ":ssms-change-process-interruption-notification-sns-topic"
+                      print("sns ARN is: ", snsTopicArn)
+                      
+                      response = client.publish(
+                        TopicArn = snsTopicArn,
+                        Message = serviceEventData,
+                        Subject = "SSM Operation Change Process has been suspended due to active AWS service event(s)"
+                      )
+                      
+                    else:
+                      serviceEventStatus = "NO-Active-Service-Event"
+                      serviceEventData = "NO-Active-Service-Event"
+                      print(serviceEventData)
+                    
+                    return {'message': serviceEventStatus}
+                    
+                    
+              description: Poll AWS Health API to check if there's active AWS service events
+              outputs:
+                - Name: serviceEventStatus
+                  Selector: $.Payload.message
+                  Type: String
+              nextStep: workflow_control_based_on_service_event_status
+            - name: workflow_control_based_on_service_event_status
+              action: 'aws:branch'
+              onFailure: Abort
+              inputs:
+                Choices:
+                  - Variable: '{{check_aws_health_status.serviceEventStatus}}'
+                    StringEquals: NO-Active-Service-Event
+                    NextStep: option2_execute_planned_operation_activity
+                  - Variable: '{{check_aws_health_status.serviceEventStatus}}'
+                    StringEquals: Active-Service-Event-Exists
+                    NextStep: option1_suspend_the_change_workflow
+            - name: option1_suspend_the_change_workflow
+              action: 'aws:sleep'
+              inputs:
+                Duration: PT5S
+              isEnd: true
+              description: |-
+                **There's active service events**
+
+                Suspended the automation runbook.
+            - name: option2_execute_planned_operation_activity
+              action: 'aws:executeScript'
+              inputs:
+                Runtime: python3.8
+                Handler: script_handler
+                Script: |-
+                  import boto3
+
+                  def script_handler(events, context):
+                    ec2 = boto3.client('ec2', region_name='us-east-1')
+                    a = ec2.describe_instances(Filters=[{'Name':'tag:SSMFleetEnv', 'Values':['test']}])
+                    print ("a is: ", a)
+                    print ("type of a is: ", type(a))
+
+                    b = a['Reservations']
+                    print ("b is: ", b)
+                    print ("type of b is: ", type(b))
+
+                    for c in b:
+                      inst = c['Instances']
+            
+                      for d in inst:
+                        instid = d['InstanceId']
+                        instrun = d['State']['Name']
+              
+                        if instrun == 'running':
+                          ec2.stop_instances(InstanceIds=[instid])
+                          print("The instance is stopped:" + instid)
+                        else:
+                          print("The instance in stop state:" + instid)
+
+                    return {'message': 'Hello'}
+
+              isEnd: true
+              description: |-
+                **There's NO active service event:**
+
+                Conduct the planned operational change process as there's NO existed active AWS service event. In this case it's to stop the EC2 instance with **SSMFleetEnv** tag value set to be **test**.
+        DocumentFormat: YAML
+        DocumentType: Automation
+        Name: AWS_health_aware_normal_operation_runbook
+      DependsOn:
+      - HASSMInstanceProfileRole
+      - HASSMAutomationRole
+    SMSAutomationHealthAwareRunbookSimulatedEvents:
+      Type: AWS::SSM::Document
+      Properties: 
+        Content:
+          description: |+
+            ---
+            # Purpose of this SSM Automation Runbook
+            ## 1. Built-in AWS health aware logic
+            ## 2. Avoid operation pipeline to be impacted by active AWS service events
+            ## 3. Simulate the service event senario using the historical event data
+
+            ## Runbook Workflow
+            >*1. Automation Runbook initiated*
+
+            >*2. Poll AWS Health API* 
+
+            >*3. If there's active AWS Service events, then cancel the workflow, and send SNS notification to admin*
+
+            >*4. If there's no active service events, proceed the operation, e.g. Windows EC2 upgrades*
+            ##
+            [Github: aws-health-aware-ssm-change-management](https://github.com/JerryChenZeyun/aws-health-aware-ssm-change-management)
+
+          schemaVersion: '0.3'
+          assumeRole: {"Fn::GetAtt" : [HASSMAutomationRole, "Arn"] }
+          mainSteps:
+            - name: check_aws_health_status
+              action: 'aws:executeScript'
+              inputs:
+                Runtime: python3.8
+                Handler: script_handler
+                InputPayload:
+                  accountId: '{{global:ACCOUNT_ID}}'
+                Script: |-
+                  import json
+                  import boto3
+                  from botocore.config import Config
+
+                  def script_handler(events, context):
+                    ## Get the current region
+                    my_session = boto3.session.Session()
+                    my_region = my_session.region_name
+                    print("The current region is:", my_region)
+                    
+                    ## Initiate boto3 client
+                    config = Config(
+                      retries = dict(
+                        max_attempts = 10 # org view apis have a lower tps than the single
+                                          # account apis so we need to use larger
+                                          # backoff/retry values than than the boto defaults
+                        )
+                    )
+                    client = boto3.client('health', 'us-east-1', config=config)
+                    print("boto3 client initiation succeeded.")
+                      
+                    ## Fetch health event status
+                    response = client.describe_events(
+                      filter={
+                        'regions': [my_region],
+                        'eventTypeCategories': [
+                          'issue'
+                        ],
+                        'eventStatusCodes': [
+                          ##'open'
+                          ##,'upcoming'
+                          'closed'
+                        ]
+                      }    
+                    )
+                    print("health events have been fetched: ", type(response))
+                    print("Event status is: ", response["events"])
+
+                    ## determine if there's any active ('open') events, so that the operation pipeline will be delayed or suspended.
+                    if(len(response["events"]) != 0):
+                      serviceEventStatus = "Active-Service-Event-Exists"
+                      ## Extract service event data into a list
+                      service_list = ''
+                      for event in response["events"]:
+                        service_list = service_list + event['service'] +', '
+                      print("service_list is: ", service_list)
+                      print("service_list type is: ", type(service_list))
+                      
+                      serviceEventData = "There's active AWS service event(s) impacting the region, hence the AWS Systems Manager operation change process has been suspended.\n" + "Impacted Service(s): " + service_list + "Please look into the runbook execution logs."
+                      print(serviceEventData)
+                      
+
+                      ## SNS notify the admin re the service issue before suspending the operational activities.
+                      # Get the account ID
+                      sts = boto3.client('sts')
+                      AWS_ACCOUNT_ID = sts.get_caller_identity()["Account"]
+
+                      # Get the region info   
+                      my_session = boto3.session.Session()
+                      my_region = my_session.region_name
+
+                      # Generate the sns Topic ARN based on the Topic Name
+                      client = boto3.client('sns')
+                      snsTopicArn = "arn:aws:sns:" + my_region + ":" + AWS_ACCOUNT_ID + ":ssms-change-process-interruption-notification-sns-topic"
+                      print("sns ARN is: ", snsTopicArn)
+                      
+                      response = client.publish(
+                        TopicArn = snsTopicArn,
+                        Message = serviceEventData,
+                        Subject = "SSM Operation Change Process has been suspended due to active AWS service event(s)"
+                      )
+                      
+                    else:
+                      serviceEventStatus = "NO-Active-Service-Event"
+                      serviceEventData = "NO-Active-Service-Event"
+                      print(serviceEventData)
+                    
+                    return {'message': serviceEventStatus}
+                    
+              description: Poll AWS Health API to check if there's active AWS service events
+              outputs:
+                - Name: serviceEventStatus
+                  Selector: $.Payload.message
+                  Type: String
+              nextStep: workflow_control_based_on_service_event_status
+            - name: workflow_control_based_on_service_event_status
+              action: 'aws:branch'
+              onFailure: Abort
+              inputs:
+                Choices:
+                  - Variable: '{{check_aws_health_status.serviceEventStatus}}'
+                    StringEquals: NO-Active-Service-Event
+                    NextStep: option2_execute_planned_operation_activity
+                  - Variable: '{{check_aws_health_status.serviceEventStatus}}'
+                    StringEquals: Active-Service-Event-Exists
+                    NextStep: option1_suspend_the_change_workflow
+            - name: option1_suspend_the_change_workflow
+              action: 'aws:sleep'
+              inputs:
+                Duration: PT5S
+              isEnd: true
+              description: |-
+                **There's active service events**
+
+                Suspended the automation runbook.
+            - name: option2_execute_planned_operation_activity
+              action: 'aws:executeScript'
+              inputs:
+                Runtime: python3.8
+                Handler: script_handler
+                Script: |-
+                  import boto3
+
+                  def script_handler(events, context):
+                    ec2 = boto3.client('ec2', region_name='us-east-1')
+                    a = ec2.describe_instances(Filters=[{'Name':'tag:SSMFleetEnv', 'Values':['test']}])
+                    print ("a is: ", a)
+                    print ("type of a is: ", type(a))
+
+                    b = a['Reservations']
+                    print ("b is: ", b)
+                    print ("type of b is: ", type(b))
+
+                    for c in b:
+                      inst = c['Instances']
+            
+                      for d in inst:
+                        instid = d['InstanceId']
+                        instrun = d['State']['Name']
+              
+                        if instrun == 'running':
+                          ec2.stop_instances(InstanceIds=[instid])
+                          print("The instance is stopped:" + instid)
+                        else:
+                          print("The instance in stop state:" + instid)
+
+                    return {'message': 'Hello'}
+
+              isEnd: true
+              description: |-
+                **There's NO active service event:**
+
+                Conduct the planned operational change process as there's NO existed active AWS service event. In this case it's to stop the EC2 instance with **SSMFleetEnv** tag value set to be **test**.
+        DocumentFormat: YAML
+        DocumentType: Automation
+        Name: AWS_health_aware_event_simulated_runbook
+      DependsOn:
+      - HASSMInstanceProfileRole
+      - HASSMAutomationRole

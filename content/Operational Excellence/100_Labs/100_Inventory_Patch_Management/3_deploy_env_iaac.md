@@ -59,12 +59,12 @@ A CloudFormation template is a JSON or YAML formatted text file that describes y
    1. Leave **InstanceProfile** blank as we have not yet defined an instance profile.
    1. Leave **InstanceTypeApp** and **InstanceTypeWeb** as the default free-tier-eligible t2.micro value.
    1. Select the EC2 **KeyName** you defined earlier from the list.
-   * In a browser window, go to <https://checkip.amazonaws.com/> to get your IP. Enter your IP address in **SSHLocation** in CIDR notation (i.e., ending in /32).
-   * Define the **Workload Name** as `Test`.
+   * In a browser window, go to <https://checkip.amazonaws.com/> to get your IP. Enter your IP address in **SourceLocation** in CIDR notation (i.e., ending in /32).
+   * Define the **WorkloadName** as `Test`.
    * Choose **Next**.
 1. On the **Options** page under **Tags**, define a **Key** of **Owner**, with **Value** set to the username you choose for your administrator. You may define additional keys as needed. The CloudFormation template creates all the example tags given in the discussion on tagging above.
 1. Leave all other sections unmodified. Scroll to the bottom of the page and choose **Next**.
-1. On the **Review** page, review your choices and then choose **Create**.
+1. On the **Review** page, review your choices and then choose **Submit**.
 1. On the CloudFormation console page
     1. **Check the box next to your Stack Name** to see its details.
     1. If your **Stack Name** is not displayed, click the **refresh** button (circular arrow) in the top right until it appears.

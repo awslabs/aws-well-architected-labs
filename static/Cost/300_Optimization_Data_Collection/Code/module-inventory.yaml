@@ -1,0 +1,596 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Retrieves Inventory data for the chosen service
+Parameters:
+  DatabaseName:
+    Type: String
+    Description: Name of the Athena database to be created to hold lambda information
+    Default: optimization_data
+  DestinationBucket:
+    Type: String
+    Description: Name of the S3 Bucket to be created to hold data information
+    AllowedPattern: (?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)
+  MultiAccountRoleName:
+    Type: String
+    Description: Name of the IAM role deployed in all accounts which can retrieve AWS Data.
+  LambdaAnalyticsARN:
+    Type: String
+    Description: Arn of lambda for Analytics
+  CFDataName:
+    Type: String
+    Description: The name of what this cf is doing.
+    Default: inventory
+  DestinationBucketARN:
+    Type: String
+    Description: ARN of the S3 Bucket that exists or needs to be created to hold rightsizing information
+  CodeBucket:
+      Type: String
+      Description: S3 Bucket that exists and holds code
+      Default: aws-well-architected-labs
+  CodeKey:
+    Type: String
+    Description: file name of ZipFile with data code
+    Default: Cost/Labs/300_Optimization_Data_Collection/fof.zip
+  GlueRoleARN:
+    Type: String
+  RolePrefix:
+    Type: String
+    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable
+Outputs:
+  LambdaRoleARN:
+    Description: Role for Lambda execution of lambda data.
+    Value:
+      Fn::GetAtt:
+        - LambdaRole
+        - Arn
+  GlueCrawler:
+    Value:
+      Fn::Sub: "${CFDataName}Crawler"
+  SQSUrl:
+    Description: TaskQueue URL the account collector lambda
+    Value: !Ref TaskQueue
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${RolePrefix}Lambda-Role-${CFDataName}"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+      Policies:
+        - PolicyName: !Sub "Assume-Management-${CFDataName}-Account-Role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sts:AssumeRole"
+                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
+        - PolicyName: !Sub "${CFDataName}-S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: 
+                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
+              - Effect: "Allow"
+                Action:
+                  - "glue:StartCrawler"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:pricing-Lambda-Function"
+              - Effect: "Allow"
+                Action:
+                  - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
+                  - "sqs:GetQueueAttributes"
+                Resource: arn:aws:sqs:*:*:InventoryCollectorModul-TaskQueue
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub
+          - '${CFDataName}-Lambda-Function-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Description: !Sub "LambdaFunction to retrieve ${CFDataName}"
+      Runtime: python3.8
+      Code:
+         S3Bucket: !Ref CodeBucket
+         S3Key: !Ref CodeKey
+      Handler: 'main.lambda_handler'
+      MemorySize: 2688
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+          - LambdaRole
+          - Arn
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            Ref: DestinationBucket
+          ROLENAME:
+            Ref: MultiAccountRoleName
+          PREFIX:
+            Ref: CFDataName
+          AMICrawler:
+            Ref: AMICrawler
+          SnapshotCrawler:
+            Ref: SnapshotCrawler
+          EBSCrawler:
+            Ref: EBSCrawler
+  AMICrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub
+          - '${CFDataName}-AMICrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/inventory/inventory-ami-data/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
+  SnapshotCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub
+          - '${CFDataName}-SnapshotCrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/inventory/inventory-snapshot-data/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
+  EBSCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name:
+        !Sub
+          - '${CFDataName}-EBSCrawler-${Id}'
+          - Id: !Select [0, !Split ['-', !Ref AWS::StackName]]
+      Role: !Ref GlueRoleARN
+      DatabaseName: !Ref DatabaseName
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${DestinationBucket}/inventory/inventory-ebs-data/"
+      Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}}}"
+  EventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !GetAtt TaskQueue.Arn
+  TaskQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 300
+      ReceiveMessageWaitTimeSeconds: 20
+      DelaySeconds: 2
+      KmsMasterKeyId: "alias/aws/sqs"
+      QueueName: 'InventoryCollectorModul-TaskQueue'
+  EventSourceMapping:
+    DependsOn:
+      - EventPermission
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt TaskQueue.Arn
+      FunctionName: !GetAtt LambdaFunction.Arn
+  AthenaSnaphotAMI:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's
+      Name: inventory_snapshot_connected_to_ami
+      QueryString: |
+        SELECT distinct(snapshotid),volume,volumesize,starttime,snapdescription, ownerid, 
+        snap_ami_id, imageid, name, description, state, rootdevicetype, virtualizationtype,year, month, 
+        CASE
+        WHEN snap_ami_id = imageid THEN 'AMI Avalible'
+        WHEN snap_ami_id LIKE 'ami%' THEN 'AMI Removed'
+        ELSE 'Not AMI'
+        END AS status
+          FROM ( 
+        (SELECT snapshotid,
+            volumeid as volume,
+            volumesize,
+            starttime,
+            Description AS snapdescription,
+            year,
+            month,
+            ownerid,
+            
+            CASE
+            WHEN substr(Description, 1, 22) = 'Created by CreateImage' THEN
+            split_part(Description,' ', 5)
+            WHEN substr(Description, 2, 11) = 'Copied snap' THEN
+            split_part(Description,' ', 9)
+            WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN
+            split_part(Description,' ', 4)
+            ELSE ''
+            END AS snap_ami_id
+        FROM optimization_data.inventory_snapshot_data
+        ) AS snapshots
+        LEFT JOIN 
+            (SELECT imageid,
+            name,
+            description,
+            state,
+            rootdevicetype,
+            virtualizationtype
+            FROM optimization_data.inventory_ami_data) AS ami
+                ON snapshots.snap_ami_id = ami.imageid )
+  AthenaSnaphotAMICUR:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with CUR data 
+      Name: inventory_snapshot_connected_to_ami_with_CUR
+      QueryString: | 
+          SELECT DISTINCT
+            snapshotid
+          , volume
+          , volumesize
+          , starttime
+          , snapdescription
+          , ownerid
+          , snap_ami_id
+          , imageid
+          , name
+          , description
+          , state
+          , rootdevicetype
+          , virtualizationtype
+          , snapshots.year
+          , snapshots.month
+          , (CASE WHEN (snap_ami_id = imageid) THEN 'AMI Avalible' WHEN (snap_ami_id LIKE 'ami%') THEN 'AMI Removed' ELSE 'Not AMI' END) status
+          ,sum_line_item_usage_amount
+          ,sum_line_item_unblended_cost
+          FROM
+          (SELECT
+              snapshotid
+            , volumeid volume
+            , volumesize
+            , starttime
+            , Description snapdescription
+            , inventory_snapshot_data.year
+            , inventory_snapshot_data.month
+            , ownerid
+            , (CASE WHEN ("substr"(Description, 1, 22) = 'Created by CreateImage') THEN "split_part"(Description, ' ', 5) WHEN ("substr"(Description, 2, 11) = 'Copied snap') THEN "split_part"(Description, ' ', 9) WHEN ("substr"(Description, 1, 22) = 'Copied for Destination') THEN "split_part"(Description, ' ', 4) ELSE '' END) snap_ami_id
+            FROM
+              optimization_data.inventory_snapshot_data)
+          as   snapshots
+          LEFT JOIN (
+            SELECT
+              imageid
+            , name
+            , description
+            , state
+            , rootdevicetype
+            , virtualizationtype
+            FROM
+              optimization_data.inventory_ami_data
+          )  ami ON (snapshots.snap_ami_id = ami.imageid)
+          left join
+          (SELECT
+                bill_payer_account_id,
+                line_item_usage_account_id,
+                product_region,
+                split("line_item_resource_id", '/')[2]resource_id,
+                ${table_name}.month, 
+                ${table_name}.year,
+                SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
+                SUM(CAST(line_item_unblended_cost AS DECIMAL(16,8))) AS sum_line_item_unblended_cost
+              FROM
+                ${database}.${table_name}
+              WHERE
+                ${date_filter}
+                AND product_product_name = 'Amazon Elastic Compute Cloud'
+                AND line_item_usage_type LIKE '%%EBS%%Snapshot%%'
+                AND product_product_family LIKE 'Storage Snapshot'
+                AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+              GROUP BY
+                bill_payer_account_id,
+                line_item_usage_account_id,
+                product_region, 
+                "line_item_resource_id",month, year
+              ORDER BY
+                sum_line_item_unblended_cost DESC, 
+                sum_line_item_usage_amount DESC
+          ) as cur
+          on snapshots.snapshotid = cur.resource_id
+          and snapshots.ownerid=cur.line_item_usage_account_id
+          and snapshots.month=cur.month
+          and snapshots.year=cur.year
+          where snapshots.month = '11' and snapshots.year= '2022'
+
+  AthenaSnaphotAMIPricing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: inventory_snapshot_connected_to_ami_with_pricing
+      QueryString: |
+        CREATE OR REPLACE VIEW snapshot_ami_quicksight_view AS 
+        SELECT *,
+          CASE
+            WHEN snap_ami_id = imageid THEN 'AMI Avalible'
+            WHEN snap_ami_id LIKE 'ami%' THEN 'AMI Removed' ELSE 'Not AMI'
+          END AS status,
+         cast(priceperunit as decimal)*volumesize as est_snap_cost
+        FROM ((((
+            (
+              SELECT snapshotid AS snap_id,
+                volumeid as volume,
+                volumesize,
+                starttime,
+                Description AS snapdescription,
+                year,
+                month,
+                region,
+                ownerid,
+                CASE
+                  WHEN substr(Description, 1, 22) = 'Created by CreateImage' THEN split_part(Description, ' ', 5)
+                  WHEN substr(Description, 2, 11) = 'Copied snap' THEN split_part(Description, ' ', 9)
+                  WHEN substr(Description, 1, 22) = 'Copied for Destination' THEN split_part(Description, ' ', 4) ELSE ''
+                END AS snap_ami_id
+              FROM optimization_data.inventory_snapshot_data
+            ) AS snapshots
+            LEFT JOIN (
+              SELECT imageid,
+                name,
+                description,
+                state,
+                rootdevicetype,
+                virtualizationtype, 
+                month as ami_month, 
+                year as ami_year
+              FROM optimization_data.inventory_ami_data) AS ami 
+            ON snapshots.snap_ami_id = ami.imageid and snapshots.month=ami.ami_month and snapshots.year = ami.ami_year
+          )
+          LEFT JOIN (
+          SELECT
+            region region_code
+          , regionname
+          FROM
+            optimization_data.pricing_region_names
+        )  region ON (snapshots.region = region.region_code))
+        LEFT JOIN (
+          SELECT DISTINCT
+            volumeid volume_mapping
+          , count(DISTINCT snapshotid) snap_count
+          FROM
+            optimization_data.inventory_snapshot_data
+          GROUP BY 1
+        )  mapping ON (mapping.volume_mapping = snapshots.volume)) s
+        LEFT JOIN (
+          SELECT
+            "productfamily"
+          , location
+          , priceperunit
+          , unit
+          FROM
+            optimization_data.pricing_ec2
+          WHERE ((("productfamily" = 'Storage Snapshot') AND (usagetype LIKE '%SnapshotUsage%')) AND ("locationtype" = 'AWS Region'))
+        )  snap_unit_price ON (s.regionname = snap_unit_price.location))
+
+  AthenaEBSTA:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: inventory_ebs_with_ta_data
+      QueryString: |
+        SELECT * 
+        FROM optimization_data.inventory_ebs_data
+        LEFT JOIN (
+          SELECT "volume id","volume name", "volume type","volume size",status,	"monthly storage cost" ,accountid as taaccountid, category, region as taregion, year as tayear,month as tamonth
+          FROM optimization_data.trusted_advisor_data
+          WHERE category = 'cost_optimizing' ) ta
+          ON inventory_ebs_data.volumeid = ta."volume id" and inventory_ebs_data.year = ta.tayear and inventory_ebs_data.month = ta.tamonth
+        LEFT JOIN (
+          SELECT
+            region region_code
+          , regionname
+          FROM optimization_data.pricing_region_names
+          )  region
+          ON (inventory_ebs_data.region = region.region_code)
+  AthenaEBSView:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data
+      Name: ebs-view
+      QueryString: |
+        CREATE OR REPLACE VIEW inventory_ebs_view AS
+        SELECT * FROM
+                    optimization_data.inventory_ebs_data
+                LEFT JOIN
+                (select "volume id","volume name", "volume type","volume size",	"monthly storage cost" ,accountid as ta_accountid, status, category, region as ta_region, year as ta_year ,month as ta_month
+                from
+                optimization_data.trusted_advisor_data
+                where category = 'cost_optimizing') ta
+                ON inventory_ebs_data.volumeid = ta."volume id" and inventory_ebs_data.year = ta.ta_year and inventory_ebs_data.month = ta.ta_month
+                LEFT JOIN (
+          SELECT
+            "region" "region_code"
+          , regionname
+          FROM
+            optimization_data.pricing_region_names
+        )  region ON (inventory_ebs_data.region = region.region_code)
+  AthenaEBSTAPricing:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies snapshots connected to AMI's with Pricing data 
+      Name: inventory_ebs_with_ta_data_with_pricing
+      QueryString: |
+        CREATE OR REPLACE VIEW ebs_quicksight_view AS
+          SELECT
+            volumeid
+          , volumetype
+          , size
+          , attachments
+          , iops
+          , region
+          , accountid
+          , TRY(date_parse(createtime, '%Y-%m-%d %H:%i:%s')) date_created
+          , year
+          , month
+          , CAST(concat(year, '-', month, '-01') AS date) billing_period
+          , concat(year, '-', month) date
+          , (CASE status WHEN 'warning' THEN 'Underutilised' ELSE 'Healthy' END) status
+          , priceperunit
+          , iop_price
+          , (priceperunit * size) ebs_gb_cost
+          , (priceperunit * size) ebs_cost
+          , (CASE WHEN (volumetype = 'io1') THEN (iop_price * CAST(iops AS integer)) WHEN (volumetype = 'io2') THEN (iop_price * CAST(iops AS integer)) ELSE 0 END) iop_cost
+          FROM
+            ((optimization_data.inventory_ebs_view
+          LEFT JOIN (
+            SELECT
+              "volume api name"
+            , location
+            , priceperunit
+            , unit
+            , "product family"
+            FROM
+              optimization_data.pricing_ec2
+            WHERE ("product family" = 'Storage')
+          )  ebs_price ON ((inventory_ebs_view.volumetype = ebs_price."volume api name") AND (inventory_ebs_view.regionname = ebs_price.location)))
+          LEFT JOIN (
+            SELECT
+              "volume api name"
+            , location
+            , priceperunit iop_price
+            , unit
+            , "product family"
+            , usagetype
+            FROM
+              optimization_data.pricing_ec2
+            WHERE ((("Product Family" = 'System Operation') AND ("volume api name" IN ('io1', 'io2'))) AND ((usagetype LIKE '%EBS:VolumeP-IOPS.io2') OR (usagetype LIKE '%EBS:VolumeP-IOPS.piops')))
+          )  ebs_iops_price ON ((inventory_ebs_view.volumetype = ebs_iops_price."volume api name") AND (inventory_ebs_view.regionname = ebs_iops_price.location)))
+          ORDER BY volumeid DESC
+  AthenaGp3Opportunity:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Database: !Ref DatabaseName
+      Description: Identifies gp2, io1, io2 that could move to gp3
+      Name: gp3-opportunity
+      QueryString: |
+        WITH raw_ebs_pricedata AS (
+        SELECT
+            region,
+            map_agg(
+                CASE WHEN "volume api name" = 'io1' AND unit = 'GB-Mo' THEN 'io1_GB-Mo'
+                    WHEN "volume api name" = 'io2' AND unit = 'GB-month' THEN 'io2_GB-Mo'
+                    WHEN "volume api name" = 'gp3' AND unit = 'GB-Mo' THEN 'gp3_GB-Mo'
+                    WHEN "volume api name" = 'gp2' AND unit = 'GB-Mo' THEN 'gp2_GB-Mo'
+                    WHEN "volume api name" = 'io1' AND unit = 'IOPS-Mo' THEN 'io1_IOPS-Mo'
+                    WHEN "volume api name" = 'io2' AND unit = 'IOPS-Mo' AND "group" = 'EBS IOPS' THEN 'io2_IOPS-Mo_tier1'
+                    WHEN "volume api name" = 'io2' AND unit = 'IOPS-Mo' AND "group" = 'EBS IOPS Tier 2' THEN 'io2_IOPS-Mo_tier2'
+                    WHEN "volume api name" = 'io2' AND unit = 'IOPS-Mo' AND "group" = 'EBS IOPS Tier 3' THEN 'io2_IOPS-Mo_tier3'
+                    WHEN "volume api name" = 'gp3' AND unit = 'IOPS-Mo' THEN 'gp3_IOPS-Mo'
+                    WHEN "volume api name" = 'gp3' AND unit = 'GiBps-mo' THEN 'gp3_GiBps-mo'
+                    ELSE unit
+                END, priceperunit) kv1
+        FROM optimization_data.pricing_ec2
+        JOIN optimization_data.pricing_region_names ON pricing_region_names.regionname = pricing_ec2.location
+        WHERE "volume api name" IN ('io1','io2','gp3','gp2')
+        GROUP BY region
+        ),
+        pivoted_ebs_pricedata AS (
+            SELECT region,
+                  kv1['io1_GB-Mo'] as io1_gb_unit_cost,
+                  kv1['io2_GB-Mo'] as io2_gb_unit_cost,
+                  kv1['gp2_GB-Mo'] as gp2_gb_unit_cost,
+                  kv1['gp3_GB-Mo'] AS gp3_gb_unit_cost,
+                  kv1['io1_IOPS-Mo'] as io1_iops_unit_cost,
+                  kv1['io2_IOPS-Mo_tier1'] as io2_iops_t1_unit_cost,
+                  kv1['io2_IOPS-Mo_tier2'] as io2_iops_t2_unit_cost,
+                  kv1['io2_IOPS-Mo_tier3'] as io2_iops_t3_unit_cost,
+                  kv1['gp3_IOPS-Mo'] as gp3_iops_unit_cost,
+                  kv1['gp3_GiBps-mo']/1000. AS gp3_throughput_unit_cost
+            FROM raw_ebs_pricedata
+        ),
+        ebs_data AS (
+            SELECT
+                volumeid,
+                "volume name",
+                "volume type",
+                size,
+                attachments,
+                iops,
+                inventory_ebs_view.region,
+                accountid,
+                year,
+                month,
+                CASE status
+                    WHEN 'warning' THEN 'Underutilised'
+                    ELSE 'Healthy'
+                END AS status,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_gb_unit_cost
+                    WHEN volumetype = 'io2' THEN io2_gb_unit_cost
+                    WHEN volumetype = 'gp2' THEN gp2_gb_unit_cost
+                END as gb_unit_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_gb_unit_cost * size
+                    WHEN volumetype = 'io2' THEN io2_gb_unit_cost * size
+                    WHEN volumetype = 'gp2' THEN gp2_gb_unit_cost * size
+                END as current_gb_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_iops_unit_cost
+                    WHEN volumetype = 'io2' THEN io2_iops_t1_unit_cost
+                    WHEN volumetype = 'gp2' THEN 0.0
+                END as iops_unit_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN io1_iops_unit_cost * CAST(iops AS double)
+                    WHEN volumetype = 'io2' THEN io2_iops_t1_unit_cost * CAST(iops AS double)
+                    WHEN volumetype = 'gp2' THEN 0.0
+                END as current_iops_cost,
+                gp3_gb_unit_cost,
+                gp3_gb_unit_cost * size AS gp3_gb_cost,
+                gp3_iops_unit_cost,
+                CASE
+                    WHEN cast(iops as integer) <= 3000 THEN 0.0
+                    ELSE (CAST(iops AS double) - 3000.) * gp3_iops_unit_cost
+                END as gp3_iops_cost,
+                gp3_throughput_unit_cost,
+                CASE
+                    WHEN volumetype = 'io1' THEN gp3_throughput_unit_cost * 500
+                    WHEN volumetype = 'io2' THEN gp3_throughput_unit_cost * 500
+                    WHEN volumetype = 'gp2' AND size <= 170 THEN gp3_throughput_unit_cost * (128.0 - 125.0)
+                    WHEN volumetype = 'gp2' AND size > 170 THEN gp3_throughput_unit_cost * (250.0 - 125.0)
+                END AS gp3_throughput_cost
+            FROM optimization_data.inventory_ebs_view
+            LEFT JOIN pivoted_ebs_pricedata ON pivoted_ebs_pricedata.region = inventory_ebs_view.region            
+            WHERE 
+                volumetype in('io1', 'io2', 'gp2')
+                and cast(iops as integer) < 16000 )
+          SELECT
+              *,
+              current_gb_cost + current_iops_cost AS current_total_cost,
+              gp3_gb_cost + gp3_iops_cost + gp3_throughput_cost AS gp3_total_cost,
+              (current_gb_cost + current_iops_cost) - (gp3_gb_cost + gp3_iops_cost + gp3_throughput_cost) as gp3_saving
+          FROM inventory_ebs_data
+  LambdaAnalyticsExecutor:
+    Type: Custom::LambdaAnalyticsExecutor
+    Properties:
+      ServiceToken: !Ref LambdaAnalyticsARN
+      Name: !Ref CFDataName

@@ -1,4 +1,4 @@
--- modified: 2021-04-25
+-- modified: 2022-12-13
 -- query_id: ecs-eks
 -- query_description: This query will output the daily cost and usage per resource, by operation and service, for Elastic Consainer Services, ECS and EKS, both unblended and amortized costs are shown.
 -- query_columns: bill_payer_account_id,line_item_line_item_type,line_item_operation,line_item_product_code,line_item_resource_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date
@@ -26,7 +26,7 @@ FROM -- automation_from_stmt
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   and line_item_product_code IN ('AmazonECS','AmazonEKS')
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage','SavingsPlanRecurringFee','SavingsPlanNegation','SavingsPlanUpfrontFee')
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,

@@ -6,11 +6,11 @@ Parameters:
     Description: AccountId of where the collector is deployed
   ManagementAccountRole:
     Type: String
-    Description: Name of role deployed into Management account to read high level data
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. DO NOT ENTER THE ROLE PREFIX HERE. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT.
     Default: "Lambda-Assume-Role-Management-Account" 
   RolePrefix:
     Type: String
-    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Description: Keep this consistent with the prefix used for the Stacks and StackSets created as part of this lab. This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
     Default: "WA-"
 Outputs:
   LambdaRole:
@@ -33,8 +33,6 @@ Resources:
               AWS:
                 -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
       Path: /
       Policies:
         - PolicyName: "Management-Account-permissions"
@@ -43,7 +41,6 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action:
-                  - "ce:GetRightsizingRecommendation"
                   - "organizations:ListAccounts"
                   - "organizations:ListCreateAccountStatus"
                   - "organizations:DescribeOrganization"
@@ -56,6 +53,22 @@ Resources:
                   - "organizations:ListParents"
                   - "organizations:ListOrganizationalUnitsForParent"
                   - "organizations:ListChildren"
+                Resource: "*"
+        - PolicyName: "RightsizingModule"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ce:GetRightsizingRecommendation"
+                Resource: "*"
+        - PolicyName: "AnomaliesModule"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ce:GetAnomalies"
                 Resource: "*"
         - PolicyName: "ComputeOptimizer-ExportLambdaFunctionRecommendations"
           PolicyDocument:
@@ -97,4 +110,16 @@ Resources:
                   - "compute-optimizer:ExportEC2InstanceRecommendations"
                   - "compute-optimizer:GetEC2InstanceRecommendations"
                   - "EC2:DescribeInstances"
+                Resource: "*"
+        - PolicyName: "ComputeOptimizer-ExportECSRecommendations"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "compute-optimizer:ExportECSServiceRecommendations"
+                  - "compute-optimizer:GetECSServiceRecommendations"
+                  - "compute-optimizer:GetECSServiceRecommendationProjectedMetrics"
+                  - "ecs:ListServices"
+                  - "ecs:ListClusters"
                 Resource: "*"

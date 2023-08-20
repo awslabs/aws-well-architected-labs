@@ -159,7 +159,7 @@ WHERE line_item_usage_start_date >= CAST('2020-07-01 00:00:00' AS TIMESTAMP)
 
 **Example: Arbitrary Date/Time until Present (July 8, 2020 01:23:45AM - Present)**
 ```tsql
-WHERE line_item_usage_start_date >= FROM_ISO8601_TIMESTAMP('2020-07-01 01:23:45')
+WHERE line_item_usage_start_date >= FROM_ISO8601_TIMESTAMP('2020-07-01T01:23:45')
 ```
 
 **Example: Previous 3 Months Before Now**  

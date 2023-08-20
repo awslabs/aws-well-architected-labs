@@ -1,4 +1,4 @@
--- modified: 2021-04-25
+-- modified: 2022-12-13
 -- query_id: quicksight
 -- query_description: This query will provide monthly unblended and usage information per linked account for Amazon QuickSight.
 -- query_columns: bill_payer_account_id,line_item_unblended_cost,line_item_usage_account_id,line_item_usage_amount,line_item_usage_start_date,line_item_usage_type
@@ -11,8 +11,9 @@ SELECT -- automation_select_stmt
   CASE
     WHEN LOWER(line_item_usage_type) LIKE 'qs-user-enterprise%' THEN 'Users - Enterprise'
     WHEN LOWER(line_item_usage_type) LIKE 'qs-user-standard%' THEN 'Users - Standard'
-    WHEN LOWER(line_item_usage_type) LIKE 'qs-reader-usage%' THEN 'Reader Usage'
-    WHEN LOWER(line_item_usage_type) LIKE '%spice' THEN 'SPICE'  
+    WHEN LOWER(line_item_usage_type) LIKE 'qs-reader%' THEN 'Reader Usage'
+    WHEN LOWER(line_item_usage_type) LIKE '%spice' THEN 'SPICE' 
+    WHEN LOWER(line_item_usage_type) LIKE '%alerts%' THEN 'Alerts'
     ELSE line_item_usage_type
   END AS case_line_item_usage_type,
   SUM(CAST(line_item_usage_amount AS DOUBLE)) AS sum_line_item_usage_amount,
@@ -22,7 +23,7 @@ FROM -- automation_from_stmt
 WHERE -- automation_where_stmt
   ${date_filter} -- automation_timerange_year_month
   AND product_product_name = 'Amazon QuickSight'
-  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage', 'SavingsPlanCoveredUsage')
+  AND line_item_line_item_type  IN ('DiscountedUsage', 'Usage')
 GROUP BY -- automation_groupby_stmt
   bill_payer_account_id,
   line_item_usage_account_id,

@@ -1,0 +1,12 @@
+     ======================= Sample Data ========================   
+[AWS Trusted Advisor]
+Amazon EC2 Reserved Instances Optimization
+region       instanceType       recommended Number Of RIs       estimated Monthly Savings       upfront Cost of RI       Terms(Years)
+us-east-1  c4.large  3  $96.24  $1,617.00  THREE_YEARS
+us-east-1  c4.large  2  $58.37  $526.00  ONE_YEAR
+us-east-1  t4g.nano  32  $1.14  $704.00  THREE_YEARS
+us-east-1  t2.nano  2  $5.05  $60.00  THREE_YEARS
+us-east-1  t3.nano  32  $74.11  $864.00  THREE_YEARS
+us-east-1  t3.nano  32  $46.76  $448.00  ONE_YEAR
+us-east-1  t2.nano  2  $3.49  $30.00  ONE_YEAR
+     ============================ Done ============================     

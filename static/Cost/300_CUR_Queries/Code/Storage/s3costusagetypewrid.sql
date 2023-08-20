@@ -27,7 +27,7 @@ SELECT
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'OneZoneIAStorage') THEN 'Storage ZIA'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'OneZoneIASizeOverhead') THEN 'Storage ZIA-Overhead'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierInstantRetrievalStorage') THEN 'Storage GIR'
-    WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierInstantRetrievalSizeOverhead') THEN 'Storage GIR-Overhead'
+    WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierIRSizeOverhead') THEN 'Storage GIR-Overhead'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierStorage') THEN 'Storage Glacier'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND line_item_operation = 'GlacierStagingStorage') THEN 'Storage Glacier-Staging'
     WHEN (line_item_usage_type LIKE '%TimedStorage%' AND (line_item_operation = 'GlacierObjectOverhead' or line_item_operation = 'GlacierS3ObjectOverhead')) THEN 'Storage Glacier-Overhead'

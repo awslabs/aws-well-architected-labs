@@ -15,8 +15,10 @@ May 2022
 - Iakov Gan, Sr. Technical Account Manager (AWS)
 
 ## Contributors  
-- Andy Brown, OPTICS Manager - Commercial Architects IBUs
+- Andy Brown, OPTICS Manager Commercial Architects IBUs
 - Xianshu Zeng, OPTICS Commercial Architect
+- Rem Baumann, OPTICS Commercial Architect
+- Yash Bindlish, Enterprise Support Manager
 
 
 ## Feedback
@@ -39,9 +41,10 @@ The main sources of the data used in optional modules:
 * **AWS Organization Module** exports data about [AWS Organizations](https://aws.amazon.com/organizations/)
 * **AWS Budgets Module** uses [AWS Budgets Export](https://aws.amazon.com/aws-cost-management/aws-budgets/)
 * **AWS Transit Gateway Chargeback Module** uses [AWS Transit Gateway Chargeback Module](https://aws.amazon.com/transit-gateway/)
+* **AWS Cost Anomaly Module** uses [AWS Cost Anomaly Module](https://aws.amazon.com/aws-cost-management/aws-cost-anomaly-detection/)
 
 
-Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. Detailed description of each module can be found [here](../3_data_collection_modules).
+Modules can be installed in any combination and can be added post install using update of the CloudFormation stack. 
 
 ## Architecture 
 Resources for this lab deployed with AWS CloudFormation:
