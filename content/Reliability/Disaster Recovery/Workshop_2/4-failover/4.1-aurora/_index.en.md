@@ -8,13 +8,13 @@ weight = 1
 
 With an Aurora global database, there are two different approaches to failover depending on the scenario.  
 
-**Manual unplanned failover ("detach and promote")** – To recover from an unplanned outage or to do disaster recovery (DR) testing, perform a cross-Region failover to one of the secondaries in your Aurora global database. The RTO for this manual process depends on how quickly you can perform the tasks listed in [Recovering an Amazon Aurora global database from an unplanned outage](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html#aurora-global-database-failover). The RPO is typically measured in seconds, but this depends on the Aurora storage replication lag across the network at the time of the failure.
+**Failover** – Use this approach to recover from an unplanned outage. With this approach, you perform a cross-Region failover to one of the secondary DB clusters in your Aurora global database. The RPO for this approach is typically a non-zero value measured in seconds. The amount of data loss depends on the Aurora global database replication lag across the AWS Regions at the time of the failure. To learn more, see [Recovering an Amazon Aurora global database from an unplanned outage](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html#aurora-global-database-failover).
 
-**Managed planned failover** – This feature is intended for controlled environments, such as operational maintenance and other planned operational procedures. By using managed planned failover, you can relocate the primary DB cluster of your Aurora global database to one of the secondary Regions. Because this feature synchronizes secondary DB clusters with the primary before making any other changes, RPO is 0 (no data loss). To learn more, see [Performing managed planned failovers for Amazon Aurora global databases](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html#aurora-global-database-disaster-recovery.managed-failover).
+**Switchover** – This operation was previously called "managed planned failover." Use this approach for controlled scenarios, such as operational maintenance and other planned operational procedures. Because this feature synchronizes secondary DB clusters with the primary before making any other changes, RPO is 0 (no data loss). To learn more, see [Performing switchovers for Amazon Aurora global databases](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html#aurora-global-database-disaster-recovery.managed-failover).
 
-**Managed planned failover**, is showcased in **Module 3: Warm Standby**. 
+**Switchover**, is showcased in **Module 3: Warm Standby**. 
 
-For this workshop we will be doing a **Managed Unplanned Failover**.
+For this workshop we will be doing a **Failover**.
 
 #### Promote Aurora
 
@@ -24,19 +24,19 @@ For this workshop we will be doing a **Managed Unplanned Failover**.
 
 {{< img a-5.png >}}
 
-1.3 Select **pilot-secondary** instance and click **Actions**. Next click the **Remove from global database** option to promote the instance to a standalone database.
+1.3 Select **pilot-global** cluster and select **Switch over or fail over global database** from **Actions**. 
 
 {{< img a-3.png >}}
 
-1.4 Click **Remove and Promote** to confirm the database promotion.
+1.4 Choose **Failover (allow data loss)**, select **pilot-secondary** as **New primary cluster**, enter **confirm** to confirm the failover then click **Confirm**.
 
 {{< img a-4.png >}}
 
 {{% notice warning %}}
-You will need to wait for the database to be successfully promoted before moving on to the next step.  This can take several minutes.
+You will need to wait for the **pilot-secondary** to become **Available** before moving on to the next step.  This can take several minutes.
 {{% /notice %}}
 
-1.5 Notice the changes. **Pilot-secondary** has been removed from the **Global database** and is now a **Regional cluster** with its own **Writer instance**. You may need to click the **Refresh** button to see the changes.
+1.5 Notice the changes. The **Primary cluster** is now in **us-west-1** which has our **Writer instance** and the **Secondary Cluster** is now in **us-east-1** which has our **Reader instance**.
 
 {{< img a-6.png >}}
 
