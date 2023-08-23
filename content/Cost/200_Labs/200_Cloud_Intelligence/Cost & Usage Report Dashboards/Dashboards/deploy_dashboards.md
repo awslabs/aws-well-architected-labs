@@ -220,7 +220,7 @@ To find your QuickSight username:
     ------------ | -------------
 
 
-If you see no data in QuickSight Dahsboards after 24 hours, plase check the following:
+If you see no data in QuickSight Dashboards after 24 hours, please check the following:
  1) Double check that QuickSight has permissions to read from your CUR bucket.
  2) In QuickSight, go to Datasets and click on Summary View. Check for errors (if you see a status `Failed`, you can click it to see more info).
  3) Check if CUR data has arrived to the S3 bucket. If you just created CUR you will need to wait 24 hours before the first data arrives. We also recommend creating a Support Case in Service=`Billing` and Category=`Invoices and Reporting`, requesting a backfill of your CUR (name=cid) with 12 months of data. Case must be created from the same account as CUR (Typically Management/Payer account).
