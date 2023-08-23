@@ -66,5 +66,9 @@ We are taking advantage of Amazon Aurora read replica [write forwarding](https:/
 
 {{< img vw-10.png >}}
 
+{{% notice note %}}
+It may take a few minutes for the cart items to asynchronously replicate data between regions.
+{{% /notice  %}}
+
 {{< prev_next_button link_prev_url="../2-dynamodb/" link_next_url="../4-cloudfront/" />}}
 
