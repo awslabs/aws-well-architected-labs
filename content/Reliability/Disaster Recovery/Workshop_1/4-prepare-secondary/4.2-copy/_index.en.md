@@ -12,7 +12,7 @@ We are going to **copy** the resources to our secondary region **N. California (
 
 {{< img cp-1.png >}}
 
-1.2 In the **Backups** section. Select the EC2 backup. Click **Copy** under the **Actions** dropdown.
+1.2 In the **Recovery points** section. Select the EC2 backup. Click **Copy** under the **Actions** dropdown.
 
 {{% notice warning %}}
 If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your EC2 backup is **Completed**.
@@ -20,7 +20,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 
 {{< img cp-4.png >}}
 
-1.3 Select **US West (N. California)** as the **Copy to destination**, then select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Copy** button.
+1.3 Select **US West (N. California)** as the **Copy to destination** then select **Forever** as the **Retention period** then select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Copy** button.
 
 {{< img cp-5.png >}}
 
@@ -32,7 +32,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 
 {{< img cp-1.png >}}
 
-2.2 In the **Backups** section. Select the RDS backup. Click **Copy** under the **Actions** dropdown.
+2.2 In the **Recovery points** section. Select the RDS backup. Click **Copy** under the **Actions** dropdown.
 
 {{% notice warning %}}
 If you don't see your backup, check the status of the **Backup Job**.  Click the **Jobs** link, then click the **Backup jobs** link.  Verify the **Status** of your RDS backup is **Completed**.
@@ -40,7 +40,7 @@ If you don't see your backup, check the status of the **Backup Job**.  Click the
 
 {{< img cp-2.png >}}
 
-2.3 Select **US West (N. California)** as the **Copy to destination**, then select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Copy** button.
+2.3 Select **US West (N. California)** as the **Copy to destination** then select **Forever** as the **Retention period** then select **Choose an IAM Role** and select **Team Role** as the **Role name**. Click the **Copy** button.
 
 {{< img cp-3.png >}}
 
