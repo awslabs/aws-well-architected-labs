@@ -26,7 +26,15 @@ You can improve resiliency and increase availability for specific scenarios by s
 One of the purposes of using CloudFront is to reduce the number of requests that your origin server must respond to directly. With CloudFront caching, more objects are served from CloudFront edge locations, which are closer to your users. This reduces the load on your origin server and reduces latency.  _However, that behavior masks our mechanism (disabling the UI bucket) from properly simulating an outage_. For more information, see [Amazon CloudFront Optimizing caching and availability](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html). In production, customers typically want to use the default value **CachingOptimized**.  
 {{% /notice %}}
 
-1.5 Click the **Create Distribution** button.  
+1.5 Select **Do not enable security protections** for **Web Application Firewall (WAF)**.
+
+{{< img cf-34.png >}}
+
+{{% notice note %}}
+For production workloads, customers will want to consider using Web Application Firewall (WAF) to enable security protections to keep their applications secure from the most common web threats and security vulnerabilities.
+{{% /notice %}}
+
+1.6 Click the **Create Distribution** button.  
 
 {{< img cf-27.png >}}
 
@@ -38,13 +46,13 @@ We will now add an additional **Origin** and use our **hot-secondary-uibucket-xx
 
 {{< img cf-19.png >}}
 
-2.2 **DO NOT choose from the drop down list** for the **Origin domain** value.  Instead paste the **CloudFormation Stack Output WebsiteURL** value that you copied in **Verify Websites** section in the **N. California (us-west-1)** region.
+2.2 **DO NOT choose from the drop down list** for the **Origin domain** value.  Instead paste the **CloudFormation Stack Output WebsiteURL** value that you copied in **Verify Websites** section in the **N. California (us-west-1)** region, then click **Create Origin**.
 
 {{< img cf-33.png >}}
 
 #### Configure the Origin Group 
 
-3.1 If you configured the origins correctly, you should see **Custom Origin** for the **Origin type**. Click the **Create Origin Group** link.
+3.1 If you configured the origins correctly, you should see **S3 static website** for the **Origin type**. Click the **Create Origin Group** link.
 
 {{< img cf-21.png >}}
 
