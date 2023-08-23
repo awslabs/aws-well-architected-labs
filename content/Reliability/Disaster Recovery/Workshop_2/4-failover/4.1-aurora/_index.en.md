@@ -32,12 +32,12 @@ For this workshop we will be doing a **Failover**.
 
 {{< img a-4.png >}}
 
+1.5 When the failover is complete, notice the changes. The **Primary cluster** is now in **us-west-1** which has our **Writer instance** and the **Secondary Cluster** is now in **us-east-1** which has our **Reader instance**.
+
+{{< img a-6.png >}}
+
 {{% notice warning %}}
 You will need to wait for the **pilot-secondary** to become **Available** before moving on to the next step.  This can take several minutes.
 {{% /notice %}}
-
-1.5 Notice the changes. The **Primary cluster** is now in **us-west-1** which has our **Writer instance** and the **Secondary Cluster** is now in **us-east-1** which has our **Reader instance**.
-
-{{< img a-6.png >}}
 
 {{< prev_next_button link_prev_url="../" link_next_url="../4.2-ec2/" />}}
