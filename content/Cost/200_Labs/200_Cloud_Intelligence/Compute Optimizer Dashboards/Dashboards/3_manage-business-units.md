@@ -21,7 +21,7 @@ FROM
 )  ignored_table_name (account_id, account_name, bu)
 ```
 
-Alos you can use business_units_map view as a proxy to other data sources.
+Also you can use business_units_map view as a proxy to other data sources.
 
 In case if you do not need Business Units functionality and you have CUDOS dashboard installed with account_map, you can use this view to SELECT from account_map.
 
