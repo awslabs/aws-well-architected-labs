@@ -36,10 +36,8 @@ You will need to wait for the pilotAMI to have a status of **Available** before 
 
 {{< img pa-4.png >}}
 
-1.8 We are going to want to bootstrap the instance to have the configurations necessary for the Unishop application in the  **N. California (us-west-1)** region.
-We use [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) to achieve this.
-
-Copy and paste the below script as the **User data**, then click the **Launch instance** button.
+1.8 Copy and paste the following script into **User data** which will configure the application to use the secondary region **N. California (us-west-1)** database and restart the application. Then click the **Launch instance** button.
+To learn more, see [user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html).
 
 **User Data Script**:
 
