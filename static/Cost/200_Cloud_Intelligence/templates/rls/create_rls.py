@@ -155,11 +155,11 @@ def main(separator=":"):
         for user in ou_tag_data:
             print("###################### USER_EMAIL:{}#######################".format(user))
             if user in qs_email_user_map:
-                if user not in cid_full_access_users:
-                    for qs_user in qs_email_user_map[user]:
+                for qs_user in qs_email_user_map[user]:
+                    if user not in cid_full_access_users:
                         qs_rls[qs_user] = ou_tag_data[user]
-                else:
-                    qs_rls[user] = {'full_access': True}
+                    else:
+                        qs_rls[qs_user] = {'full_access': True}
     print("QS EMAIL USER MAPPING: {}".format(qs_email_user_map))
     print("QS RLS DATA: {}".format(qs_rls))
     rls_s3_filename = "cid_rls.csv"
@@ -271,3 +271,5 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     main()
+
+#### TEST UPDATE ####
