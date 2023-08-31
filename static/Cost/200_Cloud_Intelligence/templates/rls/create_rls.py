@@ -262,11 +262,6 @@ def write_csv(qs_rls, rls_s3_filename):
                               'account_id': ",".join(qs_rls[user]['account_id']),
                               'payer_account_id': ""})
 
-            """  WRITE TO CSV HERE THE ALL ACCESS USERS
-                wrt.writerow({'UserName': user,
-                              'account_id': "",
-                              'payer_account_id': ""}) """
-
     upload_to_s3(TMP_RLS_FILE, rls_s3_filename)
 
 
