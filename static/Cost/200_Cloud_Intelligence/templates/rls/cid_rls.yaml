@@ -1,6 +1,19 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Lambda to collect Org data and store in S3 
+Metadata:
+    AWS::CloudFormation::Interface:
+      ParameterGroups:
+        -
+          Parameters:
+          - DestinationBucket
+          - ManagementAccountRole
+          - RolePrefix
+          - ManagementAccountID
+          - Schedule
+          - CodeBucket
+          - CodeKey
+          - CidFullAccessUsers
 Parameters:
   DestinationBucket:
     Type: String
@@ -49,6 +62,9 @@ Parameters:
     Type: String
     Description: file name of ZipFile with data code
     Default: Cost/Labs/row-level-security/create_rls.zip # RLS Folder to be updated, once the LAB will be created
+  CidFullAccessUsers:
+    Type: String
+    Description: Coma separated list of user emails who will have full, unrestricted access to all CUR data in CID Dashboards.
 Outputs:
   LambdaFunctionName:
     Value:
@@ -84,6 +100,7 @@ Resources:
           MANAGEMENTROLENAME: !Ref ManagementAccountRole
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
           QS_REGION: !Ref AWS::Region
+          CID_FULL_ACCESS_USERS: !Ref CidFullAccessUsers
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
