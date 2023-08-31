@@ -45,6 +45,7 @@ Parameters:
         - aws-well-architected-labs-canada
         - aws-well-architected-labs-milan
         - aws-well-architected-labs-paris
+        - vmindrutest
   CodeKey:
     Type: String
     Description: file name of ZipFile with data code
