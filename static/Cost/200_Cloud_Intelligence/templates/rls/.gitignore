@@ -1,0 +1,6 @@
+venv/*
+cudos_rls.csv
+.aws
+/create_rls.zip
+/vars
+.localsetup
