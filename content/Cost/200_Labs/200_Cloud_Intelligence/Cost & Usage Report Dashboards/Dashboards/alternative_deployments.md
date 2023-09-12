@@ -231,8 +231,171 @@ cid-cmd deploy
 {{% /expand%}}
 
 
+### Option 2: Terraform Deployment
+{{%expand "Click here to expand step by step instructions" }}
+This option allows you to use your existing Terraform deployment processes to enable Cost and Usage Reports (CUR) and setup CID dashboards. This guide will walk you through the recommended setup of a dedicated Data Collection account for replicating CUR data and setting up CID dashboards.
 
-### Option 2: Manual Deployment
+#### Setup CUR with Terraform
+
+Use the following Terraform modules to enable Cost and Usage Reports for Cloud Intelligence Dashboards:
+  - ![cur-setup-source](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cur-setup-source)
+  - ![cur-setup-destination](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cur-setup-destination)
+
+The following code sample deploys a CUR in your payer account (cur-setup-source) and sets up replication to a data collection account (cur-setup-destination). This sample assumes you are using a single Terraform root module and AWS CLI profiles. You should customize the code according to the specifics of your environment. If you have multiple payer accounts, you can declare multiple instances of the `cur-setup-source` module to replicate multiple CURs to the data collection account.
+
+```hcl
+provider "aws" {
+  profile = "src"
+  region  = "us-west-2"
+  alias   = "src"
+}
+
+provider "aws" {
+  profile = "src"
+  region  = "us-east-1"
+  alias   = "src_useast1"
+}
+
+provider "aws" {
+  profile = "dst"
+  region  = "us-west-2"
+  alias   = "dst"
+}
+
+provider "aws" {
+  profile = "dst"
+  region  = "us-east-1"
+  alias   = "dst_useast1"
+}
+
+# Configure exactly one destination account
+module "cur_destination" {
+  source = "github.com/aws-samples/aws-cudos-framework-deployment//terraform-modules/cur-setup-destination
+
+  source_account_ids = ["1234567890"] # UPDATE ME
+  create_cur         = false # Set to true to create an additional CUR in the aggregation account
+
+  # Provider alias for us-east-1 must be passed explicitly (required for CUR setup)
+  # Optionally, you may pass the default aws provider explicitly as well
+  providers = {
+    aws         = aws.dst
+    aws.useast1 = aws.dst_useast1
+  }
+}
+
+# Configure one or more source (payer) accounts
+module "cur_source" {
+  source = "github.com/aws-samples/aws-cudos-framework-deployment//terraform-modules/cur-setup-source"
+
+  destination_bucket_arn = module.cur_destination.cur_bucket_arn
+
+  # Provider alias for us-east-1 must be passed explicitly (required for CUR setup)
+  # Optionally, you may pass the default aws provider explicitly as well
+  providers = {
+    aws         = aws.src
+    aws.useast1 = aws.src_useast1
+  }
+}
+```
+
+{{%expand "Click here if you are installing dashboards in Management / Payer Account." %}}
+
+**WARNING**: Please note that it is typically recommended to install dashboards in a dedicated Data Collection Account in order to keep the number of users in Payer to a minimum. However, if you do decide to proceed with installing dashboards in a Payer Account, we recommend taking steps to mitigate any associated risks. This could include limiting access to a smaller team or implementing better access control measures.
+    ------------ | -------------
+
+Remove the source account setup module and related providers from your Terraform confirmation. In your payer account, deploy the `cur-setup-destination` module with `source_account_ids` set to an empty list and `create_cur` set to `true`.
+
+```hcl
+provider "aws" {
+  profile = "payer"
+  region  = "us-west-2"
+  alias   = "payer"
+}
+
+provider "aws" {
+  profile = "payer"
+  region  = "us-east-1"
+  alias   = "payer_useast1"
+}
+
+# Configure exactly one destination account
+module "cur_destination" {
+  source = "github.com/aws-samples/aws-cudos-framework-deployment//terraform-modules/cur-setup-destination
+
+  source_account_ids = []
+  create_cur         = true
+
+  # Provider alias for us-east-1 must be passed explicitly (required for CUR setup)
+  # Optionally, you may pass the default aws provider explicitly as well
+  providers = {
+    aws         = aws.payer
+    aws.useast1 = aws.payer_useast1
+  }
+}
+```
+{{% /expand%}}
+{{% /expand%}}
+
+#### (IN DATA COLLECTION ACCOUNT) Enable QuickSight
+QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. 
+
+**If you are already a regular QuickSight user** you will need to make sure you have an enterprise license and add permissions for QuickSight to read your CUR bucket. You can accomplish this by going to the persona icon in the upper right hand corner of QuickSight, clicking Manage Quicksight, clicking on Security and Permissions, clicking on managing QuickSight access to AWS Service, selecting S3, then selecting the CUR bucket from the list of S3 buckets. If you are new to QuickSight, complete the steps below.
+
+1. Log into your AWS Account and search for **QuickSight** in the list of Services
+
+2. You will be asked to **sign up** before you will be able to use it
+
+    ![QuickSight Sign up Workflow Image](https://wellarchitectedlabs.com/Cost/200_Cloud_Intelligence/Images/QS-signup.png?classes=lab_picture_small)
+
+3. After pressing the **Sign up** button you will be presented with 2 options, please ensure you select the **Enterprise Edition** during this step
+
+4. Select **continue** and you will need to fill in a series of options in order to finish creating your account. 
+
+    + Ensure you select the region that is most appropriate based on where your S3 Bucket is located containing your Cost & Usage Report file.
+
+        ![Select Region and Amazon S3 Discovery](/Cost/200_Cloud_Intelligence/Images/QS-s3.png?classes=lab_picture_small)
+    
+    + Enable the Amazon S3 option and select the bucket where your **Cost & Usage Report** is stored, as well as your **Athena** query bucket
+
+        ![Image of s3 buckets that are linked to the QuickSight account. Enable bucket and give Athena Write permission to it.](/Cost/200_Cloud_Intelligence/Images/QS-bucket.png?classes=lab_picture_small)
+
+5. Click **Finish** and wait for the congratulations screen to display
+
+6. Click **Go to Amazon QuickSight**
+![](/Cost/200_Cloud_Intelligence/Images/Congrats-QS.png?classes=lab_picture_small)
+1. Click on the persona icon on the top right and select manage QuickSight. 
+2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
+
+#### (IN DATA COLLECTION ACCOUNT) Deploy Dashboards with Terraform
+You can deploy dashboards with Terraform using this ![cid-dashboards](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cid-dashboards) module. This wrapper is a wrapper around the CloudFormation template used in the default setup described in the [Deploy Dashboards section](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards#32-deploy-dashboards-using-cloudformation). If you have questions about specific parameters, be sure to review the instructions there first.
+
+The following sample can be used to setup the Cost Intelligence Dashboard, CUDOS dashboard, and KPI Dashboard (all three are recommended). Update accordingly with the S3 bucket, Quicksight user, and AWS provider configuration (region + account) to work with your environment.
+
+**Note: Dashboards must be deployed in data collection account**
+
+```hcl
+module "cid_dashboards" {
+    source = "github.com/aws-samples/aws-cudos-framework-deployment//terraform-modules/cid-dashboards"
+
+    stack_name       = "Cloud-Intelligence-Dashboards"
+    template_bucket  = "UPDATEME" # Existing S3 Bucket (used to upload CloudFormation template)
+    stack_parameters = {
+      "PrerequisitesQuickSight"            = "yes"
+      "PrerequisitesQuickSightPermissions" = "yes"
+      "QuickSightUser"                     = "UPDATEME" # Existing Quicksight user
+      "DeployCUDOSDashboard"               = "yes"
+      "DeployCostIntelligenceDashboard"    = "yes"
+      "DeployKPIDashboard"                 = "yes"
+    }
+}
+```
+
+*Troubleshooting*
+
+Because this module is primarily a wrapper for CloudFormation, Terraform output may not be sufficient for debugging if deployment fails. For additional troubleshooting information, refer to the CloudFormation console for details on stack operation, resources, and error output. Additionally, you can refer to logs for the custom resource Lambda function "CidCustomDashboardResource"if dashboards fail to deploy.
+{{% /expand%}}
+
+### Option 3: Manual Deployment
 {{%expand "Click here to expand step by step instructions" %}}
 
 Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards into your management (payer) account or a separate linked account. This option also allows customers with multiple management (payer) accounts to deploy all the CUR-based dashboards on top of the aggregated data from multiple payers. You will need a dedicated Linked Account setup and ready to go if you want to deploy the CIDs into a linked account other than your management (payer) account. This guide will walk you through creating a new Cost & Usage Reports (CUR), and if you're deploying into a linked account; setting up the management (payer) account CUR S3 buckets to have replication enabled pointing to your linked (data collection) account. 
