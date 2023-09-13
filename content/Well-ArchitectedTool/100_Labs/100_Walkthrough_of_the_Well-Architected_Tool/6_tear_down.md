@@ -16,5 +16,5 @@ In order to take down the lab environment, you simply delete the workload you cr
 3. Confirm the deletion by clicking the **Delete** button on the dialog:
 ![ConfirmDelete](/watool/100_Walkthrough_of_the_Well-Architected_Tool/Images/AWSWAT26.png)
 
-{{< prev_next_button link_prev_url="../5_view_report/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../5_view_report/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}

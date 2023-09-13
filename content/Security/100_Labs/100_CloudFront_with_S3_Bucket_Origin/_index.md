@@ -30,7 +30,7 @@ This hands-on lab will guide you through the steps to host static web content in
 
 ## Steps:
 
-{{% children  %}}
+{{% children /%}}
 
 ## References & useful resources
 

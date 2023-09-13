@@ -234,4 +234,4 @@ Now that you have your dashboard created you can share your dashboard with users
 
 ---
 
-{{< prev_next_button link_prev_url="../alternative_deployments"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/">}}
+{{< prev_next_button link_prev_url="../alternative_deployments"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/trusted-advisor-dashboards/" />}}

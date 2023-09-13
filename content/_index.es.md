@@ -21,4 +21,4 @@ NOTA: Se le cobrará por los recursos de AWS aplicables si completa este laborat
 
 ## Labs:
 Los laboratorios están estructurados alrededor de los seis pilares de the [Well-Architected Framework](https://aws.amazon.com/well-architected):
-{{% children depth=1 %}}
+{{% children depth=1 /%}}

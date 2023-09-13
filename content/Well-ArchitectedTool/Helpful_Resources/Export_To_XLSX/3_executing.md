@@ -46,5 +46,5 @@ $ ./exportAnswersToXLSX.py --fileName ./demo_existing.xlsx --profile acct2 --reg
 ![BlankSpreadsheetExample](/watool/utilities/Images/existing_wafr.png?classes=lab_picture_auto)
 
 
-{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}

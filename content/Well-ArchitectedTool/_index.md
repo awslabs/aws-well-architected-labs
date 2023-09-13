@@ -26,4 +26,4 @@ For more information about the Well-Architected tool, read the
 [AWS Well-Architected Tool documentation](https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html).
 
 ## Labs
-{{% children depth=2 %}}
+{{% children depth=2 /%}}

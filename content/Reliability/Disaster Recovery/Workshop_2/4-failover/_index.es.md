@@ -50,4 +50,4 @@ Si no recibe el error **403 Forbidden** puede ser debido a _caching_. Intente re
 {{% /notice  %}}
 
 
-{{< prev_next_button link_prev_url="../3-prepare-secondary/3.1-ec2" link_next_url="./4.1-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../3-prepare-secondary/3.1-ec2" link_next_url="./4.1-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}

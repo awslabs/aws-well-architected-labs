@@ -24,5 +24,5 @@ You have learned how to use the various AWS CLI commands to work with the AWS We
 * [AWS Well-Architected API Reference](https://docs.aws.amazon.com/wellarchitected/latest/APIReference/Welcome.html)
 
 
-{{< prev_next_button link_prev_url="../6_programmatic/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../6_programmatic/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}
