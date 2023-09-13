@@ -58,5 +58,5 @@ Ahora, simularemos un evento regional de interrupción de servicio que afecte el
 El bucket de Amazon S3 que aloja la página web Primary-Active es inaccesible ahora. Cuando CloudFront intente enrutar las peticiones de los usuarios a esta instancia, recibirá un error HTTP 403 (Forbidden). La distribución manejará automáticamente este escenario haciendo un failover a la instancia Passive-Secondary.
 {{% /notice %}}
 
-{{< prev_next_button link_prev_url="../setup-cloudfront/" link_next_url="./promote-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
+{{< prev_next_button link_prev_url="../setup-cloudfront/" link_next_url="./promote-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
 

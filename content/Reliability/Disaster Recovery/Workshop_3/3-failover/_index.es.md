@@ -48,4 +48,4 @@ Ahora simularemos un evento de servicio regional que afecta al sitio web de Unis
 
 Asumiremos que ocurrió un evento regional de servicio. En esta sección, haremos el fail over de forma manual de la aplicación a la región secundaria, **N. California (us-west-1)**. Puede considerar usar Amazon Route53 u otro DNS (Domain Name Services) para enrutar el fail over en un escenario real. Puede crear también automatizaciones subscribiendose a notificaciones de la aplicación.
 
-{{< prev_next_button link_prev_url="../2-verify-websites/" link_next_url="./3.1-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
+{{< prev_next_button link_prev_url="../2-verify-websites/" link_next_url="./3.1-aurora/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}

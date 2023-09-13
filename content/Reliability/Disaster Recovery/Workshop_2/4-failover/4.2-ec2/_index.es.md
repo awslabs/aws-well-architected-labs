@@ -61,5 +61,5 @@ Debe esperar que la instancia haya sido desplegada exitosamente. Navegue a la co
 {{% /notice %}}
 
 
-{{< prev_next_button link_prev_url="../4.1-aurora" link_next_url="../../5-verify-secondary/"  button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
+{{< prev_next_button link_prev_url="../4.1-aurora" link_next_url="../../5-verify-secondary/"  button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
 

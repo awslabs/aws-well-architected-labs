@@ -27,5 +27,5 @@ weight = 5
 
 #### Felicitaciones !  Debería ver su aplicación "The Unicorn Shop" en la región **us-west-1**.
 
-{{< prev_next_button link_prev_url="../rds/" link_next_url="../7-cleanup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
+{{< prev_next_button link_prev_url="../rds/" link_next_url="../7-cleanup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
 

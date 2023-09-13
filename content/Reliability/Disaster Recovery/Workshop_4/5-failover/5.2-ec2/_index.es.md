@@ -56,5 +56,5 @@ sudo reboot
 
 #### Felicitaciones!  Su aplicación ha sido actualizada para usar la base de datos de Aurora que promovió!
 
-{{< prev_next_button link_prev_url="../promote-aurora/" link_next_url="../../verify-failover/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
+{{< prev_next_button link_prev_url="../promote-aurora/" link_next_url="../../verify-failover/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
 

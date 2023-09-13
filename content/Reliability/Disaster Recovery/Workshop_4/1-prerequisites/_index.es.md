@@ -20,4 +20,4 @@ Todos los recursos para este taller han sido provisionados con anterioridad.
 
 Si está corriendo este taller en su propia cuenta, oprima **Siguiente paso**.
 
-{{< prev_next_button link_prev_url="../" link_next_url="./account-setup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
+{{< prev_next_button link_prev_url="../" link_next_url="./account-setup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
