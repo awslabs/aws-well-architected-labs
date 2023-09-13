@@ -38,6 +38,6 @@ You will now delete the **CloudFormationLab** CloudFormation stack.
 * [CloudFormation Resource and property reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
 * [Working with AWS CloudFormation StackSets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html)
 
-{{< prev_next_button link_prev_url="../5_add_ec2/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5_add_ec2/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 8  How do you implement change?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-change-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

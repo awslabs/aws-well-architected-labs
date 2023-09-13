@@ -26,7 +26,7 @@ It's exciting to see the custom integrations with the AWS Well-Architected Tool 
 
 By leveraging the Well-Architected Tool APIs, companies can effectively govern workloads across many AWS accounts, stay up-to-date on the latest best practices, and scale Well-Architected principles across teams and systems.
 
-{{< prev_next_button link_prev_url="../4_visualize/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_visualize/"  title="Congratulations!" final_step="true"  />}}
 It's exciting to see the custom integrations with the AWS Well-Architected Tool made possible with the Well-Architected APIs.  Let's us know what other integrations you build.
-{{< /prev_next_button >}}
+{{< prev_next_button />}}
 

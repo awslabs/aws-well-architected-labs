@@ -12,4 +12,4 @@ Si está utilizando su cuenta propia de AWS, sea consciente que los recursos que
 
 Este taller tarda 60 minutos en completarse. 
 
-{{< prev_next_button link_prev_url="../" link_next_url="./s3-access/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../" link_next_url="./s3-access/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}

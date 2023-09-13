@@ -28,5 +28,5 @@ Si aún tienes el sitio web abierto desde un paso anterior, tendrás que **Logou
 
 {{< img vf-1.png >}}
 
-{{< prev_next_button link_prev_url="../3-failover/3.2-ec2/" link_next_url="../5-cleanup" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../3-failover/3.2-ec2/" link_next_url="../5-cleanup" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
 

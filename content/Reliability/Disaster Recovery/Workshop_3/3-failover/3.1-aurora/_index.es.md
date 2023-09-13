@@ -40,5 +40,5 @@ Deberá esperar a que la base de datos realice una conmutación por error antes 
 
 {{< img a-7-es.png >}}
 
-{{< prev_next_button link_prev_url="../" link_next_url="../3.2-ec2/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../" link_next_url="../3.2-ec2/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
 

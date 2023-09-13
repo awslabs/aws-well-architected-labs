@@ -14,10 +14,10 @@ The following resources were created in this lab:
 - IAM Policy: WAReportAccess
 
 
-{{< prev_next_button link_prev_url="../5_format_dashboard/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5_format_dashboard/"  title="Congratulations!" final_step="true"  />}}
 Now that you have your Cost Optimization Journey, you can continue to implement the best practices within
 your organization and workloads.
-{{< /prev_next_button >}}
+{{< prev_next_button />}}
 
 
 

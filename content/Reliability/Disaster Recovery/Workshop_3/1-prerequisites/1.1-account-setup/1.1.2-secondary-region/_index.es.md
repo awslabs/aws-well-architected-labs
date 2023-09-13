@@ -36,4 +36,4 @@ Debe esperar a que la pila de **Warm Secondary Region** tenga el estado de **Com
 
 {{< img sr-6-es.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.1-primary-region/"  link_next_url="../../../2-verify-websites/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../1.1.1-primary-region/"  link_next_url="../../../2-verify-websites/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}

@@ -14,4 +14,4 @@ For more information about security on AWS visit [AWS Security](https://aws.amaz
 ![Images/aws_security_areas.png](/Security/images/aws_security_areas.png)  
 
 ## Labs & Quests
-{{% children depth=2 %}}
+{{% children depth=2 /%}}

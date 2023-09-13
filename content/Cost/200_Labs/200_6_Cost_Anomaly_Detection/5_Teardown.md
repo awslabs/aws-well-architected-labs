@@ -27,4 +27,4 @@ A confirmation window will appear; type **delete me** in the text box and click 
 
 A confirmation window will appear; click **Delete** to continue.
 
-{{< prev_next_button link_prev_url="../4_create_individual_alert/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_create_individual_alert/"  title="Congratulations!" final_step="true" />}}

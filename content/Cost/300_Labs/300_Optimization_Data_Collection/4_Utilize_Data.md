@@ -510,6 +510,7 @@ This section requires you to have the **RDS Module** deployed.
   * monthly_savings	- savings seen by moving a database to to Graviton if it ran 24 hours per day for 30 days
   * estimated_annual_savings - savings seen by moving a database to to Graviton if it ran 24 hours per day for 365 days
   * percentage_savings - percent difference in unit cost between the existing instance and its Graviton equivilant
-
+{{% /expand%}}
+{{% /expand%}}
 {{< prev_next_button link_prev_url="../3_data_collection_modules/" link_next_url="../5_create_custom_data_collection_module/" />}}
 

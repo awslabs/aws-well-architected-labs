@@ -26,5 +26,5 @@ Ahora, promovamos la base de datos secundaria de Amazon Aurora MySQL a una insta
 
 ## Felicitaciones! Su base de datos secundaria de Amazon Aurora ahora es una base de datos independiente y puede convertirse en su base de datos primaria!
 
-{{< prev_next_button link_prev_url="../" link_next_url="../ec2-instance/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../" link_next_url="../ec2-instance/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
 

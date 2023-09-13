@@ -14,7 +14,7 @@ If you are unable to deploy using the CloudFormation automation steps earlier in
 
 This option walks you through setting up a CUR file in the Management (payer) Account and configuring the prerequisites to have the CIDs deployed there. This option will create a new Cost & Usage Report (CUR) or reuse one you already have. 
 
-This option is okay for testing but we recommend you deploy the Cloud Intelligence Dashboards in a dedicated acount other than the management (payer) account (option 1 above). This way you can effectivly managed the access and avoid having unnecessary users in your management (payer) account. If you still want to use this option, please apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege/) access to your payer account.
+This option is okay for testing but we recommend you deploy the Cloud Intelligence Dashboards in a dedicated account other than the management (payer) account (option 1 above). This way you can effectively managed the access and avoid having unnecessary users in your management (payer) account. If you still want to use this option, please apply [least privileges](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege/) access to your payer account.
 
 #### Configure CUR (skip if you already have a CUR in the correct format)
 1. [Sign in](https://console.aws.amazon.com/billing/home#/) to the Billing and Cost Management console.
@@ -42,7 +42,7 @@ This option is okay for testing but we recommend you deploy the Cloud Intelligen
 
 5. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
    
-6. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/{current_account_id}** (replacing current_account_id with the right value).
+6. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/current_account_id** (replacing current_account_id with the right value).
 **Note:** Make sure that the report path prefix doesn't include a double slash (//) as Athena doesn't support such a table location.
     ------------ | -------------
 
@@ -232,14 +232,14 @@ cid-cmd deploy
 
 
 ### Option 2: Terraform Deployment
-{{%expand "Click here to expand step by step instructions" }}
+{{%expand "Click here to expand step by step instructions" %}}
 This option allows you to use your existing Terraform deployment processes to enable Cost and Usage Reports (CUR) and setup CID dashboards. This guide will walk you through the recommended setup of a dedicated Data Collection account for replicating CUR data and setting up CID dashboards.
 
 #### Setup CUR with Terraform
 
 Use the following Terraform modules to enable Cost and Usage Reports for Cloud Intelligence Dashboards:
-  - ![cur-setup-source](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cur-setup-source)
-  - ![cur-setup-destination](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cur-setup-destination)
+  - [cur-setup-source](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cur-setup-source)
+  - [cur-setup-destination](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cur-setup-destination)
 
 The following code sample deploys a CUR in your payer account (cur-setup-source) and sets up replication to a data collection account (cur-setup-destination). This sample assumes you are using a single Terraform root module and AWS CLI profiles. You should customize the code according to the specifics of your environment. If you have multiple payer accounts, you can declare multiple instances of the `cur-setup-source` module to replicate multiple CURs to the data collection account.
 
@@ -298,10 +298,10 @@ module "cur_source" {
 }
 ```
 
-{{%expand "Click here if you are installing dashboards in Management / Payer Account." %}}
+
 
 **WARNING**: Please note that it is typically recommended to install dashboards in a dedicated Data Collection Account in order to keep the number of users in Payer to a minimum. However, if you do decide to proceed with installing dashboards in a Payer Account, we recommend taking steps to mitigate any associated risks. This could include limiting access to a smaller team or implementing better access control measures.
-    ------------ | -------------
+------------ | -------------
 
 Remove the source account setup module and related providers from your Terraform confirmation. In your payer account, deploy the `cur-setup-destination` module with `source_account_ids` set to an empty list and `create_cur` set to `true`.
 
@@ -333,8 +333,6 @@ module "cur_destination" {
   }
 }
 ```
-{{% /expand%}}
-{{% /expand%}}
 
 #### (IN DATA COLLECTION ACCOUNT) Enable QuickSight
 QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. 
@@ -367,7 +365,7 @@ QuickSight is the AWS Business Intelligence tool that will allow you to not only
 2. Click on the SPICE Capacity option. Purchase enough SPICE capacity so that the total is roughly 40GB. If you get SPICE capacity errors later, you can come back here to purchase more. If you've purchased too much you can also release it after you've deployed the dashboards. 
 
 #### (IN DATA COLLECTION ACCOUNT) Deploy Dashboards with Terraform
-You can deploy dashboards with Terraform using this ![cid-dashboards](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cid-dashboards) module. This wrapper is a wrapper around the CloudFormation template used in the default setup described in the [Deploy Dashboards section](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards#32-deploy-dashboards-using-cloudformation). If you have questions about specific parameters, be sure to review the instructions there first.
+You can deploy dashboards with Terraform using this [cid-dashboards](https://github.com/aws-samples/aws-cudos-framework-deployment/tree/main/terraform-modules/cid-dashboards) module. This wrapper is a wrapper around the CloudFormation template used in the default setup described in the [Deploy Dashboards section](/cost/200_labs/200_cloud_intelligence/cost-usage-report-dashboards/dashboards/deploy_dashboards#32-deploy-dashboards-using-cloudformation). If you have questions about specific parameters, be sure to review the instructions there first.
 
 The following sample can be used to setup the Cost Intelligence Dashboard, CUDOS dashboard, and KPI Dashboard (all three are recommended). Update accordingly with the S3 bucket, Quicksight user, and AWS provider configuration (region + account) to work with your environment.
 
@@ -428,7 +426,7 @@ Use this option if you're deploying the CUR-based Cloud Intelligence Dashboards 
 
 5. Review the bucket policy, and select **I have confirmed that this policy is correct** and choose **Save**.
    
-6. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/{current_account_id}** (replacing current_account_id with the right value).
+6. For **Report path prefix**, enter the report path prefix that you want prepended to the name of your report. In order to make you CUR compatible with multi-account scenarions, you can choose prefix as **cur/current_account_id** (replacing current_account_id with the right value).
 **Note:** Make sure that the report path prefix doesn't include a double slash (//) as Athena doesn't support such a table location.
     ------------ | -------------
 
@@ -452,7 +450,7 @@ It can take up to 24 hours for AWS to start delivering CURs to your Amazon S3 bu
 
 1. Log into and go to the console of your Linked (Data Collection) account. This is where the Cloud Intelligence Dashboards will be deployed. Your management (payer) account CURs will be replicated to this account. Note the region, and make sure everything you create is in the same region. To see available regions for QuickSight, visit [this website](https://docs.aws.amazon.com/quicksight/latest/user/regions.html). 
 2. Create an S3 bucket with enabled versioning.
-3. Open S3 bucket and apply following S3 bucket policy replacing respective placeholders {PayerAccountA}, {PayerAccountB} (one for each payer account) and {DataCollectionAccountBucketName}. You can add more payer accounts to the policy later if needed.
+3. Open S3 bucket and apply following S3 bucket policy replacing respective placeholders **PayerAccountA**, **PayerAccountB** (one for each payer account) and **DataCollectionAccountBucketName**. You can add more payer accounts to the policy later if needed.
 
 ```json
 {
@@ -540,7 +538,9 @@ This step should be done in each management (payer) account.
 
 Sync existing objects from CUR S3 bucket to S3 bucket in Data Collection Account.
 
+```bash
 	aws s3 sync s3://{curBucketName} s3://{DataCollectionAccountBucketName} --acl bucket-owner-full-control
+```
 
 After performing this step in each management (payer) account S3 bucket in Data Collection Account will contain CUR data from all payer accounts under respective prefixes.
 
@@ -860,11 +860,11 @@ aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
             ]
         }
     ],
-"DashboardPublishOptions": {
-"AdHocFilteringOption": {
-"AvailabilityStatus": "DISABLED"
-}
-},
+    "DashboardPublishOptions": {
+        "AdHocFilteringOption": {
+            "AvailabilityStatus": "DISABLED"
+        }
+    },
     "SourceEntity": {
         "SourceTemplate": {
             "DataSetReferences": [
@@ -1006,11 +1006,11 @@ aws quicksight list-data-sets --aws-account-id <Account_ID> --region <Region>
             ]
         }
     ],
-"DashboardPublishOptions": {
-"AdHocFilteringOption": {
-"AvailabilityStatus": "DISABLED"
-}
-},
+    "DashboardPublishOptions": {
+    "AdHocFilteringOption": {
+        "AvailabilityStatus": "DISABLED"
+        }
+    },
     "SourceEntity": {
         "SourceTemplate": {
             "DataSetReferences": [

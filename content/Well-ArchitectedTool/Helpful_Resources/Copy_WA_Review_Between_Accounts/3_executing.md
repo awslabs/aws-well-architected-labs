@@ -53,5 +53,5 @@ $ ./duplicateWAFR.py --fromaccount acct2 --toaccount acct3 --workloadid c896b2b1
 2021-04-19 09:47:37.326 INFO duplicateWAFR - main: Copy complete - exiting
 ```
 
-{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}

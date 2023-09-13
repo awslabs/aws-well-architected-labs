@@ -26,4 +26,4 @@ Cambie el valor del parámetro **IsPrimary** a `no`.
 
 {{< img sr-5-es.png >}}
 
-{{< prev_next_button link_prev_url="../1.1.1-primary-region/" link_next_url="../../cfn-outputs/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../1.1.1-primary-region/" link_next_url="../../cfn-outputs/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}

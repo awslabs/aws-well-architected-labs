@@ -9,5 +9,5 @@ Si vuelve y refresca su ordenador (Utilizando el nombre de dominio de la distrib
 
 {{< img vf-1.png >}}
 
-{{< prev_next_button link_prev_url="../disaster/ec2-instance/" link_next_url="../cleanup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../disaster/ec2-instance/" link_next_url="../cleanup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
 

@@ -41,4 +41,4 @@ Debe esperar a que la base de datos sea promovida antes de continuar con el paso
 {{< img a-6-ES.png >}}
 
 
-{{< prev_next_button link_prev_url="../" link_next_url="../4.2-ec2/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../" link_next_url="../4.2-ec2/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}

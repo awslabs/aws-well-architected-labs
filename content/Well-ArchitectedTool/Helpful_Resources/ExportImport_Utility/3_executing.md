@@ -55,5 +55,5 @@ $ ./exportImportWAFR.py -f workload_output.json --importWorkload  --profile acct
 2021-05-19 15:42:04.291 INFO exportImportWAFR - main: Copy complete - exiting
 ```
 
-{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../2_python_code/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}

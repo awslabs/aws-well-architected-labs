@@ -37,5 +37,5 @@ Necesitará los valores de los parámetros de salida de Amazon CloudFormation de
 
 {{< img vw-6.png >}}
 
-{{< prev_next_button link_prev_url="../configure-websites/" link_next_url="../setup-cloudfront/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../configure-websites/" link_next_url="../setup-cloudfront/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
 

@@ -98,6 +98,6 @@ Espere a que termine la eliminación de la pila antes de continuar con los sigui
 
 {{< img cl-7-es.png >}}
 
-{{< prev_next_button link_prev_url="../4-verify-secondary/" title="Felicidades!" button_prev_text="Paso anterior" button_next_text="Complete este Laboratorio" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4-verify-secondary/" title="Felicidades!" button_prev_text="Paso anterior" button_next_text="Complete este Laboratorio" final_step="true"  />}}
 Este laboratorio le ayuda especificamente con las mejores prácticas cubiertas en la pregunta [REL 13  Como planea para recuperación de desastres? (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

@@ -34,4 +34,4 @@ If you are using AWS Control Tower the steps in this lab cover what has already 
 - [AWS Pricing](https://aws.amazon.com/pricing/)
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}

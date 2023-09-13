@@ -25,8 +25,8 @@ You can deploy a LAMP stack on AWS using the CloudFormation template found [here
 
 ![Images/CostEstimation31](/Cost/100_Cost_Estimation/Images/CostEstimation31.png?classes=lab_picture_small)
 
-{{< prev_next_button link_prev_url="../4_export_estimate/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_export_estimate/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, use the Pricing Calculator to estimate the cost of a workload in your organization. This lab specifically helps you with
 [COST 5 - "How do you evaluate cost when you select services?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-cost-effective-resources.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}
 

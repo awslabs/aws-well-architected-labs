@@ -38,6 +38,6 @@ If necessary, when architecting a multi-region strategy for your workload, you s
 
 The bi-directional cross-region replication that you created in this lab is helpful for **Pilot light**, **Warm standby**, and **Multi-region active-active** strategies.
 
-{{< prev_next_button link_prev_url="../4_cleanup/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_cleanup/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 13  How do you plan for disaster recovery (DR)?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

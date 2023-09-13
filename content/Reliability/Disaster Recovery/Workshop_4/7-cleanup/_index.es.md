@@ -103,7 +103,7 @@ Por favor repita estos pasos con la base de datos primaria en la región us-east
 
 {{< img cfn-3-es.png >}}
 
-{{< prev_next_button link_prev_url="../verify-failover/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../verify-failover/" title="Congratulations!" final_step="true"  />}}
 Este laboratorio le ayuda especificamente con las mejores prácticas cubiertas en la pregunta [REL 13  Como planea para recuperación de desastres? (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}
 

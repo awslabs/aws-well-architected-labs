@@ -35,4 +35,4 @@ FROM account_map
 ```
 
 
-{{< prev_next_button link_prev_url="../2_deployment/"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/teardown/4_teardown/">}}
+{{< prev_next_button link_prev_url="../2_deployment/"  link_next_url="https://wellarchitectedlabs.com/cost/200_labs/200_cloud_intelligence/teardown/4_teardown/" />}}

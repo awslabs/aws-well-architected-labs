@@ -40,4 +40,4 @@ Esto puede tomar un par de minutos, puede seguir al siguiente paso. Solo asegúr
 
 #### Felicitaciones! Sus tablas globales de DynamoDB se han creado!
 
-{{< prev_next_button link_prev_url="../prerequisites/cfn-outputs/" link_next_url="../verify-aurora-writefwd/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../prerequisites/cfn-outputs/" link_next_url="../verify-aurora-writefwd/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}

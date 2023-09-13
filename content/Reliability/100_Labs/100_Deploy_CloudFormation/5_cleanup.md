@@ -32,6 +32,6 @@ AWS Resources that enable reliable architectures:
 * Elastic Load Balancing: [What Is an Application Load Balancer?](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html)
 * Availability Zones: AWS [Global Infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/)
 
-{{< prev_next_button link_prev_url="../4_explore_cloudformation/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_explore_cloudformation/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 8  How do you implement change?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-change-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

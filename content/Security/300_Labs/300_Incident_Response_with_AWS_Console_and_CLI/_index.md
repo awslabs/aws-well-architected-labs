@@ -30,4 +30,4 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 * CloudTrail must already be enabled in your account and logging to CloudWatch Logs, follow the [Automated Deployment of Detective Controls](../../200_Labs/200_Automated_Deployment_of_Detective_Controls/) lab to enable.
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}

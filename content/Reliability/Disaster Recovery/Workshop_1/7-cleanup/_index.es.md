@@ -73,6 +73,7 @@ Si tiene más de una instancia corriendo puede verificar que está seleccionando
 
 {{< img CL-26-ES.png >}}
 
-{{< prev_next_button link_prev_url="../disaster/modify-application/" title="Felicitaciones!" button_next_text="Complete este lab" button_prev_text="Paso anterior" final_step="true" >}}
-Este laboratorio le ayuda a cumplir con las mejores prácticas cubiertas en la pregunta [REL 13  Como planeo para recuperación de desastres (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../disaster/modify-application/" title="Felicitaciones!" button_next_text="Complete este lab" button_prev_text="Paso anterior" final_step="true"  />}}
+
+Este laboratorio le ayuda a cumplir con las mejores prácticas cubiertas en la pregunta [REL 13  Como planeo para recuperación de desastres (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html) 
+{{< prev_next_button />}}

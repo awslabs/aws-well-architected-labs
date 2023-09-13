@@ -21,6 +21,6 @@ In order to remove the lab, go into the CloudFormation console, select the deplo
 * [How to manage the clock source for EC2 instances running Linux](https://aws.amazon.com/premiumsupport/knowledge-center/manage-ec2-linux-clock-source/)
 
 
-{{< prev_next_button link_prev_url="../3_change_clock/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../3_change_clock/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [PERF2 - "Understand the available compute configuration options."](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-selection.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

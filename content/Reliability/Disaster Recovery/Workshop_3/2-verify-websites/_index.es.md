@@ -64,5 +64,5 @@ Estamos aprovechando el [envío de escritura a réplicas de lectura](https://doc
 
 {{< img vw-10.png >}}
 
-{{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-failover/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-failover/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/ />}}
 
