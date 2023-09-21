@@ -30,7 +30,6 @@ Parameters:
     Description: Adds prefixes of partition keys in s3 object key (Hive-compatible S3 prefix)
     AllowedValues:
       - true
-      - false
     Default: true
   S3BucketRegion:
     Type: String

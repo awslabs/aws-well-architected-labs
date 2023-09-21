@@ -22,7 +22,6 @@ This dashboard contains breakdowns with the following visuals. Available views a
  - Source and destination AWS services paths (Enhanced view)
 
 Supported flow log record formats:
-- CSV
 - Parquet
 
 Supported Glue Partitions:

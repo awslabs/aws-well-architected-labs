@@ -19,10 +19,6 @@ We will now create the data sets in QuickSight from the Athena view and an analy
 2. Run CloudFormation stack to create QuickSight Athena dataset and a Dashboard.
 - Download CloudFormation Template:
     
-    **CSV** file format - [vpc_flowlogs_quicksight_template.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_flowlogs_quicksight_template.yaml)
-
-    **OR**
-
     **Parquet** file format - [vpc_flowlogs_quicksight_multi_view_template.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc_flowlogs_quicksight_multi_view_template.yaml)
 
 - From AWS Console navigate to CloudFormation. Then click on **Create stack**
@@ -32,11 +28,7 @@ We will now create the data sets in QuickSight from the Athena view and an analy
   1. In **Specify template** section, select **Upload a template** file. 
   2. Then **Choose File** and upload the appropriate template below (you have downloaded previously)
       
-      **CSV file format**: **_vpc_flowlogs_quicksight_template.yaml_**
-
-      **OR**
-
-      **Parquet file format**: **_vpc_flowlogs_quicksight_multi_view_template.yaml_**
+      Parquet file format: **_vpc_flowlogs_quicksight_multi_view_template.yaml_**
 
   3. Then **Click Next**
       
@@ -73,29 +65,29 @@ We will now create the data sets in QuickSight from the Athena view and an analy
 
 9. From AWS console navigate to the **QuickSight** and click on Dashboards link on the left panel.
   
-10. You will see the newly created dashboard in QuickSight under **Dashboards**, click on the Dashboard name **VPC Flow Logs Analysis Dashboard integrated with AWS VPC Service**:
+10. You will see the newly created dashboard in QuickSight under **Dashboards**, click on the Dashboard name **VPC Flow Logs Analysis Dashboard integrated with AWS VPC Service**
 ![Images/qs-vpcfl-27.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-27.png)
 
-7. Click **Share**, click **Share dashboard**:, 
+7. Click **Share**, click **Share dashboard**
 ![Images/qs-vpcfl-28.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-28.png)
 
-8. Click on **Manage dashboard access**:
+8. Click on **Manage dashboard access**
 ![Images/quicksight_dashboard_8.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-manage_dashboard.png)
 
 9. Add the required users, or share with all users, ensure you check **Save as** for each user, then click the **x** to close the window:
 ![Images/quicksight_dashboard_9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-saveas_admin.png)
 
-10. Click **Save as**:
+10. Click **Save as**
 ![Images/qs-vpcfl-31.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-31.png)
 
-11. Enter an **Analysis name** and click **Create**:
+11. Enter an **Analysis name** and click **Create**
 ![Images/qs-vpcfl-32.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-32.png)
 
 {{% notice note %}}
 Perform steps 11 - 15 above to create additional analyses for other teams, this will allow each team to have their own customizable analysis.
 {{% /notice %}}
 
-16. You will now have an analysis created from the template that you can edit and modify:
+16. You will now have an analysis created from the template that you can edit to make changes as per your requirements
 ![Images/qs-vpcfl-analysis.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-analysis.png)
 
 
