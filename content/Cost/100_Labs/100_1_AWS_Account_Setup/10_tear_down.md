@@ -24,8 +24,8 @@ To cancel your QuickSight subscription follow the steps below.
 4. Review the notifications, click **Unsubscribe**:
 ![Images/AWSQuicksight78.png](/Cost/100_1_AWS_Account_Setup/Images/AWSQuicksight78.png)
 
-{{< prev_next_button link_prev_url="../9_monthly_report/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../9_monthly_report/"  title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment or workload,
 you should complete a milestone in the Well-Architected tool. This lab specifically helps you with
 [COST2 - "How do you govern usage?" and COST3 - "How do you monitor usage and cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-expenditure-and-usage-awareness.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

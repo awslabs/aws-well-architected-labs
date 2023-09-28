@@ -27,10 +27,10 @@ In this section you will delete all resources related to the lab environment.
 ![section4_4_teardown](/Cost/200_EC2_Scheduling_at_Scale/Images/section4_4_teardown.png)
 ![section4_5_teardown](/Cost/200_EC2_Scheduling_at_Scale/Images/section4_5_teardown.png)
 
-{{< prev_next_button link_prev_url="../3_scheduling_at_scale/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../3_scheduling_at_scale/"  title="Congratulations!" final_step="true"  />}}
 You have now completed the lab! Learn more via:
 
 * [COST06-BP03](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_type_size_number_resources_metrics.html) - **Select resource type, size, and number automatically based on metrics**
 * [COST09-BP01](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html) - **Perform an analysis on the workload demand**
 * [COST09-BP03](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html) - **Supply resources dynamically**
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

@@ -31,11 +31,9 @@ Wait until the VPC CloudFormation stack status is CREATE_COMPLETE, then continue
 
 ### Enable VPC Flow Logs
 
-QuickSight dashboard provided in this lab requires all the fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) are required. If you already have enabled VPC Flow logs with those fields (with CSV format, Hive partition enabled and delivered to S3) then you can skip this section and proceed to ["**Create Athena resources, Lambda function and CloudWatch rule**"](../2_create_athena_lambda_cloudwatch_rule/) section to continue. If you do not have VPC flow logs enabled or existing VPC Flow logs does not have all the required fields then this section will help you in enabling vpc flow logs for existing VPC(s) in your account. Repeat all the steps from this section for each VPC in case you want to enable VPC Flow logs in respective account to visualize them in QuickSight dashboard under central account.
+QuickSight dashboard provided in this lab requires all the fields mentioned in the [Introduction section](/security/300_labs/300_vpc_flow_logs_analysis_dashboard/#introduction) are required. If you already have enabled VPC Flow logs with those fields (with parquet format, Hive partition enabled and delivered to S3) then you can skip this section and proceed to ["**Create Athena resources, Lambda function and CloudWatch rule**"](../2_create_athena_lambda_cloudwatch_rule/) section to continue. If you do not have VPC flow logs enabled or existing VPC Flow logs does not have all the required fields then this section will help you in enabling vpc flow logs for existing VPC(s) in your account. Repeat all the steps from this section for each VPC in case you want to enable VPC Flow logs in respective account to visualize them in QuickSight dashboard under central account.
 
 #### Parquet file format
-
-{{%expand "Click here for the instructions for enabling VPC Flow Logs in Parquet format" %}}
 
 Use aws cli or AWS CloudShell to run below command. This command will create Flow Log in parquet file format with hive-compatible s3 prefixes
 
@@ -57,76 +55,8 @@ Use aws cli or AWS CloudShell to run below command. This command will create Flo
 4. Once you finish replacing ID, ARN paste the command in CloudShell and run it. You will see below result with FlowLogIds, if it is successful.
 ![Images/quicksight_dashboard_dt-8.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-33.png)
 
-{{% /expand%}}
-&nbsp;
-&nbsp;
-#### CSV file format
-
-{{%expand "Click here for the instructions for enabling VPC Flow Logs in CSV format" %}}
-
-1. Login to your central AWS account.
-
-2. Run CloudFormation stack to enable VPC Flow Logs.
-
-- Download CloudFormation Template:
-    - [vpc-flow-logs-custom.yaml](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/code/vpc-flow-logs-custom.yaml) 
-        - This CloudFormation template enables VPC Flow Logs in the account you run it. You will need to run it per VPC.
-
-    - From AWS Console navigate to CloudFormation. Then click on **Create stack**
-    ![Images/quicksight_dashboard_dt-8.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-08.png)
-
-    - Create stack page:
-      1. In **Create stack** page **Specify template** select **Upload a template** file. 
-      2. Then **Choose File** and upload the template vpc-flow-logs-custom.yaml (you have downloaded previously)
-      3. **Click Next**
-    ![Images/quicksight_dashboard_dt-9.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-09.png)
-
-3. Provide name for the stack e.g., "vpc-flow-logs-stack" and values for the stack parameters and then click **Next**
-
-    - **TrafficType** (ACCEPT, REJECT, ALL): Type of traffic you wish to record
-        - ACCEPT — The recorded traffic was permitted by the security groups and network ACLs.
-        - REJECT — The recorded traffic was not permitted by the security groups or network ACLs.
-        - ALL -  The recorded traffic that was permitted (ACCEPT) and was not permitted (REJECT) by the security groups or network ACLs.
-
-    - **VpcFlowLogsBucketName (Optional)**: S3 bucket name where VPC flow logs will be stored. 
-
-        - If you specify the bucket name then it is assumed that the bucket already exists. If you want to centralize the storage of the logs, then create the bucket before and specify the bucket name here. **If you are enabling VPC Flow Logs in additional account then please make sure to modify S3 bucket's policy from the central account to grant access to additional account and provide the name of the central bucket to this parameter.**
-
-        - If you leave it blank CloudFormation template will create a bucket for you.
-        
-        Note:
-        **VpcFlowLogsBucketName** - This bucket will be used to gather vpc flow logs for all of your vpcs from one or more accounts. So please make sure this is the central account where you want your VPC flow logs to be collected and QuickSight dashboard to be hosted.
-
-
-    - **VpcFlowLogsFilePrefix (Optional)**: VPC Flow [logfile prefix](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html#flow-logs-s3-path) in S3 bucket. See bold text in below example
-
-        **e.g.,** bucket_name/<span style="color: #f92672">**vpc-flow-logs**</span>/AWSLogs/aws_account_id/vpcflowlogs/region/year/month/day/
-
-    - **VpcId**: You can find the VPC ID in [console](https://console.aws.amazon.com/vpc/home?region=us-east-1#vpcs:) 
-
-    ![Images/quicksight_dashboard_dt-2.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-02.png)
-
-4. In **Configure stack options** page, add below tags and click on **Next**
-    - Name=VPCFlowLogs-CFN
-    - Purpose=WALabVPCFlowLogs
-
-![Images/quicksight_dashboard_dt-3.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-03.png)
-
-5. On Review screen verify the inputs you have provided
-
-![Images/quicksight_dashboard_dt-4.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-04.png)
-
-6. Last click on **Create stack**
-![Images/quicksight_dashboard_dt-5.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-05.png)
-
-7. As shown below you will see progress of the stack creation under **Events** tab. Please wait for the stack to complete the execution. Once complete it will show the status **CREATE_COMPLETE** in green then proceed to the next step.
-![Images/quicksight_dashboard_dt-6.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-06.png)
-
-{{% /expand%}}
-
 - To verify, navigate to VPC service, click on vpc link and then click on **Flow Logs** tab at the bottom part of the screen. You will see a line with flow logs you just created now.
 ![Images/quicksight_dashboard_dt-7.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-07.png)
-
 
 ### Delete older VPC Flow Logs from S3 bucket (Optional)
 
@@ -145,7 +75,7 @@ We recommend you to create a life cycle policy to delete logs older than 90 days
     - Check **"I acknowledge that this rule will apply to all the objects in the bucket."**
     - Under **"Lifecycle rule actions"** check
         - Expire current versions of objects
-        - Delete expired delete markers or incomplete multipart uploads
+        - Permanently delete noncurrent versions of objects
     ![Images/qs-vpcfl-s3-2.png](/Security/300_VPC_Flow_Logs_Analysis_Dashboard/images/qs-vpcfl-s3-2.png)
 6. Enter 90 days for **"Number of days after object creation"** and 90 days for **"Number of days after object becomes previous versions"** and click on **Create rule**
 

@@ -6,5 +6,4 @@ chapter: false
 pre: "<b>4. </b>"
 ---
 
-
 This page is permanently moved to https://catalog.workshops.aws/awscid/en-US/dashboards/update

@@ -39,6 +39,6 @@ In addition to the lab tasks, feel free to use this lab deployment to test some 
 * [Monitoring your instances using CloudWatch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html)
 * [Connect to instance using Session Manager](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/session-manager.html)
 
-{{< prev_next_button link_prev_url="../5_generating_load/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5_generating_load/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [PERF7 - "How do you monitor your resources to ensure they are performing?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-monitoring.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

@@ -39,5 +39,5 @@ Input the full name of the lens for the confirmation, then you will able to unap
 
 If you want to delete the workload, please check the radio button on workload list, and click the **"Delete Workload"**. Or you can follow the instruction in [Lab: Walk Through of the AWS Well-Architected Tool](../../../100_labs/100_walkthrough_of_the_well-architected_tool/6_tear_down/). 
 
-{{< prev_next_button link_prev_url="../5_ddb_config_share_and_update/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../5_ddb_config_share_and_update/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}

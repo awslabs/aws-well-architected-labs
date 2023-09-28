@@ -8,8 +8,8 @@ weight: 5
 
 There is no tear down required for this lab.
 
-{{< prev_next_button link_prev_url="../4_visualize_recommendations/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_visualize_recommendations/"  title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 [COST7 - "How do you use pricing models to reduce cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-cost-effective-resources.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

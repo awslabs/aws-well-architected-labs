@@ -15,6 +15,6 @@ The AWS free tier allows for 3 Dashboards for up to 50 metrics per month for fre
 * [Focus on Metrics and Alarms in a Single AWS Service](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Automatic_Dashboards_Focus_Service.html)
 * [Focus on Metrics and Alarms in a Resource Group](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Automatic_Dashboards_Resource_Group.html)
 
-{{< prev_next_button link_prev_url="../1_intro/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../1_intro/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [PERF7 - "How do you monitor your resources to ensure they are performing?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-monitoring.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

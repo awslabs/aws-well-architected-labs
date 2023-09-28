@@ -23,10 +23,10 @@ The following resources were created in this lab:
 - QuickSight Analysis: sp_usage analysis
 
 
-{{< prev_next_button link_prev_url="../5_format_dashboard/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5_format_dashboard/"  title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 [COST7 - "How do you use pricing models to reduce cost?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-cost-effective-resources.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}
 
 

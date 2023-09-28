@@ -41,7 +41,7 @@ With just a few lines per resource, you can define the application you want and 
 During deployment, SAM transforms and expands the SAM syntax into AWS CloudFormation syntax, enabling you to build serverless applications faster.
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
 
 ## References & useful resources
 

@@ -69,7 +69,7 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: "Assume-Management-Rightsizing-Account-Role"
@@ -78,7 +78,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
-                Resource: !Sub "arn:aws:iam::*:role/${MultiAccountRoleName}" # Need to assume a Read role in all Accounts
+                Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in the Management Accounts
         - PolicyName: "Rightsizing-S3-Access"
           PolicyDocument:
             Version: "2012-10-17"
@@ -86,7 +86,9 @@ Resources:
               - Effect: "Allow"
                 Action:
                   - "s3:PutObject"
-                Resource: !Ref DestinationBucketARN
+                Resource: 
+                  - !Ref DestinationBucketARN
+                  - !Sub "${DestinationBucketARN}/*"
               - Effect: "Allow"
                 Action:
                   - "glue:StartCrawler"
@@ -249,7 +251,7 @@ Resources:
           S3_BUCKET: !Ref DestinationBucket
           CRAWLER_NAME: !Ref RightsizingCrawler
           RECOMMENDATION_TARGET: 'SAME_INSTANCE_FAMILY'
-          ROLE: !Ref MultiAccountRoleName
+          ROLE: !Ref ManagementRoleName
           MANAGEMENT_ACCOUNT_IDS: !Ref ManagementAccountID
   RightsizingCrawler:
     Type: AWS::Glue::Crawler

@@ -49,4 +49,4 @@ The skills you learn from this lab will help you secure your workloads in alignm
 {{% /notice %}}
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}

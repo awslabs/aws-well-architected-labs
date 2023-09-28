@@ -19,4 +19,4 @@ weight: 8
 
 ### Thank you for using this lab.
 
-{{< prev_next_button link_prev_url="../7_cleanup/" title="Congratulations!" final_step="true" >}} With completion of this lab you have learned several best practices. Consider how you can implement these, and update the Well-Architected Review for your workloads: **REL 10  How do you use fault isolation to protect your workload? - Use bulkhead architectures** {{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../7_cleanup/" title="Congratulations!" final_step="true" />}} With completion of this lab you have learned several best practices. Consider how you can implement these, and update the Well-Architected Review for your workloads: **REL 10  How do you use fault isolation to protect your workload? - Use bulkhead architectures** {{< prev_next_button  />}}

@@ -57,4 +57,4 @@ La región secundaria no debe estar disponible. En una estrategia de DR _pilot l
 
 {{< img vw-9.png >}}
 
-{{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-prepare-secondary/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../1-prerequisites/" link_next_url="../3-prepare-secondary/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}

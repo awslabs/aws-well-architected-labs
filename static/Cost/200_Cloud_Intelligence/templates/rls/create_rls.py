@@ -15,6 +15,7 @@ QS_REGION = os_environ['QS_REGION'] if 'QS_REGION' in os_environ else exit("Miss
 MANAGEMENT_ACCOUNT_IDS = os_environ['MANAGEMENT_ACCOUNT_IDS'] if 'MANAGEMENT_ACCOUNT_IDS' in os_environ else QS_ACCOUNT_ID
 MANAGEMENTROLENAME = os_environ['MANAGEMENTROLENAME'] if 'MANAGEMENTROLENAME' in os_environ else exit(
     "Missing MANAGEMENT ROLE NAME. Please define bucket as ENV VAR MANAGEMENTROLENAME")
+CID_FULL_ACCESS_USERS = os_environ['CID_FULL_ACCESS_USERS'] if 'CID_FULL_ACCESS_USERS' in os_environ else ""
 
 
 def assume_management(payer_id, region):
@@ -129,7 +130,9 @@ def main(separator=":"):
     qs_client = boto3.client('quicksight', region_name=QS_REGION)
     qs_users = get_qs_users(QS_ACCOUNT_ID, qs_client)
     qs_users = {qs_user['UserName']: qs_user['Email'] for qs_user in qs_users}
+    cid_full_access_users = CID_FULL_ACCESS_USERS.split(',')
     print(f"qs_users: {qs_users}")
+    print(f"cid_full_access_users: {cid_full_access_users}")
     for payer_data in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
         if ':' in payer_data:
             payer_id = payer_data.split(':')[0]
@@ -150,9 +153,13 @@ def main(separator=":"):
                 qs_email_user_map[value].append(key)
         # process all tags from alll OU
         for user in ou_tag_data:
+            print("###################### USER_EMAIL:{}#######################".format(user))
             if user in qs_email_user_map:
                 for qs_user in qs_email_user_map[user]:
-                    qs_rls[qs_user] = ou_tag_data[user]
+                    if user not in cid_full_access_users:
+                        qs_rls[qs_user] = ou_tag_data[user]
+                    else:
+                        qs_rls[qs_user] = {'full_access': True}
     print("QS EMAIL USER MAPPING: {}".format(qs_email_user_map))
     print("QS RLS DATA: {}".format(qs_rls))
     rls_s3_filename = "cid_rls.csv"
@@ -246,6 +253,10 @@ def write_csv(qs_rls, rls_s3_filename):
                 wrt.writerow({'UserName': user,
                               'account_id': "",
                               'payer_account_id': ",".join(qs_rls[user]['payer_id'])})
+            elif qs_rls[user].get('full_access'):
+                wrt.writerow({'UserName': user,
+                              'account_id': "",
+                              'payer_account_id': ""})
             else:
                 wrt.writerow({'UserName': user,
                               'account_id': ",".join(qs_rls[user]['account_id']),
@@ -260,3 +271,5 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     main()
+
+#### TEST UPDATE ####

@@ -228,7 +228,7 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: "Assume-Management-Organization-Data-Role"
@@ -238,7 +238,16 @@ Resources:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
-        - PolicyName: "S3-Access"
+        - PolicyName: !Sub "S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: 
+                  - !Sub "arn:aws:s3:::${DestinationBucket}/*"
+        - PolicyName: "CloudWatch-Access"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:

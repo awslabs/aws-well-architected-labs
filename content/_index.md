@@ -21,7 +21,7 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 ## Labs:
 The labs are structured around the six pillars of the [Well-Architected Framework](https://aws.amazon.com/well-architected):
-{{% children depth=1 %}}
+{{% children depth=1 /%}}
 
 
 ## Contributing
