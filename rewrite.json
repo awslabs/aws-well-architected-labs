@@ -490,5 +490,11 @@
         "target": "/sustainability/",
         "status": "301",
         "condition": null
+    },
+    {
+        "source": "/cost/200_labs/200_cloud_intelligence/",
+        "target": "/cloud-intelligence-dashboards/",
+        "status": "301",
+        "condition": null
     }
 ]

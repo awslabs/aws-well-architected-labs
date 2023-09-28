@@ -1,0 +1,1 @@
+2023-06-05 16:19:45,631 - CRITICAL - cid.cli:wrapper:37 - Authentication error: An error occurred (ExpiredToken) when calling the GetCallerIdentity operation: The security token included in the request is expired
