@@ -5,6 +5,8 @@ chapter: false
 weight: 4
 hidden: false
 ---
+<<<<<<< HEAD
+=======
 ### Update Dashboard Template
 
 {{< rawhtml >}}
@@ -19,4 +21,6 @@ To pull the latest version of the dashboard from the public template please use 
 2. Then type the following command and press enter ```pip3 install --upgrade cid-cmd``` 
 3. Then type the following command and press enter ```cid-cmd update``` 
 4. Choose the dashboard you wish to update and press enter.  
+>>>>>>> main
 
+This page is permanently moved to https://catalog.workshops.aws/awscid/en-US/dashboards/share
