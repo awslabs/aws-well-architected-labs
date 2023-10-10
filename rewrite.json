@@ -319,133 +319,139 @@
     },
     {
         "source": "/Cost/README.html",
-        "target": "/cost/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
-        "source": "/Cost/Fundamentals.html",
-        "target": "/cost/fundamentals/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/Cost/ExpenditureAwareness.html",
-        "target": "/cost/expenditureawareness/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/Cost/CostEffectiveResources.html",
-        "target": "/cost/costeffectiveresources/",
+        "source": "/Cost/<*>.html",
+        "target": "/cost-optimization",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Effective_Resources/100_AWS_Resource_Optimization/<*>.html",
-        "target": "/cost/100_labs/100_aws_resource_optimization/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/100_1_AWS_Account_Setup/<*>.html",
-        "target": "/cost/100_labs/100_1_aws_account_setup/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/100_2_Cost_and_Usage_Governance/<*>.html",
-        "target": "/cost/100_labs/100_2_cost_and_usage_governance/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/100_3_Pricing_Models/<*>.html",
-        "target": "/cost/100_labs/100_3_pricing_models/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/100_4_Cost_and_Usage_Analysis/<*>.html",
-        "target": "/cost/100_labs/100_4_cost_and_usage_analysis/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/100_5_Cost_Visualization/<*>.html",
-        "target": "/cost/100_labs/100_5_cost_visualization/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/200_2_Cost_and_Usage_Governance/<*>.html",
-        "target": "/cost/200_labs/200_2_cost_and_usage_governance/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/200_3_Pricing_Models/<*>.html",
-        "target": "/cost/200_labs/200_3_pricing_models/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/200_4_Cost_and_Usage_Analysis/<*>.html",
-        "target": "/cost/200_labs/200_4_cost_and_usage_analysis/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Fundamentals/200_5_Cost_Visualization/<*>.html",
-        "target": "/cost/200_labs/200_5_cost_visualization/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Effective_Resources/200_AWS_Resource_Optimization/<*>.html",
-        "target": "/cost/200_labs/200_aws_resource_optimization/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_Effective_Resources/200_Pricing_Model_Analysis/<*>.html",
-        "target": "/cost/200_labs/200_pricing_model_analysis/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Expenditure_Awareness/Workload_Efficiency/<*>.html",
-        "target": "/cost/200_labs/200_workload_efficiency/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_and_Usage_Analysis/300_Automated_CUR_Updates_and_Ingestion/<*>.html",
-        "target": "/cost/300_labs/300_automated_cur_updates_and_ingestion/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_and_Usage_Analysis/300_Multi_Account_CUR_Access/<*>.html",
-        "target": "/cost/300_labs/300_multi_account_cur_access/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Cost_and_Usage_Analysis/300_Splitting_Sharing_CUR_Access/<*>.html",
-        "target": "/cost/300_labs/300_splitting_sharing_cur_access/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/<*>.html",
-        "target": "/cost/300_labs/300_automated_cur_query_and_email_delivery/",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Cost/",
-        "target": "/cost/",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/Cost/100_labs/<*>.html",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/Cost/200_labs/<*>.html",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/Cost/300_labs/<*>.html",
+        "target": "/cost-optimization/",
         "status": "301",
         "condition": null
     },
