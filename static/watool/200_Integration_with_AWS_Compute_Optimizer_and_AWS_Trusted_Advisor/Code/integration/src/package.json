@@ -9,6 +9,6 @@
   "author": "jang whan han",
   "license": "MIT-0",
   "dependencies": {
-    "aws-sdk": "^2.1034.0"
+    "aws-sdk": "^2.1354.0"
   }
 }

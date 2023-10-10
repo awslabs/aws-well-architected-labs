@@ -40,6 +40,6 @@ Tearing down the CloudFormation stack.
 2. Click on the stack you created for this lab, likely called `security-cw-lab`.
 3. Click **Delete** and then **Delete stack** on the window that pops up.
 
-{{< prev_next_button link_prev_url="../9_create_quicksight_dashboard/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../9_create_quicksight_dashboard/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [SEC4 - How do you detect and investigate security events?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-detective-controls.html) and [SEC6 - How do you protect your compute resources?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-infrastructure-protection.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

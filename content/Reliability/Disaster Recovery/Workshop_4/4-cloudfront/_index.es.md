@@ -112,5 +112,5 @@ En el paso 2.2, **NO** escoja el bucket de S3 **passive-secondary-uibucket-xxxx*
 
 #### Felicitaciones!  Su distribución de CloudFront está funcionando!
 
-{{< prev_next_button link_prev_url="../verify-websites/" link_next_url="../disaster/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../verify-websites/" link_next_url="../disaster/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
 

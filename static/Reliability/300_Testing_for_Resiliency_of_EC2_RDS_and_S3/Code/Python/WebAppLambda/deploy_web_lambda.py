@@ -33,9 +33,7 @@ AWS_REGION = 'us-east-2'
 
 ARCH_TO_AMI_NAME_PATTERN = {
     # Architecture: (pattern, owner)
-    "PV64": ("amzn2-ami-pv*.x86_64-ebs", "amazon"),
-    "HVM64": ("amzn2-ami-hvm-*-x86_64-gp2", "amazon"),
-    "HVMG2": ("amzn2-ami-graphics-hvm-*x86_64-ebs*", "679593333241")
+    "HVM64": ("amzn2-ami-hvm-*-arm64-gp2", "amazon")
 }
 
 
@@ -220,7 +218,7 @@ def deploy_web_servers(event):
     webserver_parameters.append({'ParameterKey': 'WebLoadBalancerSG', 'ParameterValue': elb_sg, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebLoadBalancerSubnets', 'ParameterValue': igw_subnets, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebServerSubnets', 'ParameterValue': private_subnets, 'UsePreviousValue': True})
-    webserver_parameters.append({'ParameterKey': 'WebServerInstanceType', 'ParameterValue': 't2.micro', 'UsePreviousValue': True})
+    webserver_parameters.append({'ParameterKey': 'WebServerInstanceType', 'ParameterValue': 't4g.micro', 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'WebServerAMI', 'ParameterValue': latest_ami, 'UsePreviousValue': False})
     webserver_parameters.append({'ParameterKey': 'AvailabilityZones', 'ParameterValue': azs, 'UsePreviousValue': True})
     webserver_parameters.append({'ParameterKey': 'BootBucketRegion', 'ParameterValue': cfn_region, 'UsePreviousValue': True})

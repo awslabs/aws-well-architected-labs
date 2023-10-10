@@ -15,4 +15,4 @@ The Well-Architected Partner Program has enabled our best practice methodology t
 [AWS Well-Architected Partner Program](https://aws.amazon.com/partners/programs/well-architected/).
 
 ## Labs
-{{% children depth=2 %}}
+{{% children depth=2 /%}}

@@ -93,6 +93,6 @@ Espere a que la eliminación de la base de datos termine antes de continuar al s
 
 {{< img cl-7-ES.png >}}
 
-{{< prev_next_button link_prev_url="../5-verify-secondary/" title="¡Felicidades!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../5-verify-secondary/" title="¡Felicidades!" final_step="true"  />}}
 Este laboratorio ayuda le ayuda con las mejores prácticas cubiertas en la preguntas [REL 13  Como planear para recuperación de desastres (DR)](https://docs.aws.amazon.com/es_es/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

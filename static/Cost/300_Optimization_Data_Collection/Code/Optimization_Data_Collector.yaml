@@ -18,13 +18,13 @@ Metadata:
         Parameters:
           - IncludeTAModule
           - IncludeRightsizingModule
+          - IncludeCostAnomalyModule
           - IncludeInventoryCollectorModule
           - IncludeComputeOptimizerModule
           - ComputeOptimizerRegions
           - IncludeECSChargebackModule
           - IncludeRDSUtilizationModule
           - IncludeOrgDataModule
-          - IncludeBudgetsModule
           - IncludeTransitGatewayModule
     ParameterLabels:
       DestinationBucket:
@@ -40,11 +40,13 @@ Metadata:
       RolePrefix:
         default: "Role Prefix"
       CFNTemplateSourceBucket:
-        default: "DO NOT CHANGE - A bucket that contains WA-Labs CloudFormation templates. Must be allways 'aws-well-architected-labs'"
+        default: "DO NOT CHANGE - A bucket that contains WA-Labs CloudFormation templates. Must be 'aws-well-architected-labs'"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
       IncludeRightsizingModule:
         default: 'Include Rightsizing Recommendations Data Collection Module'
+      IncludeCostAnomalyModule:
+        default: 'Include Cost Anomalies ightsizing Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeComputeOptimizerModule:
@@ -88,7 +90,7 @@ Parameters:
     Default: costoptimizationdata
   ManagementAccountRole:
     Type: String
-    Description: The name of the IAM role that will be deployed in the management account which can retrieve AWS Organization data. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. DO NOT ENTER THE ROLE PREFIX HERE. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT.
     Default: Lambda-Assume-Role-Management-Account
   ManagementAccountID:
     Type: String
@@ -96,7 +98,7 @@ Parameters:
     Description: "(Ex: 123456789,098654321,789054312) List of Payer IDs you wish to collect data for. Can just be one Accounts"
   MultiAccountRoleName:
     Type: String
-    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. DO NOT ENTER THE ROLE PREFIX HERE. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT.
     Default: "Optimization-Data-Multi-Account-Role"
   Schedule:
     Type: String
@@ -104,27 +106,33 @@ Parameters:
     Default: "rate(14 days)"
   RolePrefix:
     Type: String
-    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Description: Keep this consistent with the prefix used for the Stacks and StackSets created as part of this lab. This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
     Default: "WA-"
   CFNTemplateSourceBucket:
     Type: String
-    Description: "DO NOT CHANGE - A bucket that contains WA-Labs CloudFormation templates. Must be allways 'aws-well-architected-labs'"
+    Description: "DO NOT CHANGE - A bucket that contains WA-Labs CloudFormation templates. Must be 'aws-well-architected-labs'"
     Default: "aws-well-architected-labs"
   IncludeTAModule:
     Type: String
     Description: Collects AWS Trusted Advisor recommendations data
     AllowedValues:
       - "yes"
-      - "no" 
+      - "no"
   IncludeRightsizingModule:
     Type: String
     Description: "Collects AWS Cost Explorer Rightsizing Recommendations"
     AllowedValues:
       - "yes"
       - "no"
+  IncludeCostAnomalyModule:
+    Type: String
+    Description: "Collects AWS Cost Explorer Cost Anomalies Recommendations"
+    AllowedValues:
+      - "yes"
+      - "no"
   IncludeInventoryCollectorModule:
     Type: String
-    Description: Collects data about AMIs, EBS volumes and snapshots   
+    Description: Collects data about AMIs, EBS volumes and snapshots  
     AllowedValues:
       - "yes"
       - "no"
@@ -147,7 +155,7 @@ Parameters:
       - "no"
   IncludeRDSUtilizationModule:
     Type: String
-    Description: Collects RDS CloudWatch metrics from your accounts 
+    Description: Collects RDS CloudWatch metrics from your accounts
     AllowedValues:
       - "yes"
       - "no"
@@ -200,6 +208,9 @@ Conditions:
     - "yes"
   DeployRightsizingModule: !Equals
     - !Ref IncludeRightsizingModule
+    - "yes"
+  DeployCostAnomalyModule: !Equals
+    - !Ref IncludeCostAnomalyModule
     - "yes"
   DeployInventoryCollectorModule: !Equals
     - !Ref IncludeInventoryCollectorModule
@@ -358,10 +369,10 @@ Resources:
           import uuid
           import urllib3
           import boto3
-
+ 
           endpoint = os.environ['WA_ANALYTICS_ENDPOINT']
           account_id = boto3.client("sts").get_caller_identity()["Account"]
-
+ 
           def lambda_handler(event, context):
               print(json.dumps(event))
               try:
@@ -424,6 +435,19 @@ Resources:
         RolePrefix: !Ref RolePrefix
         LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
       TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-cost-explorer-rightsizing.yaml"
+  CostAnomalyModule:
+    Type: AWS::CloudFormation::Stack
+    Condition: DeployCostAnomalyModule
+    Properties:
+      Parameters:
+        DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn
+        ManagementRoleName: !Sub "${RolePrefix}${ManagementAccountRole}"
+        ManagementAccountID: !Ref ManagementAccountID
+        GlueRoleARN: !GetAtt GlueRole.Arn
+        RolePrefix: !Ref RolePrefix
+        LambdaAnalyticsARN: !GetAtt LambdaAnalytics.Arn
+      TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-cost-explorer-cost-anomaly.yaml"
   InventoryCollectorModule:
     Type: AWS::CloudFormation::Stack
     Condition: DeployInventoryCollectorModule
@@ -476,6 +500,7 @@ Resources:
       TemplateURL: !Sub "https://${CFNTemplateSourceBucket}.s3.amazonaws.com/Cost/Labs/300_Optimization_Data_Collection/module-ecs-chargeback.yaml"
       Parameters:
         DestinationBucket: !Ref S3Bucket
+        DestinationBucketARN: !GetAtt S3Bucket.Arn
         GlueRoleArn: !GetAtt GlueRole.Arn
         MultiAccountRoleName: !Sub "${RolePrefix}${MultiAccountRoleName}"
         CodeBucket: !If [ ProdCFNTemplateUsed, !FindInMap [RegionMap, !Ref "AWS::Region", CodeBucket], !Ref CFNTemplateSourceBucket ]

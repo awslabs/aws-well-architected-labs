@@ -228,7 +228,7 @@ Resources:
                 - lambda.amazonaws.com
         Version: 2012-10-17
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: "Assume-Management-Organization-Data-Role"
@@ -238,7 +238,16 @@ Resources:
               - Effect: "Allow"
                 Action: "sts:AssumeRole"
                 Resource: !Sub "arn:aws:iam::*:role/${ManagementRoleName}" # Need to assume a Read role in all Management Accounts
-        - PolicyName: "S3-Access"
+        - PolicyName: !Sub "S3-Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource: 
+                  - !Sub "arn:aws:s3:::${DestinationBucket}/*"
+        - PolicyName: "CloudWatch-Access"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -284,8 +293,8 @@ Resources:
           CREATE OR REPLACE VIEW budgets_cur AS
           SELECT *
           FROM ("${CURTable}" cur
-          INNER JOIN "${DatabaseName}"."organisation_data"
-            ON ("cur"."line_item_usage_account_id" = "${DatabaseName}"."organisation_data"."id")) 
+          INNER JOIN "${DatabaseName}"."organization_data"
+            ON ("cur"."line_item_usage_account_id" = "${DatabaseName}"."organization_data"."id")) 
   LambdaAnalyticsExecutor:
     Type: Custom::LambdaAnalyticsExecutor
     Properties:

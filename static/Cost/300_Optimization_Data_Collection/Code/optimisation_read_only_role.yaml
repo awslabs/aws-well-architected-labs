@@ -13,7 +13,6 @@ Metadata:
         default: 'Available modules'
       Parameters:
         - IncludeTAModule
-        - IncludeRightsizingModule
         - IncludeInventoryCollectorModule
         - IncludeECSChargebackModule
         - IncludeRDSUtilizationModule
@@ -28,8 +27,6 @@ Metadata:
         default: "Role Prefix"
       IncludeTAModule:
         default: 'Include AWS Trusted Advisor Data Collection Module'
-      IncludeRightsizingModule:
-        default: 'Include Rightsizing Recommendations Data Collection Module'
       IncludeInventoryCollectorModule:
         default: 'Include Inventory Collector Module'
       IncludeECSChargebackModule:
@@ -46,11 +43,11 @@ Parameters:
     Description: AccountId of where the collector is deployed
   MultiAccountRoleName:
     Type: String
-    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT
+    Description: The name of the IAM role that will be deployed from the management account to linked accounts as a read only role. DO NOT ENTER THE ROLE PREFIX HERE. KEEP THE SAME AS WHAT IS DEPLOYED INTO MANAGEMENT ACCOUNT.
     Default: "Optimization-Data-Multi-Account-Role"
   RolePrefix:
     Type: String
-    Description: This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
+    Description: Keep this consistent with the prefix used for the Stacks and StackSets created as part of this lab. This prefix will be placed in front of all roles created. Note you may wish to add a dash at the end to make more readable e.g. prefix-
     Default: "WA-"
   IncludeTAModule:
     Type: String
@@ -58,12 +55,6 @@ Parameters:
     AllowedValues:
       - "yes"
       - "no"  
-  IncludeRightsizingModule:
-    Type: String
-    Description: "Collects AWS Cost Explorer Rightsizing Recommendations"    
-    AllowedValues:
-      - "yes"
-      - "no" 
   IncludeInventoryCollectorModule:
     Type: String
     Description: Collects data about AMIs, EBS volumes and snapshots
@@ -98,9 +89,6 @@ Parameters:
 Conditions:
   IncludeTAModulePolicy: !Equals 
     - !Ref IncludeTAModule
-    - "yes"
-  IncludeRightsizingModulePolicy: !Equals 
-    - !Ref IncludeRightsizingModule
     - "yes"
   IncludeInventoryCollectorModulePolicy: !Equals 
     - !Ref IncludeInventoryCollectorModule
@@ -139,8 +127,6 @@ Resources:
               AWS:
                 -  !Sub "arn:aws:iam::${CostAccountID}:root"
         Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
       Path: /
   AMIPolicy:
     Type: 'AWS::IAM::Policy'
@@ -177,20 +163,6 @@ Resources:
             Resource: "*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
-  RightsizeReadOnlyPolicy:
-    Type: 'AWS::IAM::Policy'
-    Condition: IncludeRightsizingModulePolicy
-    Properties:
-      PolicyName: RightsizeReadOnlyPolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action:
-              - "ce:GetRightsizingRecommendation"
-            Resource: "*" ## only * can be used as a Resource for this action
-      Roles:
-        - Ref: LambdaRole
   BudgetsReadOnlyPolicy:
     Type: 'AWS::IAM::Policy'
     Condition: IncludeBudgetsModulePolicy
@@ -203,7 +175,7 @@ Resources:
             Action:
               - "budgets:ViewBudget"
               - "budgets:Describe*"
-            Resource: "arn:aws:budgets::*:budget/*"
+            Resource: "arn:aws:budgets::*:budget/*" ## only * can be used as a Resource for this action
       Roles:
         - Ref: LambdaRole
   InventoryCollectorPolicy:
@@ -221,7 +193,7 @@ Resources:
               - "ec2:DescribeVolumes"
               - "ec2:DescribeSnapshots"
               - "ec2:DescribeSnapshotAttribute"
-            Resource: "*"
+            Resource: "*" ## only * can be used for inventory
       Roles:
         - Ref: LambdaRole
   ECSChargebackPolicy:
@@ -250,7 +222,7 @@ Resources:
               - "ecs:DescribeTasks"
               - "ecs:ListTaskDefinitions"
               - "ecs:ListClusters"
-            Resource: "*"
+            Resource: "*" ## only * can be used for inventory
       Roles:
         - Ref: LambdaRole 
   RDSUtilizationPolicy:
@@ -306,7 +278,7 @@ Resources:
               - "rds:DescribeOptionGroups"
               - "rds:DescribeDBClusterParameterGroups"
             Resource: "*"
-          - Effect: "Allow"
+          - Effect: "Allow" ## only * can be used for inventory
             Action:
               - "ec2:DescribeRegions"
               - "cloudwatch:GetMetricStatistics"
@@ -327,6 +299,6 @@ Resources:
               - "cloudwatch:Describe*"
               - "cloudwatch:Get*"
               - "cloudwatch:List*"
-            Resource: "*"
+            Resource: "*" ## only * can be used for inventory
       Roles:
         - Ref: LambdaRole 

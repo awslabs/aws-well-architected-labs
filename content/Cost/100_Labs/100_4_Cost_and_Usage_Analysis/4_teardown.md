@@ -21,8 +21,8 @@ If you'd like to disable the Monthly Reports, please follow the following steps:
 
 4. If you configured **Save to S3 Bucket** you can delete either the bucket or files to prevent any further charges. 
 
-{{< prev_next_button link_prev_url="../3_cost_usage_download/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../3_cost_usage_download/"  title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 [COST1 - "How do you implement cloud financial management?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-practice-cloud-financial-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

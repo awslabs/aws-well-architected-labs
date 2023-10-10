@@ -21,8 +21,8 @@ We will delete both custom reports that were created.
 ![Images/AWSTearDown3.png](/Cost/100_5_Cost_Visualization/Images/AWSTearDown3.png)
 
 
-{{< prev_next_button link_prev_url="../6_custom_ec2/"  title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../6_custom_ec2/"  title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment,
 you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with
 [COST1 - "How do you implement cloud financial management?"](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-practice-cloud-financial-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

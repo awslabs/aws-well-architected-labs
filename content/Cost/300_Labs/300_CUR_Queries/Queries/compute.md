@@ -260,6 +260,7 @@ SELECT
   DATE_FORMAT(line_item_usage_start_date,'%Y-%m') AS month_line_item_usage_start_date,
   bill_payer_account_id,
   line_item_usage_account_id,
+  split(savings_plan_savings_plan_a_r_n,':')[5] AS savings_plan_owner_account_id,
   savings_plan_offering_type,
   line_item_resource_id,
   SUM(CAST(line_item_unblended_cost AS DECIMAL(16, 8))) AS sum_line_item_unblended_cost,
@@ -276,6 +277,7 @@ GROUP BY
   DATE_FORMAT(line_item_usage_start_date,'%Y-%m'),
   line_item_resource_id,
   line_item_usage_account_id,
+  split(savings_plan_savings_plan_a_r_n,':')[5],
   bill_payer_account_id,
   savings_plan_offering_type
 ORDER BY 

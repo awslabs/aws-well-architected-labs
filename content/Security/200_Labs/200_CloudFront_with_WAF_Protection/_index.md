@@ -27,4 +27,4 @@ NOTE: You will be billed for any applicable AWS resources used if you complete t
 
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}

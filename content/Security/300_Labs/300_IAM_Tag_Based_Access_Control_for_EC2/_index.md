@@ -26,7 +26,7 @@ The skills you learn will help you secure your workloads in alignment with the [
 NOTE: You will be billed for any applicable AWS resources used if you complete this lab that are not covered in the [AWS Free Tier](https://aws.amazon.com/free/).
 
 ## Steps:
-{{% children  %}}
+{{% children /%}}
 
 ## References & useful resources
 

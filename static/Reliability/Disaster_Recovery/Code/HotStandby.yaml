@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'This deployment includes SSM, CloudWatch, and allows instance reboot'
+Description: 'Upgraded stack for hot standby Unicorn Shop with ALB'
 Parameters:
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
@@ -19,6 +19,8 @@ Conditions:
     !Equals [!Ref IsPrimary, 'no']
   EnableWriteFwd:
     !Equals [!Ref IsPrimary, 'no']
+  IsPrimaryRegion:
+    !Equals [!Ref IsPrimary, 'yes']
 Resources:
   UniShopAppV1VPC:
     Type: 'AWS::EC2::VPC'
@@ -125,6 +127,10 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: 80
@@ -134,9 +140,51 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
           Value: !Ref 'AWS::StackName'
+
+  #ALB and target groups
+  
+  EC2TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties: 
+      Name: !If [IsPrimaryRegion, PrimaryTargetGroup, SecondaryTargetGroup]
+      Port: 8080
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      Targets: 
+        - Id: !Ref EC2Instance
+      TargetType: 'instance'
+      VpcId: !Ref UniShopAppV1VPC
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref EC2TargetGroup
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: AttachGateway    
+    Properties:
+      Name: !If [IsPrimaryRegion, PrimaryALB, SecondaryALB]
+      Scheme: internet-facing
+      Subnets:
+      - Ref: UniShopAppV1Subnet1
+      - Ref: UniShopAppV1Subnet2
+      SecurityGroups:
+      - Ref: EC2SecurityGroup
+      IpAddressType: ipv4
+
   EC2SecurityGroupDBRule:
     Type: 'AWS::EC2::SecurityGroupEgress'
     Properties:
@@ -269,6 +317,30 @@ Resources:
       WebsiteConfiguration:
         ErrorDocument: error.html
         IndexDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false         
+  UIBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UIBucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ''
+                - - 'arn:aws:s3:::'
+                  - Ref: 'UIBucket'
+                  - '/*'
+            Principal:
+              AWS:
+                - '*'             
   EC2Instance:
       Type: 'AWS::EC2::Instance'
       DependsOn: RDSDBInstance
@@ -281,22 +353,57 @@ Resources:
           configSets:
             default:
               - update
+              - setup
               - install
               - configure
               - create-tables              
               - create-service-files
               - start-service
+              - setupnginx1
+              - setupnginx2
             secondary:
               - update
+              - setup
               - install
               - configure
               - configure-global-db        
               - create-service-files
               - start-service
+              - setupnginx1
+              - setupnginx2
           update:
             commands:
               update:
                 command: sudo yum update -y
+          setup:
+            files:
+              '/etc/cfn/cfn-hup.conf':
+                content: !Sub |
+                  [main]
+                  stack=${AWS::StackName}
+                  region=${AWS::Region}
+                  interval=1
+                mode: '000400'
+                owner: root
+                group: root
+              '/etc/cfn/hooks.d/cfn-auto-reloader.conf':
+                content: !Sub |
+                  [cfn-auto-reloader-hook]
+                  triggers=post.update
+                  path=Resources.EC2Instance.Metadata.AWS::CloudFormation::Init
+                  action=/opt/aws/bin/cfn-init --stack ${AWS::StackName} --resource EC2Instance --configsets default --region ${AWS::Region}
+                  runas=root
+                mode: "000400"
+                owner: root
+                group: root
+            services:
+              sysvinit:
+                cfn-hup:
+                  enabled: "true"
+                  ensureRunning: "true"
+                  files:
+                    - "/etc/cfn/cfn-hup.conf"
+                    - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
           install:
             packages:
               rpm:
@@ -323,8 +430,7 @@ Resources:
                       sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopLambda-0.0.1.jar /home/ec2-user/ --no-sign-request  
                     - >                       
                       aws s3 cp /home/ec2-user/UniShopLambda-0.0.1.jar
-                      s3://$ASSETS_RANDOM_NAME/ --grants
-                      read=uri=http://acs.amazonaws.com/groups/global/AllUsers      
+                      s3://$ASSETS_RANDOM_NAME/   
                     - >                  
                       sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopAppV1-0.0.1-SNAPSHOT.jar /home/ec2-user/ --no-sign-request  
                     - >
@@ -514,6 +620,78 @@ Resources:
                       sudo amazon-cloudwatch-agent-ctl -a fetch-config -s -m ec2
                       -c
                       file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+          setupnginx1:
+            commands:
+              amznextras:
+                command: "sudo amazon-linux-extras install nginx1 -y"
+          setupnginx2:
+            files:
+              /etc/nginx/nginx.conf:
+                content: !Sub
+                  - |
+                      user nginx;
+                      worker_processes auto;
+                      error_log /var/log/nginx/error.log;
+                      pid /run/nginx.pid;
+
+                      include /usr/share/nginx/modules/*.conf;
+
+                      events {
+                        worker_connections 1024;
+                      }
+
+                      http {
+                        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                                          '$status @body_bytes_sent "@http_referer" '
+                                          '"@http_user_agent" "@http_x_forwarded_for"';
+
+                        access_log  /var/log/nginx/access.log main;
+
+                        sendfile            on;
+                        tcp_nopush          on;
+                        tcp_nodelay         on;
+                        keepalive_timeout   65;
+                        types_hash_max_size 4096;
+
+                        include             /etc/nginx/mime.types;
+                        default_type        application/octet-stream;
+
+                        include /etc/nginx/conf.d/*.conf;
+
+                        server {
+                          listen        8080;
+                          listen        [::]:8080;
+                          location / {
+                            proxy_pass ${S3Url};
+                          }
+                          server_name   _;
+                          root          /usr/share/nginx/html;
+
+                          include /etc/nginx/default.d/*.conf;
+
+                          error_page 404 /404.html;
+                          location = /404.html {
+                          }
+
+                          error_page 500 502 503 504 /50x.html;
+                          location = /50x.html {
+                          }
+                        }
+                      }
+                  - 
+                    S3Url: !GetAtt UIBucket.WebsiteURL
+                mode: '000644'
+                owner: root
+                group: root
+            services:
+              sysvinit:
+                nginx:
+                  enabled: 'true'
+                  ensureRunning: 'true'
+                  files:
+                    - "/usr/share/nginx/index.html"
+                  sources:
+                    - "/etc/nginx/nginx.conf"
       Properties:
         InstanceType: t3.small
         ImageId: !Ref LatestAmiId
@@ -528,6 +706,8 @@ Resources:
                 #!/bin/bash
               - |
                 sudo yum install -y aws-cfn-bootstrap
+              - |
+                exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
               - /opt/aws/bin/cfn-init -v
               - '         --stack '
               - !Ref 'AWS::StackName'
@@ -1206,13 +1386,11 @@ Resources:
 
                   - >
                     sudo aws s3 cp s3://ee-assets-prod-us-east-1/modules/630039b9022d4b46bb6cbad2e3899733/v1/UniShopUI/
-                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive  --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                                                                
+                    /home/ec2-user/UniShopUI/ --no-sign-request --recursive                                                                 
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/
-                    s3://$UI_RANDOM_NAME/ --recursive --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                             
+                    s3://$UI_RANDOM_NAME/ --recursive                       
 
                   - >            
                   - export APIGW=
@@ -1228,8 +1406,7 @@ Resources:
 
                   - >
                     aws s3 cp /home/ec2-user/UniShopUI/config.json
-                    s3://$UI_RANDOM_NAME/ --grants 
-                    read=uri=http://acs.amazonaws.com/groups/global/AllUsers                  
+                    s3://$UI_RANDOM_NAME/               
  
     Properties:
       InstanceType: t3.small

@@ -33,8 +33,8 @@
     "WebServerInstanceType" : {
       "Description" : "EC2 instance type",
       "Type" : "String",
-      "Default" : "t2.micro",
-      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "t2.large", "t2.xlarge" ]
+      "Default" : "t4g.micro",
+      "AllowedValues" : [ "t4g.micro", "t4g.small", "t4g.medium", "t4g.large", "t4g.xlarge" ]
     },
 
     "AvailabilityZones" : {
@@ -141,6 +141,7 @@
               "source /home/ec2-user/venv/bin/activate\n",
               "pip install ec2_metadata\n",
               "pip install pymysql\n",
+              "pip install urllib3==1.26.6\n",
               "wget https://s3.", { "Ref" : "BootBucketRegion" }, ".amazonaws.com/" , { "Ref" : "BootBucket" }, "/", { "Ref" : "BootPrefix" }, { "Ref" : "BootObject" }, "\n",
               "python3 ", { "Ref" : "BootObject" }, " -u ", { "Ref" : "WebSiteImage" }, " -p 80 -s ", { "Ref" : "RDSUser" }, " -w ", { "Ref" : "RDSPassword"}, " -d iptracker -o ", { "Ref" : "RDSHostName"}, "\n"
             ]]
@@ -350,7 +351,7 @@
             "ArtifactS3Location": {
                 "Fn::Sub": "s3://${CanaryBucket}"
             },
-            "RuntimeVersion": "syn-nodejs-puppeteer-3.6",
+            "RuntimeVersion": "syn-nodejs-puppeteer-4.0",
             "Schedule": {
                 "Expression": "rate(1 minute)"
             },

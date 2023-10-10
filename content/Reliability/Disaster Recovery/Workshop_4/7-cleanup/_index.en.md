@@ -5,7 +5,8 @@ weight = 7
 +++
 
 {{% notice info %}}
-If you are running this workshop via an instructor led training, you do **NOT** need to complete this section.
+If you are running this workshop via an instructor led training OR if you continue to [Module 5: Multi-Region Resiliency with Route 53 ARC](/reliability/disaster-recovery/workshop_5/) of the lab, please do **NOT** complete this section and move on to the Module 5 straight away. This way, all resources will be ready for you to complete the module. 
+Continue to [Module 5: Multi-Region Resiliency with Route 53 ARC](/reliability/disaster-recovery/workshop_5/) 
 {{% /notice %}}
 
 #### S3 Cleanup
@@ -119,7 +120,11 @@ Wait for all the databases and clusters to finish deleting before moving to the 
 
 {{< img cl-7.png >}}
 
-{{< prev_next_button link_prev_url="../6-verify-secondary/" title="Congratulations!" final_step="true" >}}
+#### Allow Amazon S3 Public Access
+
+If you changed your account-level Block Level Public Access settings for this workshop, return them to their pre-workshop settings. For more information, see [Blocking public access to your Amazon S3 storage](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html). 
+
+{{< prev_next_button link_prev_url="../6-verify-secondary/" title="Congratulations!" final_step="true"  />}}
 This lab specifically helps you with the best practices covered in question [REL 13  How do you plan for disaster recovery (DR)](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}
 

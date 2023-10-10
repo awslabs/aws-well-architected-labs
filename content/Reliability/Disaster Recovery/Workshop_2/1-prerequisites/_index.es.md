@@ -12,11 +12,13 @@ Si está realizando este taller como parte de un taller liderado por un instruct
 
 Todos los recursos para este taller han sido provisionados con anterioridad.
 
+{{% notice info %}}
 **Continue a la sección [Verificar página web](../2-verify-primary/) del taller.**
+{{% /notice %}}
 
 #### Utilizando su propia cuenta de AWS
 
 Si está corriendo este taller en su propia cuenta, oprima **Siguiente paso**.
 
-{{< prev_next_button link_prev_url="../" link_next_url="./1.1-account-setup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior"/>}}
+{{< prev_next_button link_prev_url="../" link_next_url="./1.1-account-setup/" button_next_text="Siguiente paso" button_prev_text="Paso anterior" />}}
 

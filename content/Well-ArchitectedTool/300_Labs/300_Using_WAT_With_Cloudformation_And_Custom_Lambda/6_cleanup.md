@@ -21,5 +21,5 @@ pre: "<b>6. </b>"
 1. [CloudFormation custom resource type.](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html)
 1. [Lambda Powertools Python](https://awslabs.github.io/aws-lambda-powertools-python/)
 
-{{< prev_next_button link_prev_url="../6_programmatic/"  title="Congratulations!" final_step="true" >}}
-{{< /prev_next_button >}}
+{{< prev_next_button link_prev_url="../6_programmatic/"  title="Congratulations!" final_step="true"  />}}
+{{< prev_next_button />}}

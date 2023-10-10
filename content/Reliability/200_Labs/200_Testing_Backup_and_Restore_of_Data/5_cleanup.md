@@ -33,6 +33,6 @@ The following instructions will remove the resources that you have created in th
 
 ### Thank you for using this lab
 
-{{< prev_next_button link_prev_url="../4_test_restore/" title="Congratulations!" final_step="true" >}}
+{{< prev_next_button link_prev_url="../4_test_restore/" title="Congratulations!" final_step="true"  />}}
 Now that you have completed the lab, if you have implemented this knowledge in your environment, you should re-evaluate the questions in the Well-Architected tool. This lab specifically helps you with [REL 9  How do you back up data?](https://docs.aws.amazon.com/wellarchitected/latest/framework/a-failure-management.html)
-{{< /prev_next_button >}}
+{{< prev_next_button />}}

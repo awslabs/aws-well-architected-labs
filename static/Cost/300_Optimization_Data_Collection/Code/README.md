@@ -6,9 +6,10 @@
 You can test this lab in a dedicated account that preferably has following assets:
 * EC2 instances, running more than 14 days (for Compute Optimizer and CE Rightsizing)
 * At least one EBS and one Snapshot
+* At least one custom AMI created from one of the snapshots
 * Activated Enterprise Support (for TA module)
 * RDS cluster
-* ECS cluster
+* ECS cluster with one service deployed (wordpress will work fine)
 * TransitGateway with at least one attachment
 * Organization
 * A bucket open to readonly access to internet
@@ -35,7 +36,7 @@ python3 ./static/Cost/300_Optimization_Data_Collection/Test/test-from-scratch.py
 ```
 The test will install stacks from scratch in a single account, and then check the presence of Athena tables and deletes the stack. I also it deletes all artefacts that are not deleted by CFN.
 
-# Realease process
+# Release process
 All yaml and zip files are in the account 87******** - well-architected-content@amazon.com, in the bucket `aws-well-architected-labs`. These are then replicated to the other regional buckets.
 
 ```bash
