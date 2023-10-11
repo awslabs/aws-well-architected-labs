@@ -37,13 +37,13 @@
     },
     {
         "source": "/Security/100_AWS_Account_and_Root_User/<*>.html",
-        "target": "/security/100_labs/100_aws_account_and_root_user/",
+        "target": "/security/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Security/100_Basic_Identity_and_Access_Management_User_Group_Role/<*>.html",
-        "target": "/security/100_labs/100_basic_identity_and_access_management_user_group_role/",
+        "target": "/security/",
         "status": "301",
         "condition": null
     },
@@ -432,7 +432,35 @@
         "condition": null
     },
     {
+<<<<<<< Updated upstream
         "source": "/Cost/",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/Cost/100_labs/<*>.html",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/Cost/200_labs/<*>.html",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/Cost/300_labs/<*>.html",
+=======
+        "source": "/Cost/<*>.html",
+>>>>>>> Stashed changes
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/cost/<*>.html",
         "target": "/cost-optimization/",
         "status": "301",
         "condition": null
@@ -456,14 +484,14 @@
         "condition": null
     },
     {
-        "source": "/Well-ArchitectedTool/README.html",
-        "target": "/well-architectedtool/",
+        "source": "/Well-ArchitectedTool/<*>.html",
+        "target": "/well-architected-tool/",
         "status": "301",
         "condition": null
     },
     {
         "source": "/Well-ArchitectedTool/100_Walkthrough_of_the_Well-Architected_Tool/<*>.html",
-        "target": "/well-architectedtool/100_labs/100_walkthrough_of_the_well-architected_tool/",
+        "target": "/well-architected-tool/",
         "status": "301",
         "condition": null
     },
@@ -500,6 +528,18 @@
     {
         "source": "/cost/200_labs/200_cloud_intelligence/",
         "target": "/cloud-intelligence-dashboards/",
+        "status": "301",
+        "condition": null
+    },
+        {
+        "source": "/cost/cloud_financial_framework/",
+        "target": "/cost-optimization/cloud_financial_framework/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/cost/300_labs/300_cur_queries/",
+        "target": "/cost-optimization/cur_queries/",
         "status": "301",
         "condition": null
     }
