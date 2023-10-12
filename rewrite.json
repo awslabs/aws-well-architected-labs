@@ -432,29 +432,7 @@
         "condition": null
     },
     {
-<<<<<<< Updated upstream
-        "source": "/Cost/",
-        "target": "/cost-optimization/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/Cost/100_labs/<*>.html",
-        "target": "/cost-optimization/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/Cost/200_labs/<*>.html",
-        "target": "/cost-optimization/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/Cost/300_labs/<*>.html",
-=======
         "source": "/Cost/<*>.html",
->>>>>>> Stashed changes
         "target": "/cost-optimization/",
         "status": "301",
         "condition": null
@@ -531,7 +509,7 @@
         "status": "301",
         "condition": null
     },
-        {
+    {
         "source": "/cost/cloud_financial_framework/",
         "target": "/cost-optimization/cloud_financial_framework/",
         "status": "301",
@@ -540,6 +518,12 @@
     {
         "source": "/cost/300_labs/300_cur_queries/",
         "target": "/cost-optimization/cur_queries/",
+        "status": "301",
+        "condition": null
+    },
+    {
+        "source": "/reliability/300_labs/300_testing_for_resiliency_of_ec2_rds_and_s3/",
+        "target": "https://catalog.workshops.aws/well-architected-reliability/en-US/4-failure-management/4-test/30-testing-for-resiliency-of-ec2-rds-and-s3",
         "status": "301",
         "condition": null
     }
