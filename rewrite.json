@@ -324,12 +324,6 @@
         "condition": null
     },
     {
-        "source": "/Cost/<*>.html",
-        "target": "/cost-optimization",
-        "status": "301",
-        "condition": null
-    },
-    {
         "source": "/Cost/Cost_Effective_Resources/100_AWS_Resource_Optimization/<*>.html",
         "target": "/cost-optimization/",
         "status": "301",
@@ -427,18 +421,6 @@
     },
     {
         "source": "/Cost/Expenditure_Awareness/300_Automated_CUR_Query_and_Email_Delivery/<*>.html",
-        "target": "/cost-optimization/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/Cost/<*>.html",
-        "target": "/cost-optimization/",
-        "status": "301",
-        "condition": null
-    },
-    {
-        "source": "/cost/<*>.html",
         "target": "/cost-optimization/",
         "status": "301",
         "condition": null
@@ -545,7 +527,7 @@
         "status": "301",
         "condition": null
     },
-        {
+    {
         "source": "/reliability/300_labs/300_health_checks_and_dependencies/",
         "target": "https://catalog.workshops.aws/well-architected-reliability/en-US/3-change-management/20-implementing-health-checks-and-dependencies",
         "status": "301",
@@ -622,5 +604,5 @@
         "target": "https://catalog.workshops.aws/awscid/en-US/data-collection",
         "status": "301",
         "condition": null
-    }   
+    }
 ]
