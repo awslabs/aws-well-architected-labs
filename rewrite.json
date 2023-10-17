@@ -604,5 +604,11 @@
         "target": "https://catalog.workshops.aws/awscid/en-US/data-collection",
         "status": "301",
         "condition": null
+    },
+    {
+        "source": "/cost/<*>.html",
+        "target": "/cost-optimization/",
+        "status": "301",
+        "condition": null
     }
 ]
