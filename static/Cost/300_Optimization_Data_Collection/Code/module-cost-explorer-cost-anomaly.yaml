@@ -169,24 +169,40 @@ Resources:
               flattened_results = []
               for anomaly in results:
                   flattened_anomaly = {
-                      'AnomalyId': anomaly['AnomalyId'],
-                      'AnomalyStartDate': anomaly['AnomalyStartDate'],
-                      'AnomalyEndDate': anomaly['AnomalyEndDate'],
-                      'DimensionValue': anomaly['DimensionValue'],
-                      'MaxImpact': anomaly['Impact']['MaxImpact'],
-                      'TotalActualSpend': anomaly['Impact']['TotalActualSpend'],
-                      'TotalExpectedSpend': anomaly['Impact']['TotalExpectedSpend'],
-                      'TotalImpact': anomaly['Impact']['TotalImpact'],
-                      'TotalImpactpercentage': anomaly['Impact'].get('TotalImpactPercentage', 0),
-                      'MonitorArn': anomaly['MonitorArn'],
-                      'LinkedAccount': anomaly['RootCauses'][0].get('LinkedAccount'),
-                      'LinkedAccountName': anomaly['RootCauses'][0].get('LinkedAccountName'),
-                      'Region': anomaly['RootCauses'][0].get('Region'),
-                      'Service': anomaly['RootCauses'][0].get('Service'),
-                      'UsageType': anomaly['RootCauses'][0].get('UsageType')
+                      'AnomalyId': get_value_by_path(anomaly, 'AnomalyId'),
+                      'AnomalyStartDate': get_value_by_path(anomaly, 'AnomalyStartDate'),
+                      'AnomalyEndDate': get_value_by_path(anomaly, 'AnomalyEndDate'),
+                      'DimensionValue': get_value_by_path(anomaly, 'DimensionValue'),
+                      'MaxImpact': get_value_by_path(anomaly, 'Impact/MaxImpact'),
+                      'TotalActualSpend': get_value_by_path(anomaly, 'Impact/TotalActualSpend'),
+                      'TotalExpectedSpend': get_value_by_path(anomaly, 'Impact/TotalExpectedSpend'),
+                      'TotalImpact': get_value_by_path(anomaly, 'Impact/TotalImpact'),
+                      'TotalImpactpercentage': get_value_by_path(anomaly, 'Impact/TotalImpactPercentage', 0),
+                      'MonitorArn': get_value_by_path(anomaly, 'MonitorArn'),
+                      'LinkedAccount': get_value_by_path(anomaly, 'RootCauses/0/LinkedAccount'),
+                      'LinkedAccountName': get_value_by_path(anomaly, 'RootCauses/0/LinkedAccountName'),
+                      'Region': get_value_by_path(anomaly, 'RootCauses/0/Region'),
+                      'Service': get_value_by_path(anomaly, 'RootCauses/0/Service'),
+                      'UsageType': get_value_by_path(anomaly, 'RootCauses/0/UsageType')
                   }
                   flattened_results.append(flattened_anomaly)
               return flattened_results
+
+          def get_value_by_path(data, path, default=None):
+              keys = path.split("/")
+              current = data
+              for key in keys:
+                  if isinstance(current, dict) and key in current:
+                      current = current.get(key, default)
+                  elif isinstance(current, list):
+                      try:
+                          index = int(key)
+                          current = current[index]
+                      except (ValueError, IndexError):
+                          return default
+                  else:
+                      return default
+              return current
 
           def calculate_dates(s3_path):
               end_date = datetime.now().date()
