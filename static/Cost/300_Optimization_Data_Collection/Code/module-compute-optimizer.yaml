@@ -117,6 +117,7 @@ Resources:
                   - s3:Set*
                   - s3:Get*
                   - s3:Replicate*
+                  - s3:DeleteBucketPolicy
                 Resource:
                   - !Sub 'arn:aws:s3:::${BucketPrefix}${AWS::AccountId}-*'
               - Effect: Allow
