@@ -2,7 +2,7 @@
 """
 This script generates CSV:
 
-    |qs user id |account_id|payer_account_id|
+    |qs user name|account_id|payer_account_id|
 """
 
 import os
@@ -11,7 +11,7 @@ import json
 from collections import defaultdict
 import boto3
 
-OWNER_TAG = os.environ.get('CID_OWNER_TAG', 'cid_users')
+OWNER_TAG_KEY = os.environ.get('CID_OWNER_TAG', 'cid_users')
 BUCKET_NAME = os.environ['BUCKET_NAME']
 TMP_RLS_FILE = os.environ.get('TMP_RLS_FILE', '/tmp/cid_rls.csv')
 RLS_HEADER = ['UserName', 'account_id', 'payer_account_id']
@@ -24,33 +24,33 @@ CID_FULL_ACCESS_USERS = os.environ.get('CID_FULL_ACCESS_USERS', "")
 def recursive_defaultdict():
     return defaultdict(recursive_defaultdict)
 
-def assume_management(payer_id, region):
+def get_client(account_id, service, region):
     credentials = boto3.client('sts').assume_role(
-        RoleArn=f"arn:aws:iam::{payer_id}:role/{MANAGEMENT_ROLE_NAME}",
+        RoleArn=f"arn:aws:iam::{account_id}:role/{MANAGEMENT_ROLE_NAME}",
         RoleSessionName="cross_acct_lambda"
     )['Credentials']
     return boto3.client(
-        "organizations", region_name=region,
+        service, region_name=region,
         aws_access_key_id=credentials['AccessKeyId'],
         aws_secret_access_key=credentials['SecretAccessKey'],
         aws_session_token=credentials['SessionToken'],
     )
 
+# Not used?
+# def get_tags(account_list, org_client):
+#     for index, account in enumerate(account_list):
+#         account_tags = org_client.list_tags_for_resource(ResourceId=account["Id"])['Tags']
+#         account_tags = {'AccountTags': account_tags}
+#         account.update(account_tags)
+#         account_list[index] = account
+#     return account_list
 
-def get_tags(account_list, org_client):
-    for index, account in enumerate(account_list):
-        account_tags = org_client.list_tags_for_resource(ResourceId=account["Id"])['Tags']
-        account_tags = {'AccountTags': account_tags}
-        account.update(account_tags)
-        account_list[index] = account
-    return account_list
 
-
-def update_tag_data(account, users, ou_tag_data, separator=":"):
+def update_tag_data(account, emails, ou_tag_data, separator=":"):
     """ Default separator """
-    for user in users.split(separator):
-        user = user.strip()
-        ou_tag_data[user]['account_id'] = ou_tag_data[user].get('account_id', []) + [account]
+    for email in emails.split(separator):
+        email = email.strip()
+        ou_tag_data[email]['account_id'] = ou_tag_data[email].get('account_id', []) + [account]
     return ou_tag_data
 
 
@@ -72,7 +72,7 @@ def get_ou_accounts(org_client, ou, accounts_list=None, process_ou_children=True
 #     cid_users = []
 #     for account in account_list:
 #         for tag in account['AccountTags']:
-#             if tag['Key'] == 'cid_users':
+#             if tag['Key'] == OWNER_TAG_KEY:
 #                 cid_users.append((account['Id'], tag['Value']))
 #     return cid_users
 
@@ -83,43 +83,29 @@ def get_ou_accounts(org_client, ou, accounts_list=None, process_ou_children=True
 
 
 def upload_to_s3(file, s3_file):
-    try:
-        s3 = boto3.client('s3', QS_REGION)
-        s3.upload_file(file, BUCKET_NAME, f"cid_rls/{s3_file}")
-        print(f"{s3_file} data in s3")
-    except Exception as e:
-        print(e)
+    boto3.client('s3').upload_file(file, BUCKET_NAME, f"cid_rls/{s3_file}")
+    print(f"{s3_file} data in s3")
 
 
 def main():
     qs_rls = {} # Key=QS User, value: dict (full access / account / payer id)
-    ou_tag_data = recursive_defaultdict() # Key: email 
     qs_users = {qs_user['UserName']: qs_user['Email'] for qs_user in get_qs_users()}
     cid_full_access_users = CID_FULL_ACCESS_USERS.split(',')
     print(f"qs_users: {qs_users}")
     print(f"cid_full_access_users: {cid_full_access_users}")
 
-    for payer_data in [r.strip() for r in MANAGEMENT_ACCOUNT_IDS.split(',')]:
-        if ':' in payer_data:
-            payer_id = payer_data.split(':')[0]
-            identity_region = payer_data.split(':')[1]
-        else:
-            payer_id = payer_data
-            identity_region = QS_REGION
+    for payer_data in MANAGEMENT_ACCOUNT_IDS.split(','):
+        payer_id, _, identity_region = payer_data.strip().partition(':')
+        identity_region = identity_region or QS_REGION
+
         print("processing payer: {}".format(payer_id))
-
-        org_client = assume_management(payer_id, identity_region)
-        root_ou = org_client.list_roots()['Roots'][0]['Id']
-        ou_tag_data = process_ou(org_client, root_ou, ou_tag_data, root_ou)
-        ou_tag_data = process_root_ou(org_client, payer_id, root_ou, ou_tag_data)  # -> will recreate root process
+        ou_tag_data = get_ou_tag_data(payer_id, identity_region)
         qs_email_user_map = recursive_defaultdict()
-
         for user_name, email in qs_users.items():
             qs_email_user_map[email] = qs_email_user_map.get(email, []) + [user_name]
 
         # process all tags from all OU
         for email in ou_tag_data:
-            print("###################### USER_EMAIL:{}#######################".format(email))
             for qs_user in qs_email_user_map.get(email, []):
                 if email in cid_full_access_users:
                     qs_rls[qs_user] = {'full_access': True}
@@ -131,6 +117,15 @@ def main():
     write_csv(qs_rls, rls_s3_filename)
 
 
+def get_ou_tag_data(payer_id, identity_region):
+    org_client = get_client(payer_id, 'organizations', identity_region)
+    root_ou = org_client.list_roots()['Roots'][0]['Id']
+
+    ou_tag_data = recursive_defaultdict() # Key: email
+    ou_tag_data = process_ou(org_client, root_ou, ou_tag_data, root_ou)
+    ou_tag_data = process_root_ou(org_client, payer_id, root_ou, ou_tag_data)  # -> will recreate root process
+
+
 def get_qs_users(account_id, qs_client):
     qs_client = boto3.client('quicksight', region_name=QS_REGION)
     account_id = boto3.client('sts').get_caller_identity().get('Account')
@@ -139,26 +134,25 @@ def get_qs_users(account_id, qs_client):
 def process_account(account_id, ou_tag_data, ou, org_client):
     print(f"DEBUG: processing account level tags, processing account_id: {account_id}")
     for tag in org_client.get_paginator('list_tags_for_resource').paginate(ResourceId=account_id).search('Tags'):
-        if tag['Key'] == 'cid_users':
-            cid_users_tag_value = tag['Value']
+        if tag['Key'] == OWNER_TAG_KEY:
             print(f"DEBUG: processing child account: {account_id} for ou: {ou}")
-            ou_tag_data = update_tag_data(account_id, cid_users_tag_value, ou_tag_data)
+            ou_tag_data = update_tag_data(account_id, tag['Value'], ou_tag_data)
     return ou_tag_data
 
 
 def process_root_ou(org_client, payer_id, root_ou, ou_tag_data):
     "PROCESS OU MUST BE PROCESSED LAST"
     for tag in org_client.get_paginator('list_tags_for_resource').paginate(ResourceId=root_ou).search('Tags'):
-        if tag['Key'] == 'cid_users':
-            for user in tag['Value'].split(':'):
-                ou_tag_data[user]['payer_id'] = ou_tag_data[user].get('payer_id', []) + [payer_id]
+        if tag['Key'] == OWNER_TAG_KEY:
+            for email in tag['Value'].split(':'):
+                ou_tag_data[email]['payer_id'] = ou_tag_data[email].get('payer_id', []) + [payer_id]
     return ou_tag_data
 
 
 def process_ou(org_client, ou, ou_tag_data, root_ou):
-    print("DEBUG: processing ou {}".format(ou))
+    print(f"DEBUG: processing ou {ou}")
     for tag in org_client.get_paginator('list_tags_for_resource').paginate(ResourceId=ou).search('Tags'):
-        if tag['Key'] == 'cid_users':
+        if tag['Key'] == OWNER_TAG_KEY:
             cid_users_tag_value = tag['Value']
             """ Do not process all children if this is root ou, this is done bellow in separate cycle. """
             process_ou_children = bool(ou != root_ou)
