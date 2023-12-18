@@ -209,7 +209,7 @@ def process_root_ou(org_client, payer_id, root_ou, ou_tag_data):
                     else:
                         ou_tag_data[user]['payer_id'] = [payer_id]
                 else:
-                    ou_tag_data.udpate({user: {'payer_id': [payer_id]}})
+                    ou_tag_data.update({user: {'payer_id': [payer_id]}})
     return ou_tag_data
 
 
@@ -271,5 +271,3 @@ def lambda_handler(event, context):
 
 if __name__ == '__main__':
     main()
-
-#### TEST UPDATE ####
