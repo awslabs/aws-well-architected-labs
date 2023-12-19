@@ -405,6 +405,7 @@ FROM
         (line_item_resource_id LIKE '%cluster:cluster-%' OR line_item_resource_id LIKE '%db:%')
         AND product_database_engine IN ('Aurora MySQL','Aurora PostgreSQL')
         AND line_item_usage_amount != 0.0
+	AND line_item_usage_type LIKE '%InstanceUsage%'
         ${date_filter}  -- use partitions to optimize query
     GROUP BY 
         line_item_usage_account_id,
