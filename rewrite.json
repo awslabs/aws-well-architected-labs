@@ -490,5 +490,11 @@
         "target": "/cost-optimization/",
         "status": "301",
         "condition": null
+    },
+    {
+        "source": "/cost-optimization/cur_queries/queries/",
+        "target": "/cost-optimization/cur_queries/",
+        "status": "301",
+        "condition": null
     }
 ]
