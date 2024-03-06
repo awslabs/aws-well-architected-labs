@@ -254,16 +254,19 @@ def process_ou(org_client, ou, ou_tag_data, root_ou):
     print("DEBUG: processing ou {}".format(ou))
     tags = org_client.list_tags_for_resource(ResourceId=ou)['Tags']
     for tag in tags:
-        if tag['Key'] == 'cid_users':
-            cid_users_tag_value = tag['Value']
-            """ Do not process all children if this is root ou, this is done bellow in separate cycle. """
+
+        if tag['Key'] == CID_GROUP_OWNER_TAG:  # ADD GROUP TAGS
+            cid_groups_tag_value = tag['Value']
+            """ Do not process all children if this is root ou, for ROOT_OU we have a separate function, this is done bellow in separate cycle. """
             process_ou_children = bool(ou != root_ou)
             for account in get_ou_accounts(org_client, ou, process_ou_children=process_ou_children):
                 account_id = account['Id']
-                print(f"DEBUG: processing inherit tag: {cid_users_tag_value} for ou: {ou} account_id: {account_id}")
-        if tag['Key'] == CID_USER_OWNER_TAG:
+                print(f"DEBUG: processing inherit tag: {cid_groups_tag_value} for ou: {ou} account_id: {account_id}")
+                ou_tag_data = update_tag_data(account_id, None, cid_groups_tag_value, ou_tag_data)
+
+        if tag['Key'] == CID_USER_OWNER_TAG:  # ADD USER TAGS
             cid_users_tag_value = tag['Value']
-            """ Do not process all children if this is root ou, this is done bellow in separate cycle. """
+            """ Do not process all children if this is root ou, for ROOT_OU we have a separate function, this is done bellow in separate cycle. """
             process_ou_children = bool(ou != root_ou)
             for account in get_ou_accounts(org_client, ou, process_ou_children=process_ou_children):
                 account_id = account['Id']
