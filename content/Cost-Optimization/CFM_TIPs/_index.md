@@ -28,7 +28,7 @@ in your organization. This results in mechanisms that ensure ongoing, self-suffi
 The CFM TIPs is a collection of best practices curated and bar raised by AWS subject matter experts for CFM activities.
 
 
-![CFM and CFM TIPs cycle](/static/cfm_tips_flywheel.png)
+![CFM and CFM TIPs cycle](/Cost/CFM_TIPs/cfm_tips_flywheel.png)
 
 
 The CFM TIPs is currently divided into four main pillars: [1] Culture change, [2] Foundations, [3] Visualizations and [4] Service cost optimization playbooks. 
