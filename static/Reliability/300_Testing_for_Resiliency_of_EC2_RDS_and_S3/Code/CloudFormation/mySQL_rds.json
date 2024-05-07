@@ -18,7 +18,6 @@
           "Description": "DB Instance Class",
           "Type": "String",
           "AllowedValues": [
-              "db.t2.micro",
               "db.t3.micro",
               "db.t3.small",
               "db.t3.medium",
@@ -32,7 +31,7 @@
               "db.m5.12xlarge",
               "db.m5.24xlarge"
           ],
-          "Default": "db.t2.micro",
+          "Default": "db.t3.micro",
           "ConstraintDescription": "must select a valid database instance type."
       },
       "DBUser": {
