@@ -395,7 +395,7 @@ Resources:
        - !GetAtt DatabaseSG.GroupId
       AllocatedStorage: '20'
       PubliclyAccessible: 'false'
-      DBInstanceClass: db.t2.micro
+      DBInstanceClass: db.t3.micro
       Engine: MySQL
       DBInstanceIdentifier: Project2Database
       MasterUsername: MyName

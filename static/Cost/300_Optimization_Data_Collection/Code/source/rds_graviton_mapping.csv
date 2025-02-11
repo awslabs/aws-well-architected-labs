@@ -39,7 +39,7 @@ Aurora,MySQL,db.r5.8xlarge,db.r6g.8xlarge
 Aurora,MySQL,db.r5.12xlarge,db.r6g.12xlarge
 Aurora,MySQL,db.r5.16xlarge,db.r6g.16xlarge
 Aurora,MySQL,db.r5.24xlarge,None
-AmazonRDS,PostgreSQL,db.t2.micro,db.t4g.micro
+AmazonRDS,PostgreSQL,db.t3.micro,db.t4g.micro
 AmazonRDS,PostgreSQL,db.t2.small,db.t4g.small
 AmazonRDS,PostgreSQL,db.t2.medium,db.t4g.medium
 AmazonRDS,PostgreSQL,db.t2.large,db.t4g.large
@@ -99,7 +99,7 @@ AmazonRDS,PostgreSQL,db.r5b.8xlarge,db.r6gd.8xlarge
 AmazonRDS,PostgreSQL,db.r5b.12xlarge,db.r6gd.12xlarge
 AmazonRDS,PostgreSQL,db.r5b.16xlarge,db.r6gd.16xlarge
 AmazonRDS,PostgreSQL,db.r5b.24xlarge,None
-AmazonRDS,MySQL,db.t2.micro,db.t4g.micro
+AmazonRDS,MySQL,db.t3.micro,db.t4g.micro
 AmazonRDS,MySQL,db.t2.small,db.t4g.small
 AmazonRDS,MySQL,db.t2.medium,db.t4g.medium
 AmazonRDS,MySQL,db.t2.large,db.t4g.large
@@ -159,7 +159,7 @@ AmazonRDS,MySQL,db.r5b.8xlarge,db.r6gd.8xlarge
 AmazonRDS,MySQL,db.r5b.12xlarge,db.r6gd.12xlarge
 AmazonRDS,MySQL,db.r5b.16xlarge,db.r6gd.16xlarge
 AmazonRDS,MySQL,db.r5b.24xlarge,None
-AmazonRDS,MariaDB,db.t2.micro,db.t4g.micro
+AmazonRDS,MariaDB,db.t3.micro,db.t4g.micro
 AmazonRDS,MariaDB,db.t2.small,db.t4g.small
 AmazonRDS,MariaDB,db.t2.medium,db.t4g.medium
 AmazonRDS,MariaDB,db.t2.large,db.t4g.large
