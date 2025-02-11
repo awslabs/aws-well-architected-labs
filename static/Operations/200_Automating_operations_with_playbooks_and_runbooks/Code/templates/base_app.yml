@@ -291,7 +291,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 5
-      DBInstanceClass: db.t2.micro
+      DBInstanceClass: db.t3.micro
       Engine: MySQL
       MasterUsername: !Join ['', ['{{resolve:secretsmanager:', !Ref RDSSecret, ':SecretString:username}}' ]]
       MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref RDSSecret, ':SecretString:password}}' ]]
@@ -498,7 +498,7 @@ Resources:
             - ''
             - - s3://
               - Ref: ResultsBucket
-        RuntimeVersion: syn-nodejs-puppeteer-3.5
+        RuntimeVersion: syn-nodejs-puppeteer-6.2
         Schedule: 
           Expression: 'rate(1 minute)'
           DurationInSeconds: 0
