@@ -37,7 +37,6 @@ base_github_url = "https://github.com/awslabs/aws-well-architected-labs/tree/mas
 base_raw_github_url = "https://raw.githubusercontent.com/awslabs/aws-well-architected-labs/master/"
 #{{% siteparam "base_github_url" %}}
 
-
 [minify]
   disableCSS = false
   disableHTML = false
