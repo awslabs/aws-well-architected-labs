@@ -118,8 +118,8 @@ Resources:
                   # Search CloufFormation Stacks for tag
                   cfnclient = boto3.client('cloudformation', region_name = region )
                   list = cfnclient.list_stacks(StackStatusFilter=['CREATE_COMPLETE','ROLLBACK_COMPLETE','UPDATE_COMPLETE','UPDATE_ROLLBACK_COMPLETE','IMPORT_COMPLETE','IMPORT_ROLLBACK_COMPLETE']  )
+                  app_resources_list = []
                   for stack in list['StackSummaries']:
-                    app_resources_list = []
                     stack_name = stack['StackName']
                     stack_details = cfnclient.describe_stacks(StackName=stack_name)
                     stack_info = stack_details['Stacks'][0]
@@ -135,9 +135,8 @@ Resources:
                                 'Type': resource['ResourceType']
                               }
                             )
-                          result =  app_resources_list
+                  return app_resources_list
                   
-                  return result
                 def handler(event, context):
                   result = {}
                   arn = event['CloudWatchAlarmARN']
