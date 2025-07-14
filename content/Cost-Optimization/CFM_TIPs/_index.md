@@ -41,4 +41,5 @@ The CFM TIPs is currently divided into four main pillars: [1] Culture change, [2
 * With 2 additional pillars, [5] **Solutions** and [6] **Governance** coming soon.
 
 
+
 {{< prev_next_button link_next_url="https://catalog.workshops.aws/awscff/en-US" button_next_text="Start Workshop" first_step="true" />}}
