@@ -7,7 +7,7 @@ weight: 10
 hidden: false
 ---
 ## Last Updated
-April 2024
+July 2025
 
 
 ## Feedback
@@ -33,12 +33,12 @@ The CFM TIPs is a collection of best practices curated and bar raised by AWS sub
 
 The CFM TIPs is currently divided into four main pillars: [1] Culture change, [2] Foundations, [3] Visualizations and [4] Service cost optimization playbooks. 
 
-1. **Culture Change**- focuses on creating an organizational cost-aware culture, 
-2. **Foundations**- includes defining tagging strategy, setting up budgets and cost anomaly detection monitors, 
-3. **Visualizations**- include deploying Cloud Intelligent Dashboards (CID) and setting up key performance indicators with the KPI dashboard
+1. **Culture Change**- focuses on creating an organizational cost-aware culture.
+2. **Foundations**- includes defining tagging strategy, setting up budgets and cost anomaly detection monitors.
+3. **Visualizations**- include deploying Cloud Intelligent Dashboards (CID) and setting up key performance indicators with the KPI dashboard.
 4. **Service cost optimization playbooks**- provide specific AWS service recommendations.
+5. **Governance** - focuses on preventing unoptimized architecture and detecting inefficient infrastructure.
 
-* With 2 additional pillars, [5] **Solutions** and [6] **Governance** coming soon.
 
 
-{{< prev_next_button link_next_url="https://catalog.workshops.aws/awscff/en-US" button_next_text="Start Workshop" first_step="true" />}}
+## [Go to CFM TIPs Workshop](https://catalog.workshops.aws/awscff/)

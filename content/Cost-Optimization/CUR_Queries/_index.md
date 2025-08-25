@@ -10,8 +10,7 @@ The CUR Query Library is a collection of curated SQL queries to get you started 
 
 ## Last Updated
 January 2024:
-The CUR Query Library is now hosted on AWS Workshop Studio
-{{< prev_next_button link_next_url="https://catalog.workshops.aws/cur-query-library/en-US" button_next_text="View Workshop" first_step="true" />}}
+The [CUR Query Library is now hosted on AWS Workshop Studio](https://catalog.workshops.aws/cur-query-library/en-US).
 
 ## Introduction
 {{< rawhtml >}}
@@ -44,4 +43,4 @@ If you wish to provide feedback on this lab, there is an error, or you want to m
 CUR queries are provided as is. We recommend validating your data by comparing it against your monthly bill and Cost Explorer prior to making any financial decisions. If you wish to provide feedback on these queries, there is an error, or you want to make a suggestion, please email: curquery@amazon.com
 {{% /notice %}}
 
-{{< prev_next_button link_next_url="https://catalog.workshops.aws/cur-query-library/en-US" button_next_text="View Workshop" first_step="true" />}}
+The [CUR Query Library is now hosted on AWS Workshop Studio](https://catalog.workshops.aws/cur-query-library/en-US).
