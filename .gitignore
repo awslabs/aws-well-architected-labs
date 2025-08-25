@@ -29,3 +29,8 @@ dist/
 __pycache__
 .pytest_cache
 pytest.ini
+# Exclude yml and yaml files in Code directories
+**/Code/**/*.yml
+**/Code/**/*.yaml
+**/code/**/*.yml
+**/code/**/*.yaml
