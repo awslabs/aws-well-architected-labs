@@ -3,3 +3,21 @@
     console.log("running some javascript");
 </script>
 -->
+    <!-- CloudWatch RUM Client-->
+    <script>
+    (function(n,i,v,r,s,c,x,z){x=window.AwsRumClient={q:[],n:n,i:i,v:v,r:r,c:c};window[n]=function(c,p){x.q.push({c:c,p:p});};z=document.createElement('script');z.async=true;z.src=s;document.head.insertBefore(z,document.head.getElementsByTagName('script')[0]);})(
+      'cwr',
+      '26ea5436-dffe-408e-9d65-9b76cb9449d2',
+      '1.0.0',
+      'us-west-2',
+      'https://client.rum.us-east-1.amazonaws.com/1.19.0/cwr.js',
+      {
+        sessionSampleRate: 1 ,
+        endpoint: "https://dataplane.rum.us-west-2.amazonaws.com" ,
+        telemetries: ["performance","errors","http"] ,
+        allowCookies: true ,
+        enableXRay: false ,
+        signing: true
+      }
+    );
+  </script>
